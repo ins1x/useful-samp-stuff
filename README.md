@@ -1,2 +1,3 @@
 # useful-filtersripts
-various useful filterscripts for SA-MP
+
+Various useful scripts for [SA-MP](https://www.sa-mp.com/) multiplayer.
