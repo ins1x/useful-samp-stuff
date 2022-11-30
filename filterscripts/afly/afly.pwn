@@ -1,7 +1,10 @@
-// Filterscript: afly
-// Description: Simple admin fly system
+/* 
+Filterscript: afly
+Description: Simple admin fly system
+*/
 
 #include <a_samp>
+#define FILTERSCRIPT
 
 new bool:OnFly[MAX_PLAYERS];
 forward SurflyMode(playerid);

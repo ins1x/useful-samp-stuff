@@ -11,6 +11,7 @@
 // and is not detected immediately when a player is connected.
  
 #include <a_samp>
+#define FILTERSCRIPT
 
 public OnPlayerStateChange(playerid, newstate, oldstate)
 {

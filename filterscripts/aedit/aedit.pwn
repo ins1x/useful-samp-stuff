@@ -5,10 +5,11 @@
 	#warning or use original filterscript https://github.com/Southclaws/samp-attachedit
 #endif
 #define OUTPUT_FILE "Attachments.txt"
+#define FILTERSCRIPT
 
-// Southclaw's Attachment Editor Modified to fit the RSC team own needs
-// Russian Sawn-off Community [RSC] find us: https://dsc.gg/sawncommunity
-// Original: https://github.com/Southclaws/samp-attachedit
+/* Southclaw's Attachment Editor Modified to fit the RSC team own needs
+ Russian Sawn-off Community [RSC] find us: https://dsc.gg/sawncommunity
+ Original: https://github.com/Southclaws/samp-attachedit */
 
 enum
 {
