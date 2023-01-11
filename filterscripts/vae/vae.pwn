@@ -48,6 +48,12 @@ public OnFilterScriptInit()
 	SendClientMessageToAll(-1, "Vehicle Attach Editor loaded. (VAE). type /vae or press ALT");
 }
 
+public OnFilterScriptExit()
+{
+	for(new i = 0; i < MAX_PLAYERS; ++i) DestroyObject(VaeData[i][obj]);
+	return 1;
+}
+
 public OnPlayerConnect(playerid)
 {
     SetPVarInt(playerid, "freezed", 0);
