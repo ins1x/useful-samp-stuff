@@ -9,6 +9,7 @@ Various useful filterscripts, includes and systems for [SA-MP](https://www.sa-mp
 | [Admin Fly](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/afly) | Simple admin fly system |
 | [Blank filterscripts](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/blank_filterscripts) | Script templates |
 | [Checkmobile](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/checkmobile) | Identify a players from a mobile client |
+| [Geoip (ip-api)](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/geoip_ipapi) | Geoip based on ip-api service |
 | [UG-MP objects](https://github.com/ins1x/useful-samp-stuff/tree/main/include/ugmp_objects) | This include contains a list of valid [UG-MP](https://gtaundergroundmod.com/) objects  |
 | [Vae](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/vae) | Vehicle Attachment Editor |
 
