@@ -2,6 +2,7 @@
 ![SA:MP](https://www.sa-mp.com/images/logo.gif)  
 
 Various useful filterscripts, includes and systems for [SA-MP](https://www.sa-mp.com/) multiplayer.
+The presented systems were developed or improved by me, and implemented in working projects.
 
 | Name | Description |
 | --- | --- |
