@@ -1,3 +1,9 @@
+# valid-objects-models
+
+IsValidObjectModel(modelid) Checks valid GTA:SA and SA:MP models.  
+> NOTE: not the same as a function IsValidObject(objectid)  
+This is not check if an object exists, check only a model is valid.  
+
 # ugmp-objects-models
 
 This include contains a list of [UG-MP](https://gtaundergroundmod.com/) objects in the format modelid - object name.  
