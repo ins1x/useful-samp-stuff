@@ -90,7 +90,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
    return 1;
 }
 
-public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, weaponid, bodypart);
+public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, weaponid, bodypart)
 {
    return 1;
 }
@@ -150,7 +150,7 @@ public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
    return 1;
 }
 
-public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid);
+public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 {
    return 1;
 }
