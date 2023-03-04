@@ -6,6 +6,10 @@ Various useful filterscripts, includes and systems for [SA-MP](https://www.sa-mp
 The presented systems were developed or improved by me, and implemented in working projects.  
 > Disclaimer: All rights to modified scripts belong to their respective owners.  
 
+### Recommendations
+The filterscripts are written in the Pawn language. To build from sources, you will need the [Pawn Community Compiler](https://github.com/pawn-lang/compiler).  
+> All scripts tested on [SA:MP v0.3.7](https://www.sa-mp.com/download.php)  
+
 | Name | Description |
 | --- | --- |
 | [Attach Editor](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/aedit) | Convenient player attachment editor |
