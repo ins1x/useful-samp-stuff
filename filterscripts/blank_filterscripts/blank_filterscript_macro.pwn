@@ -8,12 +8,23 @@
 // https://open.mp/docs/scripting/resources/callbacks-sequence
 
 #include <a_samp>
-#tryinclude <foreach>
 
 #define FILTERSCRIPT
 
-// macro
+// ----------------------------------------------------------------------------
 #define KickPlayerEx(%0) SetTimerEx("KickPlayer", 500, 0, "d", %0)
+
+// Y_Less foreach macro
+#tryinclude <foreach>
+#if !defined foreach
+	#define foreach(%1,%2) for (new %2 = 0; %2 < MAX_PLAYERS; %2++) if (IsPlayerConnected(%2))
+	#define __SSCANF_FOREACH__
+#endif
+
+#if !defined _samp_included
+	#error "Please include a_samp or a_npc before foreach"
+#endif
+// ----------------------------------------------------------------------------
 
 //main() {}
 
