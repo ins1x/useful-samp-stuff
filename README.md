@@ -17,7 +17,7 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | [Bodylabel](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/bodylabel) | Attach 3d text with ploss, fps, ping to player |
 | [Checkmobile](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/checkmobile) | Identify a players from a mobile client |
 | [Dashcam](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/dashcam) | Textdraw simulating a police camera |
-| [fs_cmds](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/fs_cmds) | A set of commands for quick work with filterscripts without rcon rights |
+| [Filterscript commands](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/fs_cmds) | A set of commands for quick work with filterscripts without rcon rights |
 | [Geoip (ip-api)](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/geoip_ipapi) | Geoip based on ip-api service |
 | [Valid objects](https://github.com/ins1x/useful-samp-stuff/tree/main/include/valid_objects) | Include contains a list of valid objects  |
 | [Ufo](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/ufo) | Adds dynamic UFO over a desert bar|

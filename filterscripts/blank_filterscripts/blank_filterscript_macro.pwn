@@ -4,13 +4,12 @@
 	Author: 
 */
 
-// Below is a list of callbacks available in SA-MP and its call sequence. Tickbox represent called first.
+// Below is a list of callbacks available in SA-MP and its call sequence.
 // https://open.mp/docs/scripting/resources/callbacks-sequence
 
 #include <a_samp>
 
 #define FILTERSCRIPT
-
 // ----------------------------------------------------------------------------
 #define KickPlayerEx(%0) SetTimerEx("KickPlayer", 500, 0, "d", %0)
 
@@ -23,6 +22,10 @@
 
 #if !defined _samp_included
 	#error "Please include a_samp or a_npc before foreach"
+#endif
+
+#if !defined isnull
+	#define isnull(%0) ((!(%0[0])) || (((%0[0]) == '\1') && (!(%0[1]))))
 #endif
 // ----------------------------------------------------------------------------
 
@@ -155,17 +158,48 @@ public OnPlayerText(playerid, text[])
 
 public OnPlayerCommandText(playerid, cmdtext[])
 {
+	new cmd[128], tmp[128], idx;
+	cmd = strtok(cmdtext, idx);
+	
 	if (!strcmp(cmdtext, "/testiterate", true))
 	{
-		#if defined foreach
 		foreach(new p : Player)
-		#else
-		for(new p = 0; p < MAX_PLAYERS; p++)
-		#endif
 		{
 			SendClientMessage(p, -1, "testiterate");
 		}
 		return 1;
 	}
+	
+	if (!strcmp("/testcmd", cmd, true))
+	{
+		tmp = strtok(cmdtext, idx);
+		new id = strval(tmp);
+		
+		if (!strlen(tmp)) return 1;
+		
+		SendClientMessage(id, -1, "testcmd");
+		return 1;
+	}
 	return 0;
+}
+
+// This (strtok) is used to search a string and find a variable typed after
+// a " " (space), then return it as a string.
+strtok(const string[], &index)
+{
+	new length = strlen(string);
+	while ((index < length) && (string[index] <= ' '))
+	{
+		index++;
+	}
+
+	new offset = index;
+	new result[20];
+	while ((index < length) && (string[index] > ' ') && ((index - offset) < (sizeof(result) - 1)))
+	{
+		result[index - offset] = string[index];
+		index++;
+	}
+	result[index - offset] = EOS;
+	return result;
 }
