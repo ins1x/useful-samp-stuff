@@ -20,7 +20,8 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | [Filterscript commands](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/fs_cmds) | A set of commands for quick work with filterscripts without rcon rights |
 | [Geoip (ip-api)](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/geoip_ipapi) | Geoip based on ip-api service |
 | [Valid objects](https://github.com/ins1x/useful-samp-stuff/tree/main/include/valid_objects) | Include contains a list of valid objects  |
-| [Ufo](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/ufo) | Adds dynamic UFO over a desert bar|
+| [Ufo](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/ufo) | Adds dynamic UFO over a desert bar |
+| [Undeground bar](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/undeground_bar) | Modified Ten Green Bottles bar |
 | [Vae](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/vae) | Vehicle Attachment Editor |
 
 > Disclaimer: All rights to modified scripts belong to their respective owners.  
