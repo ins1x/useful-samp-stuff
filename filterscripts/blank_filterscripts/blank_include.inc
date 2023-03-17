@@ -1,4 +1,3 @@
-//  Filterscript: 
 //  Description: 
 //  Author: 
 
@@ -7,5 +6,3 @@
 	#endinput
 #endif
 #define _blankinc_included
-
-//#include <a_samp>
