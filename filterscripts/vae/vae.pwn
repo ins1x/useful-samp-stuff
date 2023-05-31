@@ -1,12 +1,20 @@
 /* 
 Filterscript: vae
 Description: Vehicle attachements editor
-Based on Insanity Vehicle Attachment Editor
-Original fs: https://github.com/Southclaws/samp-Hellfire/blob/master/filterscripts/tool_VehicleAttach.pwn
-Improved and translated specifically for RSC server https://dsc.gg/sawncommunity
+  It allows you to edit the offsets of any object to attach in any vehicle
+  Based on Insanity Vehicle Attachment Editor
+Credits:
+  Orgignal FS Author Allan Jader (CyNiC) 
+  https://github.com/Southclaws/samp-Hellfire/blob/master/filterscripts/tool_VehicleAttach.pwn
+  Improved and translated specifically for RSC server https://dsc.gg/sawncommunity
+Language set: SetPVarInt(playerid, "lang", 1) where 1 = English, 0 = Russian
+  To change the language, set 
 */
 
+
 #include <a_samp>
+#tryinclude <streamer>
+
 #define OUTPUT_FILE "Vaeditions.txt"
 #define FILTERSCRIPT
 
@@ -45,17 +53,12 @@ forward VaeGetKeys(playerid); // vae keys hook
 public OnFilterScriptInit()
 {
 	print("Vehicle Attach Editor loaded. (VAE)");
-	SendClientMessageToAll(-1, "Vehicle Attach Editor loaded. (VAE). type /vae or press ALT");
-}
-
-public OnFilterScriptExit()
-{
-	for(new i = 0; i < MAX_PLAYERS; ++i) DestroyObject(VaeData[i][obj]);
-	return 1;
+	SendClientMessageToAll(-1, "Vehicle Attach Editor loaded. (VAE). type /vae or press <H> in vehicle");
 }
 
 public OnPlayerConnect(playerid)
 {
+	//SetPVarInt(playerid, "lang", 1) // 1 EN, 0 RUS 
     SetPVarInt(playerid, "freezed", 0);
 	
 	VaeData[playerid][timer] = -1;
@@ -93,8 +96,8 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		{
 			ShowPlayerDialog(playerid, DIALOG_VAENEW, DIALOG_STYLE_INPUT,
 			"VAE New attach", 
-			"specify the object model to attach to the vehicle.\
-			(For example minigun: 362)\nEnter model id:", ">>>","Cancel");
+			"Specify the object model to attach to the vehicle.\
+			(For example minigun: 362)", ">>>","Cancel");
 		} else {
 			ShowVaeMenu(playerid);
 		}
@@ -103,8 +106,9 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	if(!strcmp("/vaestop", cmd, true))
 	{
 		KillTimer(VaeData[playerid][timer]);
-		return SendClientMessageEx(playerid, -1,
+		SendClientMessageEx(playerid, -1,
 		"Редактирование закончено.", "Editing is complete");
+		return true;
 	}
 	if(!strcmp("/vaesave", cmd, true))
 	{		
@@ -112,29 +116,60 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		new str[256], File: file;
 		if(!fexist(OUTPUT_FILE)) file = fopen(OUTPUT_FILE, io_write);
 		else file = fopen(OUTPUT_FILE, io_append);
-		format(str, 256, "\r\nAttachObjectToVehicle(objectid, vehicleid, %f, %f, %f, %f, %f, %f); //Object Model: %d | %s",
-		VaeData[playerid][OffSetX], VaeData[playerid][OffSetY], VaeData[playerid][OffSetZ],
-		VaeData[playerid][OffSetRX], VaeData[playerid][OffSetRY], VaeData[playerid][OffSetRZ],
-		VaeData[playerid][objmodel], tmp);
+		#if defined _streamer_included
+		format(str, 256,
+		"\r\n//Vehicle model ID: %d, Object Model: %d %s",
+		GetVehicleModel(GetPlayerVehicleID(playerid)), VaeData[playerid][objmodel], tmp);
 		fwrite(file, str);
+		
+		format(str, 256,
+		"\r\nnew tmpobjid = CreateDynamicObject(%d, 0.0, 0.0, -1000.0, 0.0, 0.0, 0.0, %d, %d);",
+		VaeData[playerid][objmodel],GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+		fwrite(file, str);
+		
+		format(str, 256,
+		"\r\nAttachDynamicObjectToVehicle(tmpobjid, vehicleid, %f, %f, %f, %f, %f, %f);",
+		VaeData[playerid][OffSetX], VaeData[playerid][OffSetY], VaeData[playerid][OffSetZ],
+		VaeData[playerid][OffSetRX], VaeData[playerid][OffSetRY], VaeData[playerid][OffSetRZ]);
+		fwrite(file, str);
+		#else
+		format(str, 256,
+		"\r\n//Vehicle model ID: %d, Object Model: %d %s",
+		GetVehicleModel(GetPlayerVehicleID(playerid)), VaeData[playerid][objmodel], tmp);
+		fwrite(file, str);
+		
+		format(str, 256,
+		"\r\nnew tmpobjid = CreateObject(%d, 0.0, 0.0, -1000.0, 0.0, 0.0, 0.0);",
+		VaeData[playerid][objmodel]);
+		fwrite(file, str);
+		CreateObject(1188,0,0,0,0,0,0,100.0);
+		
+		format(str, 256,
+		"\r\nAttachObjectToVehicle(tmpobjid, vehicleid, %f, %f, %f, %f, %f, %f);",
+		VaeData[playerid][OffSetX], VaeData[playerid][OffSetY], VaeData[playerid][OffSetZ],
+		VaeData[playerid][OffSetRX], VaeData[playerid][OffSetRY], VaeData[playerid][OffSetRZ]);
+		fwrite(file, str);
+		#endif
 		fclose(file);
-		return SendClientMessageEx(playerid, -1,
+		SendClientMessageEx(playerid, -1,
 		"Всё сохранено в \""OUTPUT_FILE"\".", "Saved to \""OUTPUT_FILE"\".");
+		return true;
 	}
 	if(!strcmp("/vaemodel", cmd, true))
 	{
 		//VaeData[playerid][EditStatus] = vaeModel;
 		SendClientMessage(playerid, -1, "Editing Object Model.");
 		ShowPlayerDialog(playerid, DIALOG_VAENEW, DIALOG_STYLE_INPUT,
-		"VAE New attach", "specify the object model to attach to the vehicle.\
-		(For example minigun: 362)\nEnter model id:", ">>>","Cancel");
+		"VAE New attach", "Specify the object model to attach to the vehicle.\
+		(For example minigun: 362)", ">>>","Cancel");
+		return true;
 	}
 	return 0;
 }
 
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(GetPVarInt(playerid, "VaeEdit") > 0)
+	if(GetPVarType(playerid, "VaeEdit"))
 	{
 		if(newkeys == KEY_SECONDARY_ATTACK) // ENTER
 		{
@@ -146,7 +181,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			ShowVaeMenu(playerid);
 		}
 	}
-	if(newkeys == 1024) //ALT
+	if(newkeys == KEY_CROUCH) // <H/CAPSLOCK> in Vehicle or <C> on foot
 	{
 		ShowVaeMenu(playerid);
 	}
@@ -169,13 +204,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						ShowPlayerDialog(playerid, DIALOG_VAENEW, DIALOG_STYLE_INPUT,
 						"VAE New attach",
 						"Введите ID модели объекта для прикрепления на транспорт.\
-						(Например minigun: 362)\nВведите ID:",
+						(Например minigun: 362):",
 						">>>","Cancel");
 					} else {
 						ShowPlayerDialog(playerid, DIALOG_VAENEW, DIALOG_STYLE_INPUT,
 						"VAE New attach",
-						"specify the object model to attach to the vehicle.\
-						(For example minigun: 362)\nEnter model id:",
+						"Specify the object model to attach to the vehicle.\
+						(For example minigun: 362)",
 						">>>","Cancel");
 					}
 					//SendClientMessage(playerid, -1, "Editing Object Model.");
@@ -242,6 +277,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						SendClientMessageEx(playerid, -1,
 						"Вы замороженны","You are freezed");
 					}
+					ShowVaeMenu(playerid);
 				}
 				case 9:
 				{
@@ -249,24 +285,18 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					TogglePlayerControllable(playerid, true);
 					SetPVarInt(playerid,"freezed",0);
 					DeletePVar(playerid, "VaeEdit");
+					
+					VaeData[playerid][OffSetX]  = 0.0;
+					VaeData[playerid][OffSetY]  = 0.0;
+					VaeData[playerid][OffSetZ]  = 0.0;
+					VaeData[playerid][OffSetRX] = 0.0;
+					VaeData[playerid][OffSetRY] = 0.0;
+					VaeData[playerid][OffSetRZ] = 0.0;
+					
 					SendClientMessageEx(playerid, -1,
 					"Редактирование закончено.", "Finish vae edit");
 				}
-				case 10:
-				{
-					new str[256], File:file;
-					if(!fexist(OUTPUT_FILE)) file = fopen(OUTPUT_FILE, io_write);
-					else file = fopen(OUTPUT_FILE, io_append);
-					format(str, 200, "\r\nAttachObjectToVehicle(objectid, vehicleid, %f, %f, %f, %f, %f, %f); //Object Model: %d | %s",
-					VaeData[playerid][OffSetX], VaeData[playerid][OffSetY],
-					VaeData[playerid][OffSetZ],	VaeData[playerid][OffSetRX],
-					VaeData[playerid][OffSetRY], VaeData[playerid][OffSetRZ],
-					VaeData[playerid][objmodel]);
-					fwrite(file, str);
-					fclose(file);
-					return SendClientMessageEx(playerid, -1,
-					"Всё сохранено в \""OUTPUT_FILE"\".", "Saved to \""OUTPUT_FILE"\".");
-				}
+				case 10: OnPlayerCommandText(playerid, "/vaesave");
 			}
 		}
 	}
@@ -346,11 +376,12 @@ stock ShowVaeMenu(playerid)
 		"adjustment RY\t%.2f\n"\
 		"adjustment RZ\t%.2f\n"\
 		"Reset XYZ and adjustment\t\n"\
-		"Freeze-Unfreeze\t{00FF00}/freeze\n"\
+		"%s\t\n"\
 		"Stop edit\t{00FF00}/vaestop\n"\
 		"Save\t{00FF00}/vaesave\n",
 		VaeData[playerid][OffSetX], VaeData[playerid][OffSetY], VaeData[playerid][OffSetZ],
-		VaeData[playerid][OffSetRX], VaeData[playerid][OffSetRY], VaeData[playerid][OffSetRZ]);
+		VaeData[playerid][OffSetRX], VaeData[playerid][OffSetRY], VaeData[playerid][OffSetRZ],
+		(!GetPVarInt(playerid,"freezed")) ? ("Freeze") : ("Unfreeze"));
 	} else {
 		format(tbtext, sizeof(tbtext),
 		"Изменить модель\t{00FF00}/vaemodel\n"\
@@ -361,11 +392,12 @@ stock ShowVaeMenu(playerid)
 		"Регулировка оси RY\t%.2f\n"\
 		"Регулировка оси RZ\t%.2f\n"\
 		"Сбросить XYZ и Оси\t\n"\
-		"Заморозить-Разморозить\t{00FF00}/freeze\n"\
+		"%s\t\n"\
 		"Закончить редактирование\t{00FF00}/vaestop\n"\
 		"Сохранить\t{00FF00}/vaesave\n",
 		VaeData[playerid][OffSetX], VaeData[playerid][OffSetY], VaeData[playerid][OffSetZ],
-		VaeData[playerid][OffSetRX], VaeData[playerid][OffSetRY], VaeData[playerid][OffSetRZ]);
+		VaeData[playerid][OffSetRX], VaeData[playerid][OffSetRY], VaeData[playerid][OffSetRZ],
+		(!GetPVarInt(playerid,"freezed")) ? ("Заморозить") : ("Разморозить"));
 	}
 	
 	ShowPlayerDialog(playerid, DIALOG_VAE, DIALOG_STYLE_TABLIST, 
