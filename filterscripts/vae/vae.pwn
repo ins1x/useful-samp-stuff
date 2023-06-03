@@ -11,7 +11,6 @@ Language set: SetPVarInt(playerid, "lang", 1) where 1 = English, 0 = Russian
   To change the language, set 
 */
 
-
 #include <a_samp>
 #tryinclude <streamer>
 
@@ -40,7 +39,6 @@ enum playerSets
 }
 
 new Float:VaeData[MAX_PLAYERS][playerSets];
-new PlayerVehicle[MAX_PLAYERS];
 const vaeFloatX =  1;
 const vaeFloatY =  2;
 const vaeFloatZ =  3;
@@ -111,11 +109,16 @@ public OnPlayerCommandText(playerid, cmdtext[])
         {
             ShowPlayerDialog(playerid, DIALOG_VAENEW, DIALOG_STYLE_INPUT,
             "VAE New attach", 
-            "Specify the object model to attach to the vehicle.\
+            "{FFFFFF}Specify the object model to attach to the vehicle.\
             (For example minigun: 362)", ">>>","Cancel");
         } else {
             ShowVaeMenu(playerid);
         }
+        return true;
+    }
+    if(!strcmp("/vaehelp", cmd, true))
+    {
+        VaeHelp(playerid);
         return true;
     }
     if(!strcmp("/vaestop", cmd, true))
@@ -138,7 +141,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
         fwrite(file, str);
         
         format(str, 256,
-        "\r\nnew tmpobjid = CreateDynamicObject(%d, 0.0, 0.0, -1000.0, 0.0, 0.0, 0.0, %d, %d);",
+        "\r\ntmpobjid = CreateDynamicObject(%d, 0.0, 0.0, -1000.0, 0.0, 0.0, 0.0, %d, %d);",
         VaeData[playerid][objmodel],GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
         fwrite(file, str);
         
@@ -154,7 +157,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
         fwrite(file, str);
         
         format(str, 256,
-        "\r\nnew tmpobjid = CreateObject(%d, 0.0, 0.0, -1000.0, 0.0, 0.0, 0.0);",
+        "\r\ntmpobjid = CreateObject(%d, 0.0, 0.0, -1000.0, 0.0, 0.0, 0.0);",
         VaeData[playerid][objmodel]);
         fwrite(file, str);
         
@@ -174,7 +177,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
         //VaeData[playerid][EditStatus] = vaeModel;
         SendClientMessage(playerid, -1, "Editing Object Model.");
         ShowPlayerDialog(playerid, DIALOG_VAENEW, DIALOG_STYLE_INPUT,
-        "VAE New attach", "Specify the object model to attach to the vehicle.\
+        "VAE New attach", "{FFFFFF}Specify the object model to attach to the vehicle.\
         (For example minigun: 362)", ">>>","Cancel");
         return true;
     }
@@ -183,21 +186,12 @@ public OnPlayerCommandText(playerid, cmdtext[])
 
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-    if(GetPVarType(playerid, "VaeEdit"))
-    {
-        if(newkeys == KEY_SECONDARY_ATTACK) // ENTER
-        {
-            TogglePlayerControllable(playerid, false);
-            SetPVarInt(playerid, "freezed", 1);
-            if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) {
-                PutPlayerInVehicle(playerid, PlayerVehicle[playerid], 0);
-            }
-            ShowVaeMenu(playerid);
-        }
-    }
     if(newkeys == KEY_CROUCH) // <H/CAPSLOCK> in Vehicle or <C> on foot
     {
-        ShowVaeMenu(playerid);
+        if(GetPVarType(playerid, "VaeEdit"))
+        {
+            if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) ShowVaeMenu(playerid);
+        }
     }
     return 1;
 }
@@ -217,17 +211,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         ShowPlayerDialog(playerid, DIALOG_VAENEW, DIALOG_STYLE_INPUT,
                         "VAE New attach",
-                        "Введите ID модели объекта для прикрепления на транспорт.\
+                        "{FFFFFF}Введите ID модели объекта для прикрепления на транспорт.\
                         (Например minigun: 362):",
                         ">>>","Cancel");
                     } else {
                         ShowPlayerDialog(playerid, DIALOG_VAENEW, DIALOG_STYLE_INPUT,
                         "VAE New attach",
-                        "Specify the object model to attach to the vehicle.\
+                        "{FFFFFF}Specify the object model to attach to the vehicle.\
                         (For example minigun: 362)",
                         ">>>","Cancel");
                     }
-                    //SendClientMessage(playerid, -1, "Editing Object Model.");
                 }
                 case 1:
                 {
@@ -296,6 +289,34 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 case 9:
                 {
+                    if(!IsPlayerInAnyVehicle(playerid)) {
+                        return SendClientMessageEx(playerid, -1,
+                        "Вы не в машине.","You are not in the car.");
+                    }
+                    
+                    if(IsValidObject(VaeData[playerid][obj])) {
+                        return SendClientMessageEx(playerid, -1,
+                        "Объект не был создан", "Object not found");
+                    }
+                    
+                    new vehicleid  = GetPlayerVehicleID(playerid);
+                    new tmpobjid = CreateObject(VaeData[playerid][objmodel], 0.0, 0.0, -10.0, -50.0, 0, 0);
+                    AttachObjectToVehicle(tmpobjid, vehicleid,
+                    VaeData[playerid][OffSetX],
+                    VaeData[playerid][OffSetY],
+                    VaeData[playerid][OffSetZ],
+                    VaeData[playerid][OffSetRX],
+                    VaeData[playerid][OffSetRY],
+                    VaeData[playerid][OffSetRZ]);
+                    
+                    DestroyObject(VaeData[playerid][obj]);
+                    VaeData[playerid][obj] = -1;
+                    SendClientMessageEx(playerid, -1,
+                    "Аттач сохранен на транспорте. Теперь вы можете создать новый",
+                    "The attachment is saved on vehicle. Now you can create a new one");
+                }
+                case 10:
+                {
                     KillTimer(VaeData[playerid][timer]);
                     TogglePlayerControllable(playerid, true);
                     SetPVarInt(playerid,"freezed",0);
@@ -311,7 +332,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     SendClientMessageEx(playerid, -1,
                     "Редактирование закончено.", "Finish vae edit");
                 }
-                case 10: OnPlayerCommandText(playerid, "/vaesave");
+                case 11: 
+                {
+                    new param[24];
+                    format(param, sizeof(param), "/vaesave");
+                    OnPlayerCommandText(playerid, param);
+                }
             }
         }
     }
@@ -330,12 +356,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 
                 if(VaeData[playerid][obj] == -1)
                 {
-                    SendClientMessageEx(playerid, -1, 
-                    "Используйте клавиши {FF0000}ВЛЕВО-ВПРАВО{FFFFFF} для перемещения аттача",
-                    "Use keys {FF0000}LEFT - RIGHT{FFFFFF} to move attach");
-                    SendClientMessageEx(playerid, -1, 
-                    "Удерживайте {FF0000}F / ENTER{FFFFFF} для того чтобы показать меню редактирования",
-                    "Hold {FF0000}F / ENTER{FFFFFF} to show the edit menu");
+                    VaeHelp(playerid);
                 }
             
                 if(VaeData[playerid][timer] != -1) KillTimer(VaeData[playerid][timer]);
@@ -357,11 +378,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     VaeData[playerid][OffSetRZ] = 0.0;
                 }   
                 VaeData[playerid][obj] = Obj;
-                TogglePlayerControllable(playerid, false);
-                SetPVarInt(playerid,"freezed",1);
                 SetPVarInt(playerid, "VaeEdit",1);
                 ShowVaeMenu(playerid);
-                GameTextForPlayer(playerid,"~w~HOLD ENTER~n~to open edit menu",5000,1);
             }
         } 
     }
@@ -392,7 +410,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 case 2:
                 {
                     if(IsValidObject(VaeData[playerid][obj])) {
+                        VaeData[playerid][OffSetX]  = 0.0;
+                        VaeData[playerid][OffSetY]  = 0.0;
+                        VaeData[playerid][OffSetZ]  = 0.0;
+                        VaeData[playerid][OffSetRX] = 0.0;
+                        VaeData[playerid][OffSetRY] = 0.0;
+                        VaeData[playerid][OffSetRZ] = 0.0;
                         DestroyObject(VaeData[playerid][obj]);
+                        KillTimer(VaeData[playerid][timer]);
                         SendClientMessageEx(playerid, -1,
                         "Объект удален", "Object removed");
                     } else {
@@ -432,6 +457,7 @@ stock ShowVaeMenu(playerid)
         "adjustment RZ\t%.2f\n"\
         "Reset\t\n"\
         "%s\t\n"\
+        "Add more\t{00FF00}\n"\
         "Stop edit\t{00FF00}/vaestop\n"\
         "Save\t{00FF00}/vaesave\n",
         VaeData[playerid][OffSetX], VaeData[playerid][OffSetY], VaeData[playerid][OffSetZ],
@@ -448,6 +474,7 @@ stock ShowVaeMenu(playerid)
         "Регулировка оси RZ\t%.2f\n"\
         "Сбросить\t\n"\
         "%s\t\n"\
+        "Добавить еще\t{00FF00}\n"\
         "Закончить редактирование\t{00FF00}/vaestop\n"\
         "Сохранить\t{00FF00}/vaesave\n",
         VaeData[playerid][OffSetX], VaeData[playerid][OffSetY], VaeData[playerid][OffSetZ],
@@ -466,8 +493,8 @@ public VaeGetKeys(playerid)
     GetPlayerKeys(playerid,Keys,ud,VaeData[playerid][lr]);    
     switch(Keys)
     {
-        case KEY_FIRE:   toAdd = 0.000500;      
-        default:         toAdd = 0.005000;
+        case KEY_FIRE:   toAdd = 0.001000;      
+        default:         toAdd = 0.010000;
     }   
     if(VaeData[playerid][lr] == 128)
     {
@@ -476,19 +503,19 @@ public VaeGetKeys(playerid)
             case vaeFloatX:
             {
                 VaeData[playerid][OffSetX] = floatadd(VaeData[playerid][OffSetX], toAdd);
-                format(gametext, 36, "offsetx: ~w~%f", VaeData[playerid][OffSetX]);
+                format(gametext, 36, "offsetx: ~w~%.3f", VaeData[playerid][OffSetX]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatY:
             {
                 VaeData[playerid][OffSetY] = floatadd(VaeData[playerid][OffSetY], toAdd);
-                format(gametext, 36, "offsety: ~w~%f", VaeData[playerid][OffSetY]);
+                format(gametext, 36, "offsety: ~w~%.3f", VaeData[playerid][OffSetY]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatZ:
             {
                 VaeData[playerid][OffSetZ] = floatadd(VaeData[playerid][OffSetZ], toAdd);
-                format(gametext, 36, "offsetz: ~w~%f", VaeData[playerid][OffSetZ]);
+                format(gametext, 36, "offsetz: ~w~%.3f", VaeData[playerid][OffSetZ]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatRX:
@@ -497,7 +524,7 @@ public VaeGetKeys(playerid)
                 floatadd(toAdd, 1.000000)); 
                 else VaeData[playerid][OffSetRX] = floatadd(VaeData[playerid][OffSetRX],
                 floatadd(toAdd,0.100000));                                              
-                format(gametext, 36, "offsetrx: ~w~%f", VaeData[playerid][OffSetRX]);
+                format(gametext, 36, "offsetrx: ~w~%.3f", VaeData[playerid][OffSetRX]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatRY:
@@ -506,7 +533,7 @@ public VaeGetKeys(playerid)
                 floatadd(toAdd, 1.000000)); 
                 else VaeData[playerid][OffSetRY] = floatadd(VaeData[playerid][OffSetRY],
                 floatadd(toAdd,0.100000));  
-                format(gametext, 36, "offsetry: ~w~%f", VaeData[playerid][OffSetRY]);
+                format(gametext, 36, "offsetry: ~w~%.3f", VaeData[playerid][OffSetRY]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatRZ:
@@ -515,7 +542,7 @@ public VaeGetKeys(playerid)
                 floatadd(toAdd, 1.000000)); 
                 else VaeData[playerid][OffSetRZ] = floatadd(VaeData[playerid][OffSetRZ],
                 floatadd(toAdd,0.100000));  
-                format(gametext, 36, "offsetrz: ~w~%f", VaeData[playerid][OffSetRZ]);
+                format(gametext, 36, "offsetrz: ~w~%.3f", VaeData[playerid][OffSetRZ]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeModel:
@@ -541,19 +568,19 @@ public VaeGetKeys(playerid)
             case vaeFloatX:
             {
                 VaeData[playerid][OffSetX] = floatsub(VaeData[playerid][OffSetX], toAdd);
-                format(gametext, 36, "offsetx: ~w~%f", VaeData[playerid][OffSetX]);
+                format(gametext, 36, "offsetx: ~w~%.3f", VaeData[playerid][OffSetX]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatY:
             {
                 VaeData[playerid][OffSetY] = floatsub(VaeData[playerid][OffSetY], toAdd);
-                format(gametext, 36, "offsety: ~w~%f", VaeData[playerid][OffSetY]);
+                format(gametext, 36, "offsety: ~w~%.3f", VaeData[playerid][OffSetY]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatZ:
             {
                 VaeData[playerid][OffSetZ] = floatsub(VaeData[playerid][OffSetZ], toAdd);
-                format(gametext, 36, "offsetz: ~w~%f", VaeData[playerid][OffSetZ]);
+                format(gametext, 36, "offsetz: ~w~%.3f", VaeData[playerid][OffSetZ]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatRX:
@@ -562,7 +589,7 @@ public VaeGetKeys(playerid)
                 floatadd(toAdd, 1.000000)); 
                 else VaeData[playerid][OffSetRX] = floatsub(VaeData[playerid][OffSetRX],
                 floatadd(toAdd,0.100000));          
-                format(gametext, 36, "offsetrx: ~w~%f", VaeData[playerid][OffSetRX]);
+                format(gametext, 36, "offsetrx: ~w~%.3f", VaeData[playerid][OffSetRX]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatRY:
@@ -571,7 +598,7 @@ public VaeGetKeys(playerid)
                 floatadd(toAdd, 1.000000)); 
                 else VaeData[playerid][OffSetRY] = floatsub(VaeData[playerid][OffSetRY],
                 floatadd(toAdd,0.100000));  
-                format(gametext, 36, "offsetry: ~w~%f", VaeData[playerid][OffSetRY]);
+                format(gametext, 36, "offsetry: ~w~%.3f", VaeData[playerid][OffSetRY]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeFloatRZ:
@@ -580,7 +607,7 @@ public VaeGetKeys(playerid)
                 floatadd(toAdd, 1.000000)); 
                 else VaeData[playerid][OffSetRZ] = floatsub(VaeData[playerid][OffSetRZ],
                 floatadd(toAdd,0.100000));  
-                format(gametext, 36, "offsetrz: ~w~%f", VaeData[playerid][OffSetRZ]);
+                format(gametext, 36, "offsetrz: ~w~%.3f", VaeData[playerid][OffSetRZ]);
                 GameTextForPlayer(playerid, gametext, 1000, 3);
             }
             case vaeModel:
@@ -606,6 +633,19 @@ public VaeUnDelay(target)
 {
     VaeData[target][delay] = false;
     return 1;
+}
+
+stock VaeHelp(playerid)
+{
+    SendClientMessageEx(playerid, -1, 
+    "Используйте клавиши {00FF00}ВЛЕВО-ВПРАВО{FFFFFF} для перемещения аттача",
+    "Use keys {00FF00}LEFT - RIGHT{FFFFFF} to move attach");
+    SendClientMessageEx(playerid, -1, 
+    "Нажмите {00FF00}H{FFFFFF} для того чтобы показать меню редактирования (в транспорте)",
+    "Press {00FF00}H{FFFFFF} to show the edit menu (in vehicle)");
+    SendClientMessageEx(playerid, -1, 
+    "Удерживайте {00FF00}KEY_FIRE(ЛКМ){FFFFFF} чтобы увеличить чувствительность",
+    "Hold {00FF00}KEY_FIRE(LMB){FFFFFF} to increase sensitivity");
 }
 
 stock SendClientMessageEx(playerid, color, const ru[], const en[])
