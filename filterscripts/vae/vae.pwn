@@ -7,8 +7,7 @@ Credits:
   Orgignal FS Author Allan Jader (CyNiC) 
   https://github.com/Southclaws/samp-Hellfire/blob/master/filterscripts/tool_VehicleAttach.pwn
   Improved and translated specifically for RSC server https://dsc.gg/sawncommunity
-Language set: SetPVarInt(playerid, "lang", 1) where 1 = English, 0 = Russian
-  To change the language, set 
+  Language set: SetPVarInt(playerid, "lang", 1) where 1 = English, 0 = Russian
 */
 
 #include <a_samp>
@@ -292,11 +291,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     if(!IsPlayerInAnyVehicle(playerid)) {
                         return SendClientMessageEx(playerid, -1,
                         "Вы не в машине.","You are not in the car.");
-                    }
-                    
-                    if(IsValidObject(VaeData[playerid][obj])) {
-                        return SendClientMessageEx(playerid, -1,
-                        "Объект не был создан", "Object not found");
                     }
                     
                     new vehicleid  = GetPlayerVehicleID(playerid);
