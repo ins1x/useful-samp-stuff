@@ -2,12 +2,12 @@
 
 ![SA:MP](https://www.sa-mp.com/images/logo.gif)  
 
-Various useful filterscripts, includes and systems for [SA-MP](https://www.sa-mp.com/) multiplayer.  
+Various useful stuff and systems for [SA-MP](https://www.sa-mp.com/) multiplayer.  
 The presented systems were developed or improved by me, and implemented in working projects.  
 
-### Recommendations
+### Pawn scripts
 The filterscripts are written in the Pawn language. To build from sources, you will need the [Pawn Community Compiler](https://github.com/pawn-lang/compiler).  
-> All scripts tested on [SA:MP v0.3.7](https://www.sa-mp.com/download.php)  
+> All scripts tested on [SA:MP v0.3.7 server](https://www.sa-mp.com/download.php)  
 
 | Name | Description |
 | --- | --- |
@@ -26,5 +26,17 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | [Ufo](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/ufo) | Adds dynamic UFO over a desert bar |
 | [Undeground bar](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/undeground_bar) | Modified Ten Green Bottles bar |
 | [Vae](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/vae) | Vehicle Attachment Editor |
+
+### Lua scripts (Moonloader)
+[Moonloader](https://www.blast.hk/threads/13305/) is a mod for the GTA San Andreas game, aiming to become a complete modern replacement for [CLEO](https://cleo.li/ru/index.html). It introduces the ability to load Lua scripts into the game, has all the functionality of the game's opcodes, the [CLEO library](https://cleo.li/ru/index.html), the [SAMPFUNCS plugin](https://www.blast.hk/threads/17/), and adds its own set of new features for development.  
+
+| Name | Description |
+| --- | --- |
+| [AbsoluteFix.lua](https://github.com/ins1x/AbsoluteFix) | A set of fixes and additions for Absolute Play servers |
+| [AbsoluteFix.lua](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
+| [ImguiSnippet.lua](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/snippets) | Templates for creating lua scripts for SAMP |
+| [GangWarNotifer.lua](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Notifies if gangwar has started for the territory |
+| [Nogametext.lua](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Hides annoying gametext in the middle of the screen on the UIF server |
+
 
 > Disclaimer: All rights to modified scripts belong to their respective owners.  
