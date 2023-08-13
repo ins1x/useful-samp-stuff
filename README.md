@@ -17,6 +17,7 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | [Bodylabel](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/bodylabel) | Attach 3d text with ploss, fps, ping to player |
 | [Checkmobile](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/checkmobile) | Identify a players from a mobile client |
 | [Dashcam](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/dashcam) | Textdraw simulating a police camera |
+| [Derby](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/derby) | Derby system |
 | [Filterscript commands](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/fs_cmds) | A set of commands for quick work with filterscripts without rcon rights |
 | [Geoip (ip-api)](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/geoip_ipapi) | Geoip based on ip-api service |
 | [Jizzy](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/jizzy) | Fills the Pleasure Domes loaction |
