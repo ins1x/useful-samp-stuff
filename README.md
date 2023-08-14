@@ -6,7 +6,8 @@ Various useful stuff and systems for [SA-MP](https://www.sa-mp.com/) multiplayer
 The presented systems were developed or improved by me, and implemented in working projects.  
 
 ### Pawn scripts
-The filterscripts are written in the Pawn language. To build from sources, you will need the [Pawn Community Compiler](https://github.com/pawn-lang/compiler).  
+The filterscripts are written in the Pawn language. To build from sources, you will need the [Pawn Community Compiler](https://github.com/pawn-lang/compiler). If you use VSCode install [Pawn tools for vscode](https://github.com/Southclaws/vscode-pawn).  
+
 > All scripts tested on [SA:MP v0.3.7 server](https://www.sa-mp.com/download.php)  
 
 | Name | Description |
@@ -35,7 +36,7 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | --- | --- |
 | [AbsoluteFix](https://github.com/ins1x/AbsoluteFix) | A set of fixes and additions for Absolute Play servers |
 | [ModCompatibilityChecker](https://github.com/ins1x/AbsoluteFix/blob/main/moonloader/ModCompatibilityChecker.lua) | Checks the mods that can cause crashes |
-| [https://github.com/ins1x/AbsEventHelper](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
+| [AbsEventHelper](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
 | [ImguiSnippets](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/snippets) | Templates for creating lua scripts for SAMP |
 | [GangWarNotifer](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Notifies if gangwar has started for the territory |
 | [Nogametext](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Hides annoying gametext in the middle of the screen on the UIF server |
