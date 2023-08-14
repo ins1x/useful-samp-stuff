@@ -33,11 +33,12 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 
 | Name | Description |
 | --- | --- |
-| [AbsoluteFix.lua](https://github.com/ins1x/AbsoluteFix) | A set of fixes and additions for Absolute Play servers |
-| [AbsoluteFix.lua](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
-| [ImguiSnippet.lua](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/snippets) | Templates for creating lua scripts for SAMP |
-| [GangWarNotifer.lua](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Notifies if gangwar has started for the territory |
-| [Nogametext.lua](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Hides annoying gametext in the middle of the screen on the UIF server |
+| [AbsoluteFix](https://github.com/ins1x/AbsoluteFix) | A set of fixes and additions for Absolute Play servers |
+| [ModCompatibilityChecker](https://github.com/ins1x/AbsoluteFix/blob/main/moonloader/ModCompatibilityChecker.lua) | Checks the mods that can cause crashes |
+| [https://github.com/ins1x/AbsEventHelper](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
+| [ImguiSnippets](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/snippets) | Templates for creating lua scripts for SAMP |
+| [GangWarNotifer](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Notifies if gangwar has started for the territory |
+| [Nogametext](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Hides annoying gametext in the middle of the screen on the UIF server |
 
 
 > Disclaimer: All rights to modified scripts belong to their respective owners.  
