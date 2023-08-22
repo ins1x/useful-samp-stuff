@@ -69,13 +69,15 @@ BustAim is a feature rich anti-aimbot include which tries to detect players who 
 - [MySQL plugin](https://github.com/pBlueG/SA-MP-MySQL) - The best and most famous MySQL plugin.
 
 ## PAWN compiler
-
+- [sampctl](https://github.com/Southclaws/sampctl) command-line development tool for developing SA:MP Pawn scripts. It includes a package manager, a build tool and a configuration manager.
 - [AMX-Assembly](https://github.com/YashasSamaga/AMX-Assembly-Docs/blob/master/DOCUMENT.md)
 - [Pawn compiler flags](https://github.com/pawn-lang/compiler/wiki/Options)  
 - [San Andreas Multiplayer](https://github.com/dashr9230/SA-MP)
+- [Pawn Syntax Notepad++](https://github.com/CaptainBoi/Pawn-Compiler-In-Notepad-) - Pawn autocompletes for Notepad ++
+- [Pawn Syntax Sublime](https://packagecontrol.io/packages/Pawn%20syntax) - Pawn autocompletes for Sublime Text.
+- [Pawn Syntax VScode](https://marketplace.visualstudio.com/items?itemName=southclaws.vscode-pawn) - Pawn autocompletes for Visual Studio Code.
 
 ## ETC
-
 - [VisualTexture_Pawn_SA-MP](https://github.com/KaizerHind/VisualTexture_Pawn_SA-MP)
 - [VC:MP 0.1c source code](https://github.com/ziggi/vc-mp)
 
