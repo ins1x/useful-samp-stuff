@@ -1,4 +1,4 @@
-![logo](https://github.com/ins1x/useful-samp-stuff/raw/main/img/logo.jpg)
+![logo](https://raw.githubusercontent.com/ins1x/useful-samp-stuff/main/docs/img/logo.jpg)
 
 ### Mapping resources
 * [Map editors](https://github.com/ins1x/useful-samp-stuff/tree/main/docs/mapping/MapEditors.md)  
@@ -14,3 +14,4 @@
 * [Libraries for developers](https://github.com/ins1x/useful-samp-stuff/tree/main/docs/server/Libraries.md)  
 * [Installing and configuring the server](https://github.com/ins1x/useful-samp-stuff/tree/main/docs/server/ServerConfig.md)  
 * [Known Bugs GTA:SA и SA:MP](https://github.com/ins1x/useful-samp-stuff/tree/main/docs/server/Bugs.md)  
+
