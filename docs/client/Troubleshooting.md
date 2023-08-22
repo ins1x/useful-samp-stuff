@@ -1,12 +1,12 @@
 # The most common problems and their solutions
 
-** Server closed the connection without a reason **
+**Server closed the connection without a reason**
 * Check the version of the SA:MP client, whether it matches the version of the server you are connecting to.
 
-** After connecting not reaching the skin selection, crash with format codes 0x06XXXXXXX where X are arbitrary characters**
+**After connecting not reaching the skin selection, crash with format codes 0x06XXXXXXX where X are arbitrary characters**
 * Reinstall the SA-MP client through the original installer (not by changing the files)
 
-** Error when clicking "Connect" button in SA-MP client. 0x0040fB80 or similar.**
+**Error when clicking "Connect" button in SA-MP client. 0x0040fB80 or similar.**
 * Install sa-mp 0.3.7 client again and change version of GTA_SA.exe to US 1.0
 
 **Black screen.**
@@ -38,33 +38,33 @@
 
 ## Problems related to mods
 
-0x004AA8CB or 0x004F1464, 0x004F1B70 - Check the audio folder and its files.
-0x004DFF90, 0x004DD5A3, 0x004DFE92, 0x004F0E67, 0x004F0EBA, 0x004F0E1C - Problems with sound files.
-0x004F153A and 0x004D9880 - Audio/config is missing. Download the standard one.
-0x004F1464 - Attempt to play a non-existent radio. 
-0x006FD525 - Missing platecharset in vehicle.txd
-0x004C87B6 - Missing white in particle.txd
-0x005B6B2F - Broken carcols.dat file
-0x00827F6E - Configuration curves with InterfaceEditor mod. 
-0x0072CD14 - At death with mods for drawing distance. 
-0x005DD97C - No textures plant1.txd
-0x005D9A9B - Curves transport effects
-0x006FE144 - No texture roadsignfont2
-0x0053388E - Curve effects
-0x005D5CA2 - Invalid texture format vehiclegrunge256
-0x0064F73B - Deleting the transport in which the player sits
-0x007C91CC - Fashion curves for skins
-0x00718604 - Incompatible or crooked screen resolution
-0x004D1750 0x004D46AE 0x005E5815 - Animation curves
-0x00728365 - Image curves or textures in mods
-0x006EB628 and 0x006EB670- Missing water textures of waterclear256 and waterwake
-0x0055D234 - Curve file data/plants.dat
-0x00734D88 - Curve file models/grass/grass.dff
-0x00706611 - Delete shadows.asi
-0x004874EA - Delete mod CJ can repair the car
-0x007ECABB - Problems reading files
-0x004C53A6 - DFF curves files
-0x007F39FB and 0x007F3825- Attempt to read a non-existent txd 
+0x004AA8CB or 0x004F1464, 0x004F1B70 - Check the audio folder and its files.  
+0x004DFF90, 0x004DD5A3, 0x004DFE92, 0x004F0E67, 0x004F0EBA, 0x004F0E1C - Problems with sound files.  
+0x004F153A and 0x004D9880 - Audio/config is missing. Download the standard one.  
+0x004F1464 - Attempt to play a non-existent radio.   
+0x006FD525 - Missing platecharset in vehicle.txd  
+0x004C87B6 - Missing white in particle.txd  
+0x005B6B2F - Broken carcols.dat file  
+0x00827F6E - Configuration curves with InterfaceEditor mod.   
+0x0072CD14 - At death with mods for drawing distance.   
+0x005DD97C - No textures plant1.txd  
+0x005D9A9B - Curves transport effects  
+0x006FE144 - No texture roadsignfont2  
+0x0053388E - Curve effects  
+0x005D5CA2 - Invalid texture format vehiclegrunge256  
+0x0064F73B - Deleting the transport in which the player sits  
+0x007C91CC - Fashion curves for skins   
+0x00718604 - Incompatible or crooked screen resolution  
+0x004D1750 0x004D46AE 0x005E5815 - Animation curves  
+0x00728365 - Image curves or textures in mods  
+0x006EB628 and 0x006EB670- Missing water textures of waterclear256 and waterwake  
+0x0055D234 - Curve file data/plants.dat  
+0x00734D88 - Curve file models/grass/grass.dff  
+0x00706611 - Delete shadows.asi  
+0x004874EA - Delete mod CJ can repair the car  
+0x007ECABB - Problems reading files  
+0x004C53A6 - DFF curves files  
+0x007F39FB and 0x007F3825- Attempt to read a non-existent txd   
 
 ---
 
