@@ -1,3 +1,5 @@
+require "lib.moonloader"
+local imgui = require('imgui')
 script_description("Text snippets")
 
 -- Example:
@@ -50,4 +52,89 @@ function split(str, delim, plain)
         pos = epos and epos + 1
     until not pos
     return tokens
+end
+
+-- Description: converts a string to lowercase
+function string.rlower(s)
+	s = s:lower()
+	local strlen = s:len()
+	if strlen == 0 then return s end
+	s = s:lower()
+	local output = ''
+	for i = 1, strlen do
+		local ch = s:byte(i)
+		if ch >= 192 and ch <= 223 then
+			output = output .. russian_characters[ch + 32]
+		elseif ch == 168 then
+			output = output .. russian_characters[184]
+		else
+			output = output .. string.char(ch)
+		end
+	end
+	return output
+end
+
+-- Description: converts a string to uppercase
+function string.rupper(s)
+	s = s:upper()
+	local strlen = s:len()
+	if strlen == 0 then return s end
+	s = s:upper()
+	local output = ''
+	for i = 1, strlen do
+		local ch = s:byte(i)
+		if ch >= 224 and ch <= 255 then
+			output = output .. russian_characters[ch - 32]
+		elseif ch == 184 then
+			output = output .. russian_characters[168]
+		else
+			output = output .. string.char(ch)
+		end
+	end
+	return output
+end
+
+-- Description: Trims spaces at the edges of the string (trimming)
+function trim(s)
+    return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
+end
+
+-- Description: Draws text colored with a gradient.
+-- Example: renderGradientText(font, 'This is a gradient text.', 300, 300, '007FFF', 'FF00FF')
+function renderGradientText(font, text, posX, posY, startingColor, endingColor)
+    local startingColorComponents = { startingColor:match('(..)(..)(..)') }
+    local endingColorComponents = { endingColor:match('(..)(..)(..)') }
+    for i = 1, 3 do
+        startingColorComponents[i] = tonumber(startingColorComponents[i], 16)
+        endingColorComponents[i] = tonumber(endingColorComponents[i], 16)
+    end
+    local length = text:len()
+    local gradient = ''
+    local function shift(comp, i)
+        return startingColorComponents[comp] + (endingColorComponents[comp] - startingColorComponents[comp]) * ((i - 1) / (length - 1))
+    end
+    for i = 1, length do
+        local R = shift(1, i)
+        local G = shift(2, i)
+        local B = shift(3, i)
+        gradient = gradient .. string.format('{%0.2x%0.2x%0.2x}%s', R, G, B, text:sub(i, i))
+    end
+    renderFontDrawText(font, gradient, posX, posY, -1)
+end
+
+-- Description: sending multiline text text to the chat with a certain delay 
+-- Example: 
+--text = [[Lorem ipsum dolor sit amet,
+--consectetur adipiscing elit,
+--sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+--]]
+--multiStringSendChat(1200, text)
+function multiStringSendChat(delay, multiStringText)   
+    lua_thread.create(function()
+        multiStringText = multiStringText..'\n'
+        for s in multiStringText:gmatch('.-\n') do
+            sampSendChat(s)
+            wait(delay)
+        end
+    end)
 end

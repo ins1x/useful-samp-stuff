@@ -1,5 +1,5 @@
 script_description("Imgui buttons snippets")
-
+require "lib.moonloader"
 local imgui = require 'imgui'
 
 -- Description: Default button with size param 
