@@ -122,6 +122,15 @@ function renderGradientText(font, text, posX, posY, startingColor, endingColor)
     renderFontDrawText(font, gradient, posX, posY, -1)
 end
 
+-- Description: Imgui text with shadow
+function ColoredTextWithShadow(color, text)
+    local pos = imgui.GetCursorPos()
+    imgui.SetCursorPos(imgui.ImVec2(pos.x + 1, pos.y + 1))
+    imgui.TextColored(imgui.ImVec4(0, 0, 0, 1), text) -- shadow
+    imgui.SetCursorPos(pos)
+    imgui.TextColored(color, text)
+end
+
 -- Description: sending multiline text text to the chat with a certain delay 
 -- Example: 
 --text = [[Lorem ipsum dolor sit amet,
@@ -137,4 +146,13 @@ function multiStringSendChat(delay, multiStringText)
             wait(delay)
         end
     end)
+end
+
+-- Description: Converting a hexadecimal/decimal number to binary
+function toBinary(dec, bits)
+    local bin = ""
+    for i = bits - 1, 0, -1 do
+        bin = bin..bit.band(bit.rshift(dec, i), 1)
+    end
+    return bin 
 end
