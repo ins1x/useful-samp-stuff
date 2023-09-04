@@ -38,9 +38,10 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | [ModCompatibilityChecker](https://github.com/ins1x/AbsoluteFix/blob/main/moonloader/ModCompatibilityChecker.lua) | Checks the mods that can cause crashes |
 | [AbsEventHelper](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
 | [Clickwarp](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/clickwarp/) | Fork of original clickwarp by FYP updated for Absolute Play |
+| [DriftСameraLock](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Lock camera behind player on vehicle (DriftCam) |
 | [ImguiSnippets](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/snippets) | Templates for creating lua scripts for SAMP |
 | [GangWarNotifer](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Notifies if gangwar has started for the territory |
-| [Renderobjects](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/renderobjects) | A convenient tool for mappers, allows you to quickly find the desired object.   |
+| [Renderobjects](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/renderobjects) | A convenient tool for mappers, allows you to quickly find the desired object  |
 | [Nogametext](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/) | Hides annoying gametext in the middle of the screen on the UIF server |
 
 
