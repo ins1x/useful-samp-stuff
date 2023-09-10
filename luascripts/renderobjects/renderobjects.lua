@@ -14,6 +14,7 @@ local checkboxRenderAll = imgui.ImBool(false)
 local checkboxShowIDs = imgui.ImBool(false)
 local checkboxRenderIDsByRule = imgui.ImBool(false)
 local traser = imgui.ImBool(false)
+local rgbtraser = imgui.ImBool(false)
 local mainWindow = imgui.ImBool(false)
 local removeObject = imgui.ImInt(0)
 
@@ -72,7 +73,7 @@ function main()
     while true do
         wait(0)
         imgui.Process = mainWindow.v
-		
+	  
         if checkboxRenderAll.v or checkboxRenderByRule.v then
             for _, v in pairs(getAllObjects()) do
                 local objectid
@@ -81,13 +82,15 @@ function main()
                     objectid = sampGetObjectSampIdByHandle(v)
                 end
 				
-                if isObjectOnScreen(v) then
+                if isObjectOnScreen(v) and not isPauseMenuActive() then
                     local _, x, y, z = getObjectCoordinates(v)
                     local x1, y1 = convert3DCoordsToScreen(x, y, z)
                     local model = getObjectModel(v)
                     local x2, y2, z2 = getCharCoordinates(PLAYER_PED)
                     local x10, y10 = convert3DCoordsToScreen(x2, y2, z2)
                     local distance = getDistanceBetweenCoords3d(x, y, z, x2, y2, z2)
+					local r, g, b, a = rainbow(0.5, 255)
+                    local color = string.format("0xFF%s", rgbToHex(r,g,b))
 					local mindistance = 0.8 
 					
 					-- mindistance used to ignore player attached objects
@@ -101,7 +104,13 @@ function main()
 							.. string.format("%.1f", distance),
                             x1, y1, -1
                         )
-                        if traser.v then renderDrawLine(x10, y10, x1, y1, 1.0, -1) end
+                        if traser.v then 
+						   if rgbtraser.v then 
+						      renderDrawLine(x10, y10, x1, y1, 1.0, color)
+						   else
+						      renderDrawLine(x10, y10, x1, y1, 1.0, -1)
+						   end
+						end
 						
                     elseif checkboxRenderByRule.v then
                         for _, v2 in ipairs(sortedObjectsTable) do
@@ -115,7 +124,13 @@ function main()
 										.. string.format("%.1f", distance),
                                     x1, y1, -1
                                 )
-                                if traser.v then renderDrawLine(x10, y10, x1, y1, 1.0, -1) end
+                                if traser.v then
+								   if rgbtraser.v then 
+						              renderDrawLine(x10, y10, x1, y1, 1.0, color)
+						           else
+						              renderDrawLine(x10, y10, x1, y1, 1.0, -1)
+						           end
+								end
                             end
                         end
                     end
@@ -137,6 +152,10 @@ function imgui.OnDrawFrame()
     )
     
 	imgui.Checkbox("Enable tracer", traser)
+	if traser.v then
+	   imgui.SameLine()
+	   imgui.Checkbox("Rainbow line colors", rgbtraser)
+	end
 	
 	imgui.Checkbox("Find all objects", checkboxRenderAll)
     if checkboxRenderAll.v then
@@ -287,6 +306,17 @@ function imgui.TextColoredRGB(text)
     render_text(text)
 end
 
+function rainbow(speed, alpha) 
+	local r = math.floor(math.sin(os.clock() * speed) * 127 + 128)
+	local g = math.floor(math.sin(os.clock() * speed + 2) * 127 + 128)
+	local b = math.floor(math.sin(os.clock() * speed + 4) * 127 + 128)
+	return r,g,b,alpha
+end
+
+function rgbToHex(r,g,b)
+    local rgb = (r * 0x10000) + (g * 0x100) + b
+    return bit.tohex(rgb, 6)
+end
 -- apply imgui theme 
 imgui.SwitchContext()
 

@@ -11,6 +11,8 @@ In-game activation: /renderob
 - Code refactoring
 - New minimalistic interface and theme
 - Disabled rendering on attachments to the player
+- Hide render in pause menu
+- Add rainbow tracers
 
 Script forked of original version and updated by 1NS: https://www.blast.hk/threads/24320/
 
