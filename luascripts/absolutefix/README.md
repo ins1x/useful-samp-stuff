@@ -1,6 +1,6 @@
 # AbsoluteFix
 
-![logo](https://github.com/ins1x/AbsoluteFix/raw/main/demo.png)
+![logo](https://github.com/ins1x/useful-samp-stuff/blob/main/luascripts/absolutefix/demo.png?raw=true)
 
 Набор исправлений и дополнений для серверов [Absolute Play](https://sa-mp.ru/).  
 Идеально подойдет игрокам которые по каким-либо причинам не могут играть с Samp Addon, но привыкли к его некоторым возможностям.  
