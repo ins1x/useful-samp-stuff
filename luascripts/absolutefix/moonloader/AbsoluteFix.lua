@@ -4,7 +4,7 @@ script_description("Set of fixes for Absolute Play servers")
 script_dependencies('imgui', 'lib.samp.events', 'vkeys')
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/AbsoluteFix")
-script_version("1.9.1")
+script_version("1.9.2")
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
 -- script_moonloader(16) moonloader v.0.26
 -- Credits:
@@ -683,17 +683,20 @@ function sampev.onServerMessage(color, text)
          chatlog:close()
          return false
       end
-   end
+	  
+	  -- ignore server flood mesages
+	  if text:find("рекорд дрифта") then
+         return false
+      end
+	  
+      if text:find("выхода из читмира") then
+         return false
+      end
    
-   -- ignore server flood mesages
-   if text:find("выхода из читмира") then
-      return false
+      if text:find("Ни 1 клан не создан") then
+         return false
+      end
    end
-      
-   if text:find("Ни 1 клан не создан") then
-      return false
-   end
-   
 end
 
 function sampev.onTogglePlayerSpectating(state)
