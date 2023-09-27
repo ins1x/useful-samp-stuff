@@ -1,9 +1,8 @@
 script_author("1NS")
 script_name("ModCompatibilityChecker")
 script_description("Checks the mods that can cause crashes")
-script_url("https://github.com/ins1x/AbsNoAddonFix")
-script_version("1.0")
--- forked from https://github.com/ins1x/AbsNoAddonFix v1.4
+script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts")
+script_version("1.1")
 -- script_moonloader(16) moonloader v.0.26
       
 require 'lib.moonloader'
@@ -73,6 +72,66 @@ function main()
              print("ModChecker warning: install widescreen fix asi instead of exdisp.asi")
          end
         
+		 -- GFXHack
+		 if doesFileExist(getGameDirectory() .. "\\GFXHack.asi") then
+             sampAddChatMessage("GFXHack устарел, используйте SilentPatch вместо него", 0xFF00000)
+             print("ModChecker warning: GFXHack Outdated. (SILENT PATCH already contains this fix)")
+         end
+		
+		 -- III.VC.SA.LimitAdjuster
+		 if doesFileExist(getGameDirectory() .. "\\III.VC.SA.LimitAdjuster.asi") then
+             sampAddChatMessage("SA.LimitAdjuster плагин вызывает проблемы со стабильность и производительностью", 0xFF00000)
+             print("ModChecker warning: SA.LimitAdjuster plugin causes stability and performance issues")
+         end
+		 
+		 -- newCoronaLimit
+		 if doesFileExist(getGameDirectory() .. "\\newCoronaLimit.asi") then
+             sampAddChatMessage("newCoronaLimit.asi приводит к сбою в отображении шейдера ENB на автомобилях.", 0xFF00000)
+             print("ModChecker warning: newCoronaLimit causes the ENB shader to fail to display on cars")
+         end
+         
+		 -- SA_Lightning
+		 if doesFileExist(getGameDirectory() .. "\\SA_Lightning.asi") then
+             sampAddChatMessage("SA_Lightning.asi устарел, не работает на WIn7/10", 0xFF00000)
+             print("ModChecker warning: SA_Lightning outdated, does not work on WIn7/10")
+         end
+		 
+		 -- SCMDirectDrawing
+		 if doesFileExist(getGameDirectory() .. "\\SCMDirectDrawing.asi") then
+             sampAddChatMessage("SCMDirectDrawing Конфликтует с другими плагинами, и приводит к тому, что шрифты и информационное поле не отображаются.", 0xFF00000)
+             print("ModChecker warning: SCMDirectDrawing сonflicts with other plugins, and leads to the fact that fonts and the information field are not displayed.")
+         end
+		 
+		 -- Searchlights
+		 if doesFileExist(getGameDirectory() .. "\\Searchlights.asi") then
+             sampAddChatMessage("Searchlights крашит на новых версиях клиента.", 0xFF00000)
+             print("ModChecker warning: Searchlights crashes on new versions of samp client.")
+         end
+		 
+		 -- SuperVars
+		 if doesFileExist(getGameDirectory() .. "\\SuperVars.asi") then
+             sampAddChatMessage("SuperVars устарел может вызывать краши на новых версиях клиентах.", 0xFF00000)
+             print("ModChecker warning: SuperVars outdated may cause crashes on new versions of clients.")
+         end
+		 
+		 -- GTA.SA.WideScreen.Fix.asi
+		 if doesFileExist(getGameDirectory() .. "\\GTA.SA.WideScreen.Fix.asi") then
+             sampAddChatMessage("GTA.SA.WideScreen.Fix Сбрасывает разрешение до разрешения рабочего стола, при нулевых параметрах ResX и ResY", 0xFF00000)
+             print("ModChecker warning: GTA.SA.WideScreen.Fix Resets the resolution to desktop resolution, with zero ResX and ResY parameters.")
+         end
+		 
+		 -- crc32ffi
+		 if doesFileExist(getGameDirectory() .. "\\moonloader\\crc32ffi.lua") then
+             sampAddChatMessage("crc32ffi.lua приводит к мгновенному закрытию игры без каких-либо ошибок или журнала", 0xFF00000)
+             print("ModChecker warning: crc32ffi results in instant closure of the game without any errors or log")
+         end
+		 
+		 -- maplimit260
+		 if doesFileExist(getGameDirectory() .. "\\moonloader\\maplimit260.lua") then
+             sampAddChatMessage("maplimit260 Вызывает сбой после загрузки", 0xFF00000)
+             print("ModChecker warning: maplimit260 Causes a crash after loading")
+         end
+		 
          -- skybox
          if doesFileExist(getGameDirectory() .. "\\cleo\\cleoskybox.cs") then
              sampAddChatMessage("cleoskybox.cs устарел и может вызывать краши и некорректное отображение текстур", 0xFF00000)
