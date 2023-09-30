@@ -35,7 +35,7 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | Name | Description |
 | --- | --- |
 | [AbsoluteFix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix) | A set of fixes and additions for Absolute Play servers |
-| [ModCompatibilityChecker](https://github.com/ins1x/AbsoluteFix/blob/main/luascripts/ModCompatibilityChecker.lua) | Checks the mods that can cause crashes |
+| [ModCompatibilityChecker](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/ModCompatibilityChecker.lua) | Checks the mods that can cause crashes |
 | [AbsEventHelper](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
 | [Clickwarp](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/clickwarp/) | Fork of original clickwarp by FYP updated for Absolute Play |
 | [DriftСameraLock](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/DriftСameraLock.lua) | Lock camera behind player on vehicle (DriftCam) |
