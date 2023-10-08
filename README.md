@@ -1,14 +1,14 @@
 # useful-samp-stuff
 
-![SA:MP](https://www.sa-mp.com/images/logo.gif)  
+![SA:MP](https://github.com/ins1x/useful-samp-stuff/blob/main/filterscripts/samp-logo.gif)  
 
-Various useful stuff and systems for [SA-MP](https://www.sa-mp.com/) multiplayer.  
+Various useful stuff and systems for [SA-MP](https://sampwiki.blast.hk/wiki/Main_Page) multiplayer.  
 The presented systems were developed or improved by me, and implemented in working projects.  
 
 ### Pawn scripts
 The filterscripts are written in the Pawn language. To build from sources, you will need the [Pawn Community Compiler](https://github.com/pawn-lang/compiler). If you use VSCode install [Pawn tools for vscode](https://github.com/Southclaws/vscode-pawn).  
 
-> All scripts tested on [SA:MP v0.3.7 server](https://www.sa-mp.com/download.php)  
+> All scripts tested on [SA:MP v0.3.7 server](https://pawnokit.ru/en/files)  
 
 | Name | Description |
 | --- | --- |
