@@ -3,10 +3,14 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_dependencies('imgui', 'lib.samp.events', 'vkeys')
 script_properties("work-in-pause")
-script_url("https://github.com/ins1x/AbsoluteFix")
-script_version("1.9.2")
--- forked from https://github.com/ins1x/AbsEventHelper v1.5
+script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
+script_version("1.9.3")
+
 -- script_moonloader(16) moonloader v.0.26
+-- forked from https://github.com/ins1x/AbsEventHelper v1.5
+-- Recommend use more functional script GameFixer by Gorskin
+-- https://vk.com/@gorskinscripts-gamefixer-obnovlenie-30
+
 -- Credits:
 -- EvgeN 1137, hnnssy, FYP - Moonloader
 -- FYP - imgui, SAMP lua library
@@ -403,6 +407,16 @@ function main()
          memory.fill(0x4218D8, 0x90, 17, false)
          memory.fill(0x5F80C0, 0x90, 10, false)
          memory.fill(0x5FBA47, 0x90, 10, false)
+		 
+		 -- AntiCrash R1
+		 local base = sampGetBase() + 0x5CF2C
+         writeMemory(base, 4, 0x90909090, true)
+         base = base + 4
+         writeMemory(base, 1, 0x90, true)
+         base = base + 9
+         writeMemory(base, 4, 0x90909090, true)
+         base = base + 4
+         writeMemory(base, 1, 0x90, true)
       end
       
       if(ini.settings.addonupgrades) then
@@ -686,6 +700,10 @@ function sampev.onServerMessage(color, text)
 	  
 	  -- ignore server flood mesages
 	  if text:find("рекорд дрифта") then
+         return false
+      end
+	  
+	  if text:find("не засчитан") then
          return false
       end
 	  

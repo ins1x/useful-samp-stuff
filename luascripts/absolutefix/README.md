@@ -97,6 +97,8 @@
 	nogametext=false
 ```
 
+> Попробуйте более функциональный скрипт с множеством фиксов [GameFixer by Gorskin](https://vk.com/@gorskinscripts-gamefixer-obnovlenie-30)
+
 ## Credits 
 * [EvgeN 1137](https://www.blast.hk/members/1), [hnnssy](https://www.blast.hk/members/66797), [FYP](https://github.com/THE-FYP) - Moonloader  
 * [FYP](https://github.com/THE-FYP) - imgui, SAMP lua библиотеки

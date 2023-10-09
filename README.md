@@ -21,7 +21,7 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | [Derby](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/derby) | Derby system |
 | [Filterscript commands](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/fs_cmds) | A set of commands for quick work with filterscripts without rcon rights |
 | [Geoip (ip-api)](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/geoip_ipapi) | Geoip based on ip-api service |
-| [Jizzy](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/jizzy) | Fills the Pleasure Domes loaction |
+| [Jizzy](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/jizzy) | Fills the Pleasure Domes location |
 | [Skins](https://github.com/ins1x/useful-samp-stuff/tree/main/include/samp_skins) | Contains information about models and names of skins in samp |
 | [Specbar](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/specbar) | Adds a spectate TD with important player parameters for debug |
 | [Valid objects](https://github.com/ins1x/useful-samp-stuff/tree/main/include/valid_objects) | Include contains a list of valid objects |
