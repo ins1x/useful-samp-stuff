@@ -4,7 +4,7 @@ script_description("Set of fixes for Absolute Play servers")
 script_dependencies('imgui', 'lib.samp.events', 'vkeys')
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("1.9.3")
+script_version("1.9.4")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -128,8 +128,8 @@ function imgui.OnDrawFrame()
       if imgui.Checkbox(u8("Фикс горячих клавиш аддона"), checkbox.keybinds) then 
          if checkbox.keybinds.v then
             ini.settings.keybinds = not ini.settings.keybinds
-            save()
          end
+		 save()
       end
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"Восстанавливает стандартные горячие клавиши доступные с samp addon")
@@ -137,8 +137,8 @@ function imgui.OnDrawFrame()
       if imgui.Checkbox(u8("Включить фиксы игры"), checkbox.gamefixes) then 
         if checkbox.gamefixes.v then
             ini.settings.gamefixes = not ini.settings.gamefixes
-            save()
          end
+		 save()
       end
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"Включает некоторые фиксы багов игры (Нужен релог для применения)")
@@ -146,8 +146,8 @@ function imgui.OnDrawFrame()
       if imgui.Checkbox(u8("Включить работу апгрейдов"), checkbox.addonupgrades) then 
         if checkbox.addonupgrades.v then
             ini.settings.addonupgrades = not ini.settings.addonupgrades
-            save()
          end
+		 save()
       end
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"Включает улучшения - бесконечный бег, бег в интерьере, анти падение с байка")
@@ -155,8 +155,8 @@ function imgui.OnDrawFrame()
       if imgui.Checkbox(u8"Отключить эффекты", checkbox.noeffects) then
          if checkbox.noeffects.v then
             ini.settings.noeffects = not ini.settings.noeffects
-            save() 
          end
+		 save()
       end
        
       imgui.SameLine()
@@ -164,7 +164,6 @@ function imgui.OnDrawFrame()
 
 	  if imgui.Checkbox(u8"Активировать nopostfx", checkbox.nopostfx) then
 	     ini.settings.nopostfx = not ini.settings.nopostfx
-		 save()
 		 if ini.settings.nopostfx then 
 	        memory.write(7358318, 2866, 4, false) --postfx off
             memory.write(7358314, -380152237, 4, false) --postfx off
@@ -172,13 +171,13 @@ function imgui.OnDrawFrame()
  		    memory.write(7358318, 1448280247, 4, false) --postfx on
             memory.write(7358314, -988281383, 4, false) --postfx on
 		 end 
+		 save()
 	  end
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"Отключает пост-обработку (PostFX)")
 	  
 	  if imgui.Checkbox(u8"Исправить темный таймцикл", checkbox.fixdarktimecyc) then
 	     ini.settings.fixdarktimecyc = not ini.settings.fixdarktimecyc
-		 save()
 		 if not ini.settings.fixdarktimecyc then
 	        memory.write(6359759, 217, 1, false)
             memory.write(6359760, 21, 1, false)
@@ -209,6 +208,7 @@ function imgui.OnDrawFrame()
             memory.setfloat(12044072, 0.0, false) -- worldambientG
             memory.setfloat(12044096, 0.0, false) -- worldambientB
 		 end
+		 save()
 	  end
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"Исправляет темные текстуры и освещение игры (аналог gammafix)")
@@ -216,8 +216,8 @@ function imgui.OnDrawFrame()
 	  if imgui.Checkbox(u8("Фильтр подключений в чате"), checkbox.chatfilter) then
          if checkbox.chatfilter.v then
             ini.settings.chatfilter = not ini.settings.chatfilter
-            save()
          end
+		 save()
       end
 	  
       imgui.SameLine()
@@ -226,8 +226,8 @@ function imgui.OnDrawFrame()
       if imgui.Checkbox(u8("Анти-афк"), checkbox.antiafk) then 
          if checkbox.antiafk.v then
             ini.settings.antiafk = not ini.settings.antiafk
-            save()
          end
+		 save()
       end
        
       imgui.SameLine()
@@ -236,8 +236,8 @@ function imgui.OnDrawFrame()
 	  if imgui.Checkbox(u8("Скрывать пикапы оружия"), checkbox.noweaponpickups) then 
          if checkbox.noweaponpickups.v then
             ini.settings.noweaponpickups = not ini.settings.noweaponpickups
-            save()
          end
+		 save()
       end
        
       imgui.SameLine()
@@ -246,8 +246,8 @@ function imgui.OnDrawFrame()
 	  if imgui.Checkbox(u8("Скрывать иконки свободных домов"), checkbox.hidehousesmapicons) then 
          if checkbox.hidehousesmapicons.v then
             ini.settings.hidehousesmapicons = not ini.settings.hidehousesmapicons
-            save()
          end
+		 save()
       end
        
       imgui.SameLine()
@@ -256,8 +256,8 @@ function imgui.OnDrawFrame()
 	  if imgui.Checkbox(u8("Скрывать аттачи при прицеливании"), checkbox.hideattachesonaim) then 
          if checkbox.hideattachesonaim.v then
             ini.settings.hideattachesonaim = not ini.settings.hideattachesonaim
-            save()
          end
+		 save()
       end
 	  
       imgui.SameLine()
@@ -269,8 +269,8 @@ function imgui.OnDrawFrame()
 			if ini.settings.restoreremovedobjects then
 			   sampAddChatMessage("Для применения данной опции необходимо перезайти", -1)
 			end
-            save()
          end
+		 save()
       end
 	  
       imgui.SameLine()
@@ -279,12 +279,12 @@ function imgui.OnDrawFrame()
 	  
       -- if imgui.Checkbox(u8"Удалить логотип", checkbox.nologo) then
          -- ini.settings.nologo = not ini.settings.nologo
-         -- save()
          -- if ini.settings.nologo then            
             -- -- remove server logo
             -- sampTextdrawDelete(2048)
             -- sampTextdrawDelete(420)
          -- end
+		 -- save()
       -- end
       -- imgui.SameLine()
       -- imgui.TextQuestion("( ? )", u8"Удаляет логотип Absolute Play вверху экрана")
