@@ -20,7 +20,7 @@ local Vector3D = require "vector3d"
 -- Extended features config
 local useClickwarp = false
 local useDistanceProtect = true
-local maxACdist = 5.0
+local maxACdist = 25.0
 
 --- Config
 keyToggle = VK_MBUTTON
