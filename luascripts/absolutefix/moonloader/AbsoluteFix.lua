@@ -4,7 +4,7 @@ script_description("Set of fixes for Absolute Play servers")
 script_dependencies('imgui', 'lib.samp.events', 'vkeys')
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("1.9.4")
+script_version("1.9.5")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -54,6 +54,7 @@ local ini = inicfg.load({
 	  recontime = 10000,
       addonupgrades = true,
 	  autoreconnect = true,
+	  pmsoundfix = true,
 	  invalidmodelsfix = true
    },
 }, configIni)
@@ -310,7 +311,7 @@ function main()
 	  else
 	     sampAddChatMessage("{00BFFF}Absolute {FFD700}Fix. {FFFFFF}Открыть настройки {FFD700}/absfix", 0xFFFFFF)
       end
-      
+	  
 	  -- ENB check
 	  if doesFileExist(getGameDirectory() .. "\\enbseries.asi") or 
 	  doesFileExist(getGameDirectory() .. "\\d3d9.dll") then
@@ -325,7 +326,7 @@ function main()
       sampRegisterChatCommand("absfix", function ()
 	     if not ENBSeries then dialog.settings.v = not dialog.settings.v end
       end)
-      
+			
 	  -- remove "open Y menu" textdraw
       sampTextdrawDelete(423)
 	  -- remove server site textdraw
@@ -715,6 +716,13 @@ function sampev.onServerMessage(color, text)
          return false
       end
    end
+   
+   if ini.settings.pmsoundfix then
+      if text:find("ЛС") then
+	     addOneOffSound(0.0, 0.0, 0.0, 1138) -- CHECKPOINT_GREEN
+         return true
+	  end
+   end
 end
 
 function sampev.onTogglePlayerSpectating(state)
@@ -807,6 +815,22 @@ end
 
 -- Thanks Heroku for this function on !SAPatcher 
 function onSendRpc(id, bs, priority, reliability, channel, shiftTimestamp)
+	-- Fix ClickMap height detection when setting a placemark on the game map
+    if id == 119 then
+       local posX, posY, posZ = raknetBitStreamReadFloat(bs), raknetBitStreamReadFloat(bs), raknetBitStreamReadFloat(bs)
+       requestCollision(posX, posY)
+       loadScene(posX, posY, posZ)
+       local res, x, y, z = getTargetBlipCoordinates()
+       if res then
+           local new_bs = raknetNewBitStream()
+           raknetBitStreamWriteFloat(new_bs, x)
+           raknetBitStreamWriteFloat(new_bs, y)
+           raknetBitStreamWriteFloat(new_bs, z + 0.5)
+           raknetSendRpcEx(119, new_bs, priority, reliability, channel, shiftTimestamp)
+           raknetDeleteBitStream(new_bs)
+       end
+       return false
+   end
 
    if id == 153 and ini.settings.invalidmodelsfix then
       local playerId = raknetBitStreamReadInt32(bs)
