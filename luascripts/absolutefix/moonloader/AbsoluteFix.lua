@@ -4,7 +4,7 @@ script_description("Set of fixes for Absolute Play servers")
 script_dependencies('imgui', 'lib.samp.events', 'vkeys')
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("1.9.5")
+script_version("1.9.6")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -118,7 +118,7 @@ function imgui.OnDrawFrame()
          printStringNow("Url copied to clipboard", 1000)
       end
 	  
-	  imgui.TextColoredRGB("Homepage: {007DFF}github.com/ins1x/AbsoluteFix")
+	  imgui.TextColoredRGB("Подробно все опции расписаны на: {007DFF}github.com/ins1x/AbsoluteFix")
       if imgui.IsItemClicked() then
          setClipboardText("github.com/ins1x/AbsoluteFix")
          printStringNow("Url copied to clipboard", 1000)
@@ -654,7 +654,7 @@ function main()
          end		 
 		 
 		 -- The Tab key does not trigger a shot when aiming
-		 if isKeyDown(VK_RBUTTON) and isKeyDown(VK_TAB) then
+		 if isKeyDown(VK_RBUTTON) and isKeyDown(VK_TAB) and not isCharInAnyCar(PLAYER_PED) then
 		    clearCharTasksImmediately(PLAYER_PED)
 		 end 
 		 
@@ -674,8 +674,13 @@ function main()
 			
 			if isKeyJustPressed(VK_Z) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/xbybnm") end
 		 end
-      end
-      
+		 
+		 -- Switching textdraws with arrow buttons, mouse buttons, pgup-pgdown keys
+	     if isKeyJustPressed(VK_LEFT) or isKeyJustPressed(VK_XBUTTON1) or isKeyJustPressed(VK_PRIOR) and sampIsCursorActive() and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendClickTextdraw(36) end
+	  
+	     if isKeyJustPressed(VK_RIGHT) or isKeyJustPressed(VK_XBUTTON2) or isKeyJustPressed(VK_NEXT) and sampIsCursorActive() and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendClickTextdraw(37) end
+      end 
+	  
       -- END main
    end
 end
@@ -718,7 +723,7 @@ function sampev.onServerMessage(color, text)
    end
    
    if ini.settings.pmsoundfix then
-      if text:find("ЛС") then
+      if text:find("{00FF00}ЛС") then
 	     addOneOffSound(0.0, 0.0, 0.0, 1138) -- CHECKPOINT_GREEN
          return true
 	  end
