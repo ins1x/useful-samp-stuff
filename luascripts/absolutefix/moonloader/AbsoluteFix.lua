@@ -4,19 +4,14 @@ script_description("Set of fixes for Absolute Play servers")
 script_dependencies('imgui', 'lib.samp.events', 'vkeys')
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("1.9.6")
+script_version("1.9.7")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
--- Recommend use more functional script GameFixer by Gorskin
--- https://vk.com/@gorskinscripts-gamefixer-obnovlenie-30
 
--- Credits:
--- EvgeN 1137, hnnssy, FYP - Moonloader
--- FYP - imgui, SAMP lua library
--- Gorskin - useful code snippets and memory hacks
--- Black Jesus - timecyc fix functions
--- Heroku - invalid models fix functions 
+-- If your don't play on Absolute Play servers
+-- recommend use more functional script GameFixer by Gorskin
+-- https://vk.com/@gorskinscripts-gamefixer-obnovlenie-30
 
 require 'lib.moonloader'
 local keys = require 'vkeys'
@@ -115,12 +110,6 @@ function imgui.OnDrawFrame()
       imgui.TextColoredRGB("Набор исправлений и дополнений для серверов {007DFF}Absolute Play")
 	  if imgui.IsItemClicked() then
          setClipboardText("gta-samp.ru")
-         printStringNow("Url copied to clipboard", 1000)
-      end
-	  
-	  imgui.TextColoredRGB("Подробно все опции расписаны на: {007DFF}github.com/ins1x/AbsoluteFix")
-      if imgui.IsItemClicked() then
-         setClipboardText("github.com/ins1x/AbsoluteFix")
          printStringNow("Url copied to clipboard", 1000)
       end
 	  
@@ -658,6 +647,13 @@ function main()
 		    clearCharTasksImmediately(PLAYER_PED)
 		 end 
 		 
+		 -- ALT + RMB show player stats
+		 if isKeyDown(VK_RBUTTON) and isKeyJustPressed(VK_MENU) and not sampIsChatInputActive() and not isPauseMenuActive() and isCharInAnyCar(PLAYER_PED) then
+		    if(getClosestPlayerId() ~= -1) then
+			   sampSendChat(string.format("/cnfn %i", getClosestPlayerId()))
+			end
+         end	
+		 
          if isKeyJustPressed(VK_K) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/vfibye2") end
 
          if isKeyJustPressed(VK_M) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/vfibye") end
@@ -691,6 +687,24 @@ function doesFileExist(path)
    -- result: ans = file_exists("sample.txt")
    local f=io.open(path,"r")
    if f~=nil then io.close(f) return true else return false end
+end
+
+function getClosestPlayerId()
+    local closestId = -1
+    mydist = 30
+    local x, y, z = getCharCoordinates(PLAYER_PED)
+    for i = 0, 999 do
+        local streamed, pedID = sampGetCharHandleBySampPlayerId(i)
+        if streamed and getCharHealth(pedID) > 0 and not sampIsPlayerPaused(pedID) then
+            local xi, yi, zi = getCharCoordinates(pedID)
+            local dist = getDistanceBetweenCoords3d(x, y, z, xi, yi, zi)
+            if dist <= mydist then
+                mydist = dist
+                closestId = i
+            end
+        end
+    end
+    return closestId
 end
 
 -- Hooks
@@ -989,3 +1003,10 @@ function apply_custom_style()
    colors[clr.ModalWindowDarkening] = ImVec4(1.00, 0.98, 0.95, 0.73)
 end
 apply_custom_style()
+
+-- Credits:
+-- EvgeN 1137, hnnssy, FYP - Moonloader
+-- FYP - imgui, SAMP lua library
+-- Gorskin - useful code snippets and memory hacks
+-- Black Jesus - timecyc fix functions
+-- Heroku - invalid models fix functions 
