@@ -813,15 +813,19 @@ function sampev.onSetMapIcon(iconId, position, type, color, style)
    end
 end
 
-function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
+function sampev.onSendDialogResponse(dialogId, button, listboxId, input)
    if ini.settings.gamefixes then
       dialogs[dialogId] = {listboxId, input}
    end
 end
 
-function sampev.onShowDialog(dialogId , style , title , button1 , button2 , text)
+function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
    if ini.settings.gamefixes then
       dialogIncoming = dialogId
+   end
+   -- hide buy a house dialog
+   if dialogId == 118 then
+      return false
    end
 end
 
