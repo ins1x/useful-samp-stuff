@@ -7,7 +7,7 @@
 ![VK group](https://icons.iconarchive.com/icons/limav/flat-gradient-social/24/Vk-icon.png)  https://vk.com/sawncommunity | 
 ![Discord](https://icons.iconarchive.com/icons/papirus-team/papirus-apps/24/discord-icon.png) https://dsc.gg/sawncommunity  
   
-[Join to RSC server 82.208.17.10:27981](samp://82.208.17.10:27981  
+[Join to RSC server 82.208.17.10:27981](samp://82.208.17.10:27981)  
   
 ## Features
 - Fixed known [issues causing problems](https://team.sa-mp.com/wiki/Bugs.html) on the SA:MP server 
@@ -18,6 +18,6 @@
 - Works correctly in all [lag compensation](https://open.mp/docs/server/LagCompensation) modes (lagshot-skinshot)  - Simple and fast player data storage system [Sqlite](https://sampwiki.blast.hk/wiki/Category:SQLite)  
 - CW/TG system integrate to access basic game functions with simple menu    
 - Raid's protection system, detect (VPN, Mobile, Bots, Recon, Spam)    
-- NPCs system for training players    
+- NPCs and actors system for training players    
 
 > Players with SAMPCAC must connect from the [SA-MP 0.3.7 R1 Client](https://github.com/ins1x/sampcac-docs/raw/main/client/sa-mp-0.3.7-install.exe)
