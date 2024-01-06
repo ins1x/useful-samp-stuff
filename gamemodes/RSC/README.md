@@ -6,7 +6,9 @@
 [Website](https://sturmstaffel.ru) |
 ![VK group](https://icons.iconarchive.com/icons/limav/flat-gradient-social/24/Vk-icon.png)  https://vk.com/sawncommunity | 
 ![Discord](https://icons.iconarchive.com/icons/papirus-team/papirus-apps/24/discord-icon.png) https://dsc.gg/sawncommunity  
-
+  
+[Join to RSC server 82.208.17.10:27981](samp://82.208.17.10:27981  
+  
 ## Features
 - Fixed known [issues causing problems](https://team.sa-mp.com/wiki/Bugs.html) on the SA:MP server 
 - A unique system of virtual worlds with a wide range of features
