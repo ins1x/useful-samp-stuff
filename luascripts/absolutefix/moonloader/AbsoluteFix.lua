@@ -4,7 +4,7 @@ script_description("Set of fixes for Absolute Play servers")
 script_dependencies('imgui', 'lib.samp.events', 'vkeys')
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("1.9.7")
+script_version("1.9.8")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -50,6 +50,7 @@ local ini = inicfg.load({
       addonupgrades = true,
 	  autoreconnect = true,
 	  pmsoundfix = true,
+	  disablenotifications = true,
 	  invalidmodelsfix = true
    },
 }, configIni)
@@ -94,6 +95,7 @@ local showReconnectedTeammates = false
 local isPlayerSpectating = false
 local dialogRestoreText = false
 local dialogIncoming = 0
+local isTabmenuActive = false
 -- mods finder
 local ENBSeries = false
 local FastloadAsi = false
@@ -265,27 +267,8 @@ function imgui.OnDrawFrame()
 	  
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"Восстанавливает удаленные объекты деревьев и столбов с улиц (требуется релог)")
-	  
-	  
-      -- if imgui.Checkbox(u8"Удалить логотип", checkbox.nologo) then
-         -- ini.settings.nologo = not ini.settings.nologo
-         -- if ini.settings.nologo then            
-            -- -- remove server logo
-            -- sampTextdrawDelete(2048)
-            -- sampTextdrawDelete(420)
-         -- end
-		 -- save()
-      -- end
-      -- imgui.SameLine()
-      -- imgui.TextQuestion("( ? )", u8"Удаляет логотип Absolute Play вверху экрана")
       
 	  imgui.Text(" ")
-      --if imgui.Button(u8"Выгрузить скрипт") then
-        -- sampAddChatMessage("Скрипт AbsoluteFix успешно выгружен.", -1)
-         --sampAddChatMessage("Для запуска используйте комбинацию клавиш CTRL + R.", -1)
-         --thisScript():unload()
-      --end
-	  
       imgui.End()
    end
 end
@@ -627,6 +610,23 @@ function main()
 		 end
 	  end
 	  
+	  -- Fix movements PED if tabmenu opened
+	  if ini.settings.gamefixes then
+	     if wasKeyPressed(VK_TAB) and not isPauseMenuActive() then
+		    isTabmenuActive = not isTabmenuActive
+		    -- if isTabmenuActive then
+		       -- setPlayerControl(playerHandle, false)
+		    -- else
+		       -- setPlayerControl(playerHandle, true)
+		    -- end
+	     end
+	     if isKeyJustPressed(VK_ESCAPE) and not isPauseMenuActive() then
+		    if isTabmenuActive then
+		       isTabmenuActive = false
+			   setPlayerControl(playerHandle, true)
+		    end
+	     end
+	  end
       -- Absolute Play Key Binds
       -- Sets hotkeys that are only available with the samp addon
       if ini.settings.keybinds then
@@ -717,7 +717,9 @@ function sampev.onServerMessage(color, text)
          chatlog:close()
          return false
       end
-	  
+   end
+   
+   if ini.settings.disablenotifications then
 	  -- ignore server flood mesages
 	  if text:find("рекорд дрифта") then
          return false
@@ -823,9 +825,14 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
    if ini.settings.gamefixes then
       dialogIncoming = dialogId
    end
+   
    -- hide buy a house dialog
-   if dialogId == 118 then
-      return false
+   if ini.settings.disablenotifications then
+      if dialogId == 118 then
+	     --sampSendDialogResponse(sampGetCurrentDialogId(), 1, nil, 20)
+	     sampSendDialogResponse(118, 1, nil, text)
+		 --sampCloseCurrentDialogWithButton(1)
+      end
    end
 end
 
