@@ -35,7 +35,7 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | Name | Description |
 | --- | --- |
 | [AbsoluteFix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix) | A set of fixes and additions for Absolute Play servers |
-| [AutoForward]https://github.com/ins1x/useful-samp-stuff/blob/main/luascripts/AutoForward%20v2.1.lua) | Script for automatic movement by car (cruise control), and autoforward on foot |
+| [AutoForward](https://github.com/ins1x/useful-samp-stuff/blob/main/luascripts/AutoForward.lua) | Script for automatic movement by car (cruise control), and autoforward on foot |
 | [ModCompatibilityChecker](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/ModCompatibilityChecker.lua) | Checks the mods that can cause crashes |
 | [AbsEventHelper](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
 | [Clickwarp](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/clickwarp/) | Fork of original clickwarp by FYP updated for Absolute Play |
@@ -46,4 +46,4 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | [Nogametext](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/nogametext.lua) | Hides annoying gametext in the middle of the screen on the UIF server |
 
 
-> Disclaimer: All rights to modified scripts belong to their respective owners.  
+> Disclaimer: All rights to modified scripts belong to their respective owners (specified in the description).
