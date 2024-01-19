@@ -4,7 +4,7 @@ script_description("Set of fixes for Absolute Play servers")
 script_dependencies('imgui', 'lib.samp.events', 'vkeys')
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("1.9.8")
+script_version("1.9.9")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -96,6 +96,7 @@ local isPlayerSpectating = false
 local dialogRestoreText = false
 local dialogIncoming = 0
 local isTabmenuActive = false
+local clickedplayerid = nil
 -- mods finder
 local ENBSeries = false
 local FastloadAsi = false
@@ -267,7 +268,7 @@ function imgui.OnDrawFrame()
 	  
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"Восстанавливает удаленные объекты деревьев и столбов с улиц (требуется релог)")
-      
+        
 	  imgui.Text(" ")
       imgui.End()
    end
@@ -647,6 +648,17 @@ function main()
 		    clearCharTasksImmediately(PLAYER_PED)
 		 end 
 		 
+		 -- Open last chosen player dialog (only if samp addon not installed)
+	     if not isSampAddonInstalled and isKeyJustPressed(VK_B)
+	     and not sampIsChatInputActive() and not isPauseMenuActive()
+	     and not sampIsDialogActive() and not isSampfuncsConsoleActive() then 
+		    if clickedplayerid then
+		       if sampIsPlayerConnected(clickedplayerid) then 
+			      sampSendChat("/и " .. clickedplayerid)
+			   end
+		    end
+	     end 
+		 
 		 -- ALT + RMB show player stats
 		 if isKeyDown(VK_RBUTTON) and isKeyJustPressed(VK_MENU) and not sampIsChatInputActive() and not isPauseMenuActive() and isCharInAnyCar(PLAYER_PED) then
 		    if(getClosestPlayerId() ~= -1) then
@@ -826,14 +838,21 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
       dialogIncoming = dialogId
    end
    
+   -- debug
+   -- print(dialogId, style, title, button1, button2, text)
+   
    -- hide buy a house dialog
-   if ini.settings.disablenotifications then
-      if dialogId == 118 then
-	     --sampSendDialogResponse(sampGetCurrentDialogId(), 1, nil, 20)
-	     sampSendDialogResponse(118, 1, nil, text)
-		 --sampCloseCurrentDialogWithButton(1)
-      end
-   end
+   -- if ini.settings.disablenotifications then
+      -- if dialogId == 118 then
+	     -- sampSendDialogResponse(118, 0, nil, nil)
+		 -- print(dialogId, button1, text)
+		 -- sampCloseCurrentDialogWithButton(0)
+      -- end
+   -- end
+end
+
+function sampev.onSendClickPlayer(playerId, source)
+   clickedplayerid = playerId
 end
 
 function sampev.onRemoveBuilding(modelId, position, radius)
@@ -841,6 +860,7 @@ function sampev.onRemoveBuilding(modelId, position, radius)
 	  return false
    end
 end
+
 -- END hooks
 
 -- Thanks Heroku for this function on !SAPatcher 
