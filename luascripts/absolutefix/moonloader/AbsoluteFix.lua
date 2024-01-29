@@ -1,10 +1,9 @@
 script_author("1NS")
 script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
-script_dependencies('imgui', 'lib.samp.events', 'vkeys')
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("1.9.9")
+script_version("2.0")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -89,9 +88,6 @@ local hostip = "193.84.90.23"
 local dialogs = {}
 local removed_objects = {647, 1410, 1412, 1413, 1447} -- exclude objects here
 local attached_objects = {}
-local teammatesTable = {}
-local teammatesTag = "brutal" -- example team tag
-local showReconnectedTeammates = false
 local isPlayerSpectating = false
 local dialogRestoreText = false
 local dialogIncoming = 0
@@ -282,7 +278,7 @@ function main()
       if not ip:find(hostip) then
          thisScript():unload()
 	  else
-	     sampAddChatMessage("{00BFFF}Absolute {FFD700}Fix. {FFFFFF}Открыть настройки {FFD700}/absfix", 0xFFFFFF)
+	     sampAddChatMessage("{880000}Absolute Fix. {FFFFFF}Открыть настройки {CDCDCD}/absfix", 0xFFFFFF)
       end
 	  
 	  -- ENB check
@@ -737,6 +733,10 @@ function sampev.onServerMessage(color, text)
          return false
       end
 	  
+	  if text:find("рекорд в безумном трюке") then
+         return false
+      end
+	  
 	  if text:find("не засчитан") then
          return false
       end
@@ -760,33 +760,6 @@ end
 
 function sampev.onTogglePlayerSpectating(state)
    isPlayerSpectating = state
-end
-
-function sampev.onPlayerJoin(id, color, isNpc, nickname)
-	if sampIsLocalPlayerSpawned() and showReconnectedTeammates then
-	   if nickname:lower():find(teammatesTag) then
-          table.insert(teammatesTable, id)
-		  sampAddChatMessage("Соклан " .. nickname .. " подключился к серверу.", 0x00FFFF)
-	   end
-	end
-end
-
-function sampev.onPlayerQuit(id, reason)
-   local nick = sampGetPlayerNickname(id)
-   
-   if reason == 0 then reas = 'Выход'
-   elseif reason == 1 then reas = 'Кик/бан'
-   elseif reason == 2 then reas = 'Вышло время подключения'
-   end
-   
-   if showReconnectedTeammates then
-      for key, value in ipairs(teammatesTable) do
-	     if value == id then 
-	        sampAddChatMessage("Соклан " .. nick .. " вышел по причине: " .. reas, 0x00FFFF)
-		    table.remove(teammatesTable, key)
-		 end
-	  end
-   end
 end
 
 function sampev.onScriptTerminate(script, quitGame)
