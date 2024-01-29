@@ -1,0 +1,3 @@
+# Auto detect text files and perform LF normalization
+*.lua text working-tree-encoding=Windows-1251
+* text=auto
