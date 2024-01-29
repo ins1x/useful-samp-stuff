@@ -42,6 +42,7 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | [DriftСameraLock](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/DriftСameraLock.lua) | Lock camera behind player on vehicle (DriftCam) |
 | [ImguiSnippets](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/snippets) | Templates for creating lua scripts for SAMP |
 | [GangWarNotifer](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/GangWarNotifier.lua) | Notifies if gangwar has started for the territory |
+| [FriendsList](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/FriendsList.lua) | It notifies you when a friend comes online or quits |
 | [Renderobjects](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/renderobjects) | A convenient tool for mappers, allows you to quickly find the desired object  |
 | [Nogametext](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/nogametext.lua) | Hides annoying gametext in the middle of the screen on the UIF server |
 
