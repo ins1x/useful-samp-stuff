@@ -50,6 +50,7 @@ local ini = inicfg.load({
 	  autoreconnect = true,
 	  pmsoundfix = true,
 	  disablenotifications = true,
+	  disablerecordnotifications = true,
 	  invalidmodelsfix = true
    },
 }, configIni)
@@ -57,6 +58,7 @@ inicfg.save(ini, configIni)
 
 function save()
     inicfg.save(ini, configIni)
+	--sampAddChatMessage("РќР°СЃС‚СЂРѕР№РєРё СЃРѕС…СЂР°РЅРµРЅС‹",-1)
 end
 ---------------------------------------------------------
 
@@ -70,6 +72,7 @@ local dialog = {
 local checkbox = {
    antiafk = imgui.ImBool(ini.settings.antiafk),
    chatfilter = imgui.ImBool(ini.settings.chatfilter),
+   disablenotifications = imgui.ImBool(ini.settings.disablenotifications),
    keybinds = imgui.ImBool(ini.settings.keybinds),
    gamefixes = imgui.ImBool(ini.settings.gamefixes),
    noeffects = imgui.ImBool(ini.settings.noeffects),
@@ -91,7 +94,6 @@ local attached_objects = {}
 local isPlayerSpectating = false
 local dialogRestoreText = false
 local dialogIncoming = 0
-local isTabmenuActive = false
 local clickedplayerid = nil
 -- mods finder
 local ENBSeries = false
@@ -106,7 +108,7 @@ function imgui.OnDrawFrame()
      
       imgui.Begin(u8"AbsoluteFix", dialog.settings)
        
-      imgui.TextColoredRGB("Набор исправлений и дополнений для серверов {007DFF}Absolute Play")
+      imgui.TextColoredRGB("РќР°Р±РѕСЂ РёСЃРїСЂР°РІР»РµРЅРёР№ Рё РґРѕРїРѕР»РЅРµРЅРёР№ РґР»СЏ СЃРµСЂРІРµСЂРѕРІ {007DFF}Absolute Play")
 	  if imgui.IsItemClicked() then
          setClipboardText("gta-samp.ru")
          printStringNow("Url copied to clipboard", 1000)
@@ -114,44 +116,36 @@ function imgui.OnDrawFrame()
 	  
 	  imgui.Text(u8" ")
 
-      if imgui.Checkbox(u8("Фикс горячих клавиш аддона"), checkbox.keybinds) then 
-         if checkbox.keybinds.v then
-            ini.settings.keybinds = not ini.settings.keybinds
-         end
+      if imgui.Checkbox(u8("Р¤РёРєСЃ РіРѕСЂСЏС‡РёС… РєР»Р°РІРёС€ Р°РґРґРѕРЅР°"), checkbox.keybinds) then 
+         ini.settings.keybinds = not ini.settings.keybinds
 		 save()
       end
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Восстанавливает стандартные горячие клавиши доступные с samp addon")
+      imgui.TextQuestion("( ? )", u8"Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РіРѕСЂСЏС‡РёРµ РєР»Р°РІРёС€Рё РґРѕСЃС‚СѓРїРЅС‹Рµ СЃ samp addon")
 
-      if imgui.Checkbox(u8("Включить фиксы игры"), checkbox.gamefixes) then 
-        if checkbox.gamefixes.v then
-            ini.settings.gamefixes = not ini.settings.gamefixes
-         end
+      if imgui.Checkbox(u8("Р’РєР»СЋС‡РёС‚СЊ С„РёРєСЃС‹ РёРіСЂС‹"), checkbox.gamefixes) then 
+         ini.settings.gamefixes = not ini.settings.gamefixes
 		 save()
       end
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Включает некоторые фиксы багов игры (Нужен релог для применения)")
+      imgui.TextQuestion("( ? )", u8"Р’РєР»СЋС‡Р°РµС‚ РЅРµРєРѕС‚РѕСЂС‹Рµ С„РёРєСЃС‹ Р±Р°РіРѕРІ РёРіСЂС‹ (РќСѓР¶РµРЅ СЂРµР»РѕРі РґР»СЏ РїСЂРёРјРµРЅРµРЅРёСЏ)")
       
-      if imgui.Checkbox(u8("Включить работу апгрейдов"), checkbox.addonupgrades) then 
-        if checkbox.addonupgrades.v then
-            ini.settings.addonupgrades = not ini.settings.addonupgrades
-         end
+      if imgui.Checkbox(u8("Р’РєР»СЋС‡РёС‚СЊ СЂР°Р±РѕС‚Сѓ Р°РїРіСЂРµР№РґРѕРІ"), checkbox.addonupgrades) then 
+         ini.settings.addonupgrades = not ini.settings.addonupgrades
 		 save()
       end
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Включает улучшения - бесконечный бег, бег в интерьере, анти падение с байка")
+      imgui.TextQuestion("( ? )", u8"Р’РєР»СЋС‡Р°РµС‚ СѓР»СѓС‡С€РµРЅРёСЏ - Р±РµСЃРєРѕРЅРµС‡РЅС‹Р№ Р±РµРі, Р±РµРі РІ РёРЅС‚РµСЂСЊРµСЂРµ, Р°РЅС‚Рё РїР°РґРµРЅРёРµ СЃ Р±Р°Р№РєР°")
        
-      if imgui.Checkbox(u8"Отключить эффекты", checkbox.noeffects) then
-         if checkbox.noeffects.v then
-            ini.settings.noeffects = not ini.settings.noeffects
-         end
+      if imgui.Checkbox(u8"РћС‚РєР»СЋС‡РёС‚СЊ СЌС„С„РµРєС‚С‹", checkbox.noeffects) then
+         ini.settings.noeffects = not ini.settings.noeffects
 		 save()
       end
        
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Отключает эффекты дыма, пыли, тени (требуется релог)")
+      imgui.TextQuestion("( ? )", u8"РћС‚РєР»СЋС‡Р°РµС‚ СЌС„С„РµРєС‚С‹ РґС‹РјР°, РїС‹Р»Рё, С‚РµРЅРё (С‚СЂРµР±СѓРµС‚СЃСЏ СЂРµР»РѕРі)")
 
-	  if imgui.Checkbox(u8"Активировать nopostfx", checkbox.nopostfx) then
+	  if imgui.Checkbox(u8"РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ nopostfx", checkbox.nopostfx) then
 	     ini.settings.nopostfx = not ini.settings.nopostfx
 		 if ini.settings.nopostfx then 
 	        memory.write(7358318, 2866, 4, false) --postfx off
@@ -163,9 +157,9 @@ function imgui.OnDrawFrame()
 		 save()
 	  end
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Отключает пост-обработку (PostFX)")
+      imgui.TextQuestion("( ? )", u8"РћС‚РєР»СЋС‡Р°РµС‚ РїРѕСЃС‚-РѕР±СЂР°Р±РѕС‚РєСѓ (PostFX)")
 	  
-	  if imgui.Checkbox(u8"Исправить темный таймцикл", checkbox.fixdarktimecyc) then
+	  if imgui.Checkbox(u8"РСЃРїСЂР°РІРёС‚СЊ С‚РµРјРЅС‹Р№ С‚Р°Р№РјС†РёРєР»", checkbox.fixdarktimecyc) then
 	     ini.settings.fixdarktimecyc = not ini.settings.fixdarktimecyc
 		 if not ini.settings.fixdarktimecyc then
 	        memory.write(6359759, 217, 1, false)
@@ -200,70 +194,69 @@ function imgui.OnDrawFrame()
 		 save()
 	  end
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Исправляет темные текстуры и освещение игры (аналог gammafix)")
+      imgui.TextQuestion("( ? )", u8"РСЃРїСЂР°РІР»СЏРµС‚ С‚РµРјРЅС‹Рµ С‚РµРєСЃС‚СѓСЂС‹ Рё РѕСЃРІРµС‰РµРЅРёРµ РёРіСЂС‹ (Р°РЅР°Р»РѕРі gammafix)")
 	  
-	  if imgui.Checkbox(u8("Фильтр подключений в чате"), checkbox.chatfilter) then
-         if checkbox.chatfilter.v then
-            ini.settings.chatfilter = not ini.settings.chatfilter
-         end
+	  if imgui.Checkbox(u8("Р¤РёР»СЊС‚СЂРѕРІР°С‚СЊ РїРѕРґРєР»СЋС‡РµРЅРёСЏ/РѕС‚РєР»СЋС‡РµРЅРёСЏ РёРіСЂРѕРєРѕРІ РІ С‡Р°С‚Рµ"), checkbox.chatfilter) then
+         ini.settings.chatfilter = not ini.settings.chatfilter
 		 save()
       end
 	  
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Убирает сообщения о подключениях-отключениях игроков в общем чате")
+      imgui.TextQuestion("( ? )", u8"РЈР±РёСЂР°РµС‚ СЃРѕРѕР±С‰РµРЅРёСЏ Рѕ РїРѕРґРєР»СЋС‡РµРЅРёСЏС…-РѕС‚РєР»СЋС‡РµРЅРёСЏС… РёРіСЂРѕРєРѕРІ РІ РѕР±С‰РµРј С‡Р°С‚Рµ")
       
-      if imgui.Checkbox(u8("Анти-афк"), checkbox.antiafk) then 
-         if checkbox.antiafk.v then
-            ini.settings.antiafk = not ini.settings.antiafk
-         end
+	  if imgui.Checkbox(u8("Р¤РёР»СЊС‚СЂРѕРІР°С‚СЊ СѓРІРµРґРѕРјР»РµРЅРёСЏ РІ С‡Р°С‚Рµ"), checkbox.disablenotifications) then
+         ini.settings.disablenotifications = not ini.settings.disablenotifications
+         ini.settings.disablerecordnotifications = not ini.settings.disablerecordnotifications
+		 save()
+      end
+	  
+      imgui.SameLine()
+      imgui.TextQuestion("( ? )", u8"РЈР±РёСЂР°РµС‚ Р»РёС€РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ РІ С‡Р°С‚ (РґСЂРёС„С‚ СЂРµРєРѕСЂРґС‹, Р±РµР·СѓРјРЅС‹Рµ С‚СЂСЋРєРё, РїСЂРѕС‡РёР№ С„Р»СѓРґ)")
+	  
+      if imgui.Checkbox(u8("РђРЅС‚Рё-Р°С„Рє"), checkbox.antiafk) then 
+         ini.settings.antiafk = not ini.settings.antiafk
 		 save()
       end
        
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"При сворачивании окна игрок не будет уходить в афк")
+      imgui.TextQuestion("( ? )", u8"РџСЂРё СЃРІРѕСЂР°С‡РёРІР°РЅРёРё РѕРєРЅР° РёРіСЂРѕРє РЅРµ Р±СѓРґРµС‚ СѓС…РѕРґРёС‚СЊ РІ Р°С„Рє")
 	  
-	  if imgui.Checkbox(u8("Скрывать пикапы оружия"), checkbox.noweaponpickups) then 
-         if checkbox.noweaponpickups.v then
-            ini.settings.noweaponpickups = not ini.settings.noweaponpickups
-         end
+	  if imgui.Checkbox(u8("РЎРєСЂС‹РІР°С‚СЊ РїРёРєР°РїС‹ РѕСЂСѓР¶РёСЏ"), checkbox.noweaponpickups) then 
+         ini.settings.noweaponpickups = not ini.settings.noweaponpickups
 		 save()
       end
        
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Удаляет пикапы оружия из зоны стрима (Повышает FPS)")
+      imgui.TextQuestion("( ? )", u8"РЈРґР°Р»СЏРµС‚ РїРёРєР°РїС‹ РѕСЂСѓР¶РёСЏ РёР· Р·РѕРЅС‹ СЃС‚СЂРёРјР° (РџРѕРІС‹С€Р°РµС‚ FPS)")
 	  
-	  if imgui.Checkbox(u8("Скрывать иконки свободных домов"), checkbox.hidehousesmapicons) then 
-         if checkbox.hidehousesmapicons.v then
-            ini.settings.hidehousesmapicons = not ini.settings.hidehousesmapicons
-         end
+	  if imgui.Checkbox(u8("РЎРєСЂС‹РІР°С‚СЊ РёРєРѕРЅРєРё СЃРІРѕР±РѕРґРЅС‹С… РґРѕРјРѕРІ"), checkbox.hidehousesmapicons) then 
+         ini.settings.hidehousesmapicons = not ini.settings.hidehousesmapicons
 		 save()
       end
        
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Удаляет иконки свободных домов (Повышает FPS)")
+      imgui.TextQuestion("( ? )", u8"РЈРґР°Р»СЏРµС‚ РёРєРѕРЅРєРё СЃРІРѕР±РѕРґРЅС‹С… РґРѕРјРѕРІ (РџРѕРІС‹С€Р°РµС‚ FPS)")
 	  
-	  if imgui.Checkbox(u8("Скрывать аттачи при прицеливании"), checkbox.hideattachesonaim) then 
-         if checkbox.hideattachesonaim.v then
-            ini.settings.hideattachesonaim = not ini.settings.hideattachesonaim
-         end
+	  if imgui.Checkbox(u8("РЎРєСЂС‹РІР°С‚СЊ Р°С‚С‚Р°С‡Рё РїСЂРё РїСЂРёС†РµР»РёРІР°РЅРёРё"), checkbox.hideattachesonaim) then 
+         ini.settings.hideattachesonaim = not ini.settings.hideattachesonaim
 		 save()
       end
 	  
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Скрывает аттачи(аксессуары) с игрока при прицеливании c кемпы, рпг или использовании фотоаппарата")
+      imgui.TextQuestion("( ? )", u8"РЎРєСЂС‹РІР°РµС‚ Р°С‚С‚Р°С‡Рё(Р°РєСЃРµСЃСЃСѓР°СЂС‹) СЃ РёРіСЂРѕРєР° РїСЂРё РїСЂРёС†РµР»РёРІР°РЅРёРё c РєРµРјРїС‹, СЂРїРі РёР»Рё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё С„РѕС‚РѕР°РїРїР°СЂР°С‚Р°")
 	  
-	  if imgui.Checkbox(u8("Восстановить удаленные объекты"), checkbox.restoreremovedobjects) then 
+	  if imgui.Checkbox(u8("Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ СѓРґР°Р»РµРЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹"), checkbox.restoreremovedobjects) then 
          if checkbox.restoreremovedobjects.v then
             ini.settings.restoreremovedobjects = not ini.settings.restoreremovedobjects
 			if ini.settings.restoreremovedobjects then
-			   sampAddChatMessage("Для применения данной опции необходимо перезайти", -1)
+			   sampAddChatMessage("Р”Р»СЏ РїСЂРёРјРµРЅРµРЅРёСЏ РґР°РЅРЅРѕР№ РѕРїС†РёРё РЅРµРѕР±С…РѕРґРёРјРѕ РїРµСЂРµР·Р°Р№С‚Рё", -1)
 			end
          end
 		 save()
       end
 	  
       imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Восстанавливает удаленные объекты деревьев и столбов с улиц (требуется релог)")
+      imgui.TextQuestion("( ? )", u8"Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СѓРґР°Р»РµРЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹ РґРµСЂРµРІСЊРµРІ Рё СЃС‚РѕР»Р±РѕРІ СЃ СѓР»РёС† (С‚СЂРµР±СѓРµС‚СЃСЏ СЂРµР»РѕРі)")
         
 	  imgui.Text(" ")
       imgui.End()
@@ -278,7 +271,7 @@ function main()
       if not ip:find(hostip) then
          thisScript():unload()
 	  else
-	     sampAddChatMessage("{880000}Absolute Fix. {FFFFFF}Открыть настройки {CDCDCD}/absfix", 0xFFFFFF)
+	     sampAddChatMessage("{880000}Absolute Fix. {FFFFFF}РћС‚РєСЂС‹С‚СЊ РЅР°СЃС‚СЂРѕР№РєРё {CDCDCD}/absfix", 0xFFFFFF)
       end
 	  
 	  -- ENB check
@@ -607,23 +600,6 @@ function main()
 		 end
 	  end
 	  
-	  -- Fix movements PED if tabmenu opened
-	  if ini.settings.gamefixes then
-	     if wasKeyPressed(VK_TAB) and not isPauseMenuActive() then
-		    isTabmenuActive = not isTabmenuActive
-		    -- if isTabmenuActive then
-		       -- setPlayerControl(playerHandle, false)
-		    -- else
-		       -- setPlayerControl(playerHandle, true)
-		    -- end
-	     end
-	     if isKeyJustPressed(VK_ESCAPE) and not isPauseMenuActive() then
-		    if isTabmenuActive then
-		       isTabmenuActive = false
-			   setPlayerControl(playerHandle, true)
-		    end
-	     end
-	  end
       -- Absolute Play Key Binds
       -- Sets hotkeys that are only available with the samp addon
       if ini.settings.keybinds then
@@ -650,7 +626,7 @@ function main()
 	     and not sampIsDialogActive() and not isSampfuncsConsoleActive() then 
 		    if clickedplayerid then
 		       if sampIsPlayerConnected(clickedplayerid) then 
-			      sampSendChat("/и " .. clickedplayerid)
+			      sampSendChat("/Рё " .. clickedplayerid)
 			   end
 		    end
 	     end 
@@ -718,7 +694,7 @@ end
 -- Hooks
 function sampev.onServerMessage(color, text)
    if ini.settings.chatfilter then 
-      if text:find("подключился к серверу") or text:find("вышел с сервера") then
+      if text:find("РїРѕРґРєР»СЋС‡РёР»СЃСЏ Рє СЃРµСЂРІРµСЂСѓ") or text:find("РІС‹С€РµР» СЃ СЃРµСЂРІРµСЂР°") then
          chatlog = io.open(getFolderPath(5).."\\GTA San Andreas User Files\\SAMP\\chatlog.txt", "a")
          chatlog:write(os.date("[%H:%M:%S] ")..text)
          chatlog:write("\n")
@@ -728,30 +704,37 @@ function sampev.onServerMessage(color, text)
    end
    
    if ini.settings.disablenotifications then
-	  -- ignore server flood mesages
-	  if text:find("рекорд дрифта") then
+	  -- ignore various server flood mesages
+	  if text:find("РЅРµ Р·Р°СЃС‡РёС‚Р°РЅ") then
          return false
       end
 	  
-	  if text:find("рекорд в безумном трюке") then
-         return false
-      end
-	  
-	  if text:find("не засчитан") then
-         return false
-      end
-	  
-      if text:find("выхода из читмира") then
+      if text:find("РІС‹С…РѕРґР° РёР· С‡РёС‚РјРёСЂР°") then
          return false
       end
    
-      if text:find("Ни 1 клан не создан") then
+      if text:find("РќРё 1 РєР»Р°РЅ РЅРµ СЃРѕР·РґР°РЅ") then
+         return false
+      end
+   end
+   
+   if ini.settings.disablerecordnotifications then
+      -- ignore record flood mesages
+   	  if text:find("СЂРµРєРѕСЂРґ РґСЂРёС„С‚Р°") then
+         return false
+      end
+	  
+	  if text:find("СЂРµРєРѕСЂРґ РІ Р±РµР·СѓРјРЅРѕРј С‚СЂСЋРєРµ") then
+         return false
+      end
+	  
+	  if text:find("СЂРµРєРѕСЂРґ РІ С‚СЂСЋРєРµ") then
          return false
       end
    end
    
    if ini.settings.pmsoundfix then
-      if text:find("{00FF00}ЛС") then
+      if text:find("{00FF00}Р›РЎ") then
 	     addOneOffSound(0.0, 0.0, 0.0, 1138) -- CHECKPOINT_GREEN
          return true
 	  end
@@ -767,8 +750,8 @@ function sampev.onScriptTerminate(script, quitGame)
         if not sampIsDialogActive() then
             showCursor(false)
         end
-        sampAddChatMessage("Скрипт AbsoluteFix аварийно завершил свою работу.", -1)
-        sampAddChatMessage("Для перезагрузки нажмите CTRL + R.", -1)
+        sampAddChatMessage("РЎРєСЂРёРїС‚ AbsoluteFix Р°РІР°СЂРёР№РЅРѕ Р·Р°РІРµСЂС€РёР» СЃРІРѕСЋ СЂР°Р±РѕС‚Сѓ.", -1)
+        sampAddChatMessage("Р”Р»СЏ РїРµСЂРµР·Р°РіСЂСѓР·РєРё РЅР°Р¶РјРёС‚Рµ CTRL + R.", -1)
     end
 end
 
@@ -813,11 +796,11 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
    
    -- debug
    -- print(dialogId, style, title, button1, button2, text)
-   
-   -- hide buy a house dialog
+
+   -- hide buy a house dialog (now not work)
    -- if ini.settings.disablenotifications then
       -- if dialogId == 118 then
-	     -- sampSendDialogResponse(118, 0, nil, nil)
+	     -- sampSendDialogResponse(118, 1, nil, nil)
 		 -- print(dialogId, button1, text)
 		 -- sampCloseCurrentDialogWithButton(0)
       -- end
