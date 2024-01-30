@@ -13,8 +13,8 @@ script_description("It notifies you when a friend comes online or quits")
 
 -- Activation: Auto
 -- Commands:
--- /friends add Nickname - to add new friend
--- /friends del Nickname - to remove friend
+-- /friends add Nickname or ID - to add new friend
+-- /friends del Nickname or ID - to remove friend
 -- /friends list - show all friend list
 -- /friends help - to check notify list
 
@@ -35,9 +35,25 @@ function friends(args)
    if args:find('(.+) (.+)') then
       local cmd, name = args:match('(.+) (.+)')
 	  if cmd:find("add") then
+	     if name and string.len(name) < 3 then 
+		    local id = tonumber(name)
+		    if sampIsPlayerConnected(id) then
+		       local nickname = sampGetPlayerNickname(id)
+			   addfriend(nickname)
+			   return
+			end
+		 end
 	     addfriend(name)
 	  end
 	  if cmd:find("del") then
+	  	 if name and string.len(name) < 3 then 
+		    local id = tonumber(name)
+		    if sampIsPlayerConnected(id) then
+		       local nickname = sampGetPlayerNickname(id)
+			   delfriend(nickname)
+			   return
+			end
+		 end
 	     delfriend(name)
 	  end
    else
@@ -62,8 +78,8 @@ function friends(args)
 end
 
 function friendshelp()
-   sampAddChatMessage("{00FF00}/friends add Nickname - {FFFFFF}добавить в список друзей",0xCDCDCD)
-   sampAddChatMessage("{00FF00}/friends del Nickname - {FFFFFF}удалить из списка друзей",0xCDCDCD)
+   sampAddChatMessage("{00FF00}/friends add Никнейм/ID - {FFFFFF}добавить в список друзей",0xCDCDCD)
+   sampAddChatMessage("{00FF00}/friends del Никнейм/ID - {FFFFFF}удалить из списка друзей",0xCDCDCD)
    sampAddChatMessage("{00FF00}/friends list - {FFFFFF}список друзей",0xCDCDCD)
    sampAddChatMessage("{00FF00}/friends help - {FFFFFF}помощь",0xCDCDCD)
 end
@@ -79,9 +95,10 @@ end
 
 function sampev.onPlayerQuit(id, reason)
    local name = sampGetPlayerNickname(id)
+   local exitreasons = {"Таймаут/Краш", "Выход", "Кик/Бан"}
    for k,n in pairs(friendsList) do
       if (name:lower() == n:lower()) then
-         sampAddChatMessage("{00FF00}" .. name .. " {FFFFFF}вышел с сервера (" .. reason .. ")",0xFFFFFF)
+         sampAddChatMessage("{00FF00}" .. name .. " вышел с сервера (" .. exitreasons[reason] .. ")",0xFFFFFF)
          return
       end
    end
@@ -89,7 +106,7 @@ end
 
 function addfriend(name)
    if string.len(name) < 3 then
-      sampAddChatMessage("Пример: /friends add Nickname",0xCDCDCD)
+      sampAddChatMessage("Пример: /friends add Никнейм либо ID",0xCDCDCD)
       return
    end
    for k,n in pairs(friendsList) do
@@ -109,12 +126,12 @@ function addfriend(name)
    io.write(name .. "\n")
    io.close(friendsdb)
    table.insert(friendsList, name:lower())
-   sampAddChatMessage("{FFFFFF}Вы добавили {E61920}" .. name .. "{FFFFFF} в список друзей",0xFFFFFF)
+   sampAddChatMessage("{FFFFFF}Вы добавили {00FF00}" .. name .. "{FFFFFF} в список друзей",0xFFFFFF)
 end
 
 function delfriend(name)
    if string.len(name) < 3 then
-       sampAddChatMessage("Пример: /delfriend Nickname",0xCDCDCD)
+       sampAddChatMessage("Пример: /friends del Никнейм либо ID",0xCDCDCD)
        return
    end
    i = 1
