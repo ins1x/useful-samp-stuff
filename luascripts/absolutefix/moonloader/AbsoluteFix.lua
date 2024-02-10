@@ -693,6 +693,11 @@ end
 
 -- Hooks
 function sampev.onServerMessage(color, text)
+   -- Some functions are prohibited on Arizona
+   if text:find('Добро пожаловать на Arizona Role Play!') then
+      thisScript():unload()
+   end
+   
    if ini.settings.chatfilter then 
       if text:find("подключился к серверу") or text:find("вышел с сервера") then
          chatlog = io.open(getFolderPath(5).."\\GTA San Andreas User Files\\SAMP\\chatlog.txt", "a")
@@ -793,6 +798,13 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
    if ini.settings.gamefixes then
       dialogIncoming = dialogId
    end
+   
+   -- if dialogId == 1499 or dialogId == 1496 then
+      -- local randomcolor = string.sub(text, string.len(text)-6, #text-1)
+	  -- --sampAddChatMessage("Случайный цвет скопирован в буфер обмена",-1)
+	  -- printStringNow("color "..randomcolor.." copied to clipboard",1000)
+	  -- setClipboardText(randomcolor)
+   -- end
    
    -- debug
    -- print(dialogId, style, title, button1, button2, text)
