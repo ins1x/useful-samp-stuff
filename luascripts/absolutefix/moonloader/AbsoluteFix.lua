@@ -352,7 +352,8 @@ function main()
 		 memory.fill(0x00531155, 0x90, 5, true)
 		 -- nop gamma 
 		 --memory.hex2bin('E9D200000090', 0x0074721C, 5)
-		 
+		 -- disable wind effects
+		 -- memory.fill(0x535030, 0x90, 5, true) 
          -- fps fix
          memory.write(0x53E94C, 0, 1, false) --del fps delay 14 ms
          memory.setuint32(12761548, 1051965045, false) -- car speed fps fix
@@ -370,6 +371,9 @@ function main()
          memory.fill(0x4218D8, 0x90, 17, false)
          memory.fill(0x5F80C0, 0x90, 10, false)
          memory.fill(0x5FBA47, 0x90, 10, false)
+		 
+		 -- patch anim duck
+		 writeMemory(0x692649+1, 1, 6, true)
 		 
 		 -- AntiCrash R1
 		 local base = sampGetBase() + 0x5CF2C
@@ -392,9 +396,6 @@ function main()
       end
 	  
       if(ini.settings.noeffects) then
-         -- no smoke and decorative flame
-         memory.hex2bin('8B4E08E88B900000', 0x4A125D, 8)
-         
          -- nodust
          memory.write(7205311, 1056964608, 4, false)
          memory.write(7205316, 1065353216, 4, false)
