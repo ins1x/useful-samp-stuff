@@ -14,20 +14,18 @@
 * Восстанавливает последний выбранный пункт и текст в меню
 * Чат фильтр подключений/отключений игроков
 * Отключение различных эффектов дыма, пыли и теней
-* Отключение PostFx (опционально)
 * Возможность включить улучшения как в samp addon (бег по всем поверхностям, улучшенное вождение)
 * Отключения возвращения в выбор класса на F4
 * Отключение загрузочных экранов
 * Различные фиксы для увеличения FPS без кардинальных изменений самой игры
-* Исправление различных багов игры 
-* Исправление темного таймцикла
+* Исправление различных багов и крашей игры 
 * Исправление включения чата на T
 * Удаление ненужных разделов в меню в SA-MP
 * Фикс артефактов при сворачивании игры в интерьерах с зеркальным полом
 * Скрывает аттачи игрока при прицеливании
 * Возможность скрыть иконки пустых домов с радара
-* Возможность удалить пикапы выпадающего оружия с игрока
-* Возможность восстановить удаленные столбы, деревья и прочие объекты
+* Возможность удалить пикапы выпадающего оружия с игрока (Только для DM)
+* Возможность восстановить удаленные столбы, деревья и прочие объекты (Только для DM)
 * Исправление застревания игрока в другом игроке при спавне на DM
 * Бессмертному игроку визуально отключается урон на его транспорте
 * Восстановлены звуки для сообщений в личку
@@ -75,28 +73,29 @@
 Все настройки хранятся в файле moonloader\config\AbsoluteFix.ini  
 Скрытые настройки могут быть активированы только через конфиг файл
 ```INI
-	restoreremovedobjects=true
-	fixtimecycvalue=0.2
-	vehvisualdmg=true
-	gamefixes=true
-	invalidmodelsfix=true
-	noradio=true
-	antiafk=true
-	fixdarktimecyc=true
-	addonupgrades=true
-	hideattachesonaim=true
-	noweaponpickups=true
-	recontime=10000
-	chatfilter=true
-	fastload=true
-	nopostfx=false
-	hidehousesmapicons=true
-	menupatch=true
-	keybinds=true
-	autoreconnect=true
-	noeffects=false
-	nologo=false
-	nogametext=false
+  addonupgrades = true,
+  antiafk = true,
+  anticrash = true,
+  autoreconnect = true,
+  chatfilter = true,
+  dialogfix = true,
+  disablenotifications = true,
+  disablerecordnotifications = true,
+  fastload = true,
+  hideattachesonaim = true,
+  hidehousesmapicons = true,
+  gamefixes = true,
+  keybinds = true,
+  noeffects = false,
+  nologo = false,
+  noradio = false,
+  nogametext = false,
+  noweaponpickups = true,
+  menupatch = true,
+  pmsoundfix = true,
+  restoreremovedobjects = false,
+  recontime = 10000,
+  vehvisualdmg = false
 ```
 
 > Попробуйте более функциональный скрипт с множеством фиксов [GameFixer by Gorskin](https://vk.com/@gorskinscripts-gamefixer-obnovlenie-30)
