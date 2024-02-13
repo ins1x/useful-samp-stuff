@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("2.0")
+script_version("2.0.2")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -27,31 +27,29 @@ local configIni = "AbsoluteFix.ini"
 local ini = inicfg.load({
    settings =
    {
+      addonupgrades = true,
       antiafk = true,
+      anticrash = true,
+	  autoreconnect = true,
       chatfilter = true,
-      keybinds = true,
+      dialogfix = true,
+      disablenotifications = true,
+	  disablerecordnotifications = true,
+      fastload = true,
+      hideattachesonaim = true,
+	  hidehousesmapicons = true,
       gamefixes = true,
+      keybinds = true,
       noeffects = false,
       nologo = false,
-	  nopostfx = false,
 	  noradio = false,
       nogametext = false,
-	  fastload = true,
-	  menupatch = true,
 	  noweaponpickups = true,
-	  hideattachesonaim = true,
-	  hidehousesmapicons = true,
-	  fixdarktimecyc = false,
+      menupatch = true,
+      pmsoundfix = true,
 	  restoreremovedobjects = false,
-	  vehvisualdmg = false,
-	  fixtimecycvalue = 0.2,
 	  recontime = 10000,
-      addonupgrades = true,
-	  autoreconnect = true,
-	  pmsoundfix = true,
-	  disablenotifications = true,
-	  disablerecordnotifications = true,
-	  invalidmodelsfix = true
+      vehvisualdmg = false
    },
 }, configIni)
 inicfg.save(ini, configIni)
@@ -77,17 +75,16 @@ local checkbox = {
    gamefixes = imgui.ImBool(ini.settings.gamefixes),
    noeffects = imgui.ImBool(ini.settings.noeffects),
    nologo = imgui.ImBool(ini.settings.nologo),
-   nopostfx = imgui.ImBool(ini.settings.nopostfx),
    noweaponpickups = imgui.ImBool(ini.settings.noweaponpickups),
    hideattachesonaim = imgui.ImBool(ini.settings.hideattachesonaim),
    hidehousesmapicons = imgui.ImBool(ini.settings.hidehousesmapicons),
-   fixdarktimecyc = imgui.ImBool(ini.settings.fixdarktimecyc),
    restoreremovedobjects = imgui.ImBool(ini.settings.restoreremovedobjects),
    addonupgrades = imgui.ImBool(ini.settings.addonupgrades)
 }
 
 -- If the server changes IP, change it here
 local hostip = "193.84.90.23"
+local isAbsoluteRoleplay = false
 local dialogs = {}
 local removed_objects = {647, 1410, 1412, 1413, 1447} -- exclude objects here
 local attached_objects = {}
@@ -136,65 +133,6 @@ function imgui.OnDrawFrame()
       end
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"Включает улучшения - бесконечный бег, бег в интерьере, анти падение с байка")
-       
-      if imgui.Checkbox(u8"Отключить эффекты", checkbox.noeffects) then
-         ini.settings.noeffects = not ini.settings.noeffects
-		 save()
-      end
-       
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Отключает эффекты дыма, пыли, тени (требуется релог)")
-
-	  if imgui.Checkbox(u8"Активировать nopostfx", checkbox.nopostfx) then
-	     ini.settings.nopostfx = not ini.settings.nopostfx
-		 if ini.settings.nopostfx then 
-	        memory.write(7358318, 2866, 4, false) --postfx off
-            memory.write(7358314, -380152237, 4, false) --postfx off
-	     else
- 		    memory.write(7358318, 1448280247, 4, false) --postfx on
-            memory.write(7358314, -988281383, 4, false) --postfx on
-		 end 
-		 save()
-	  end
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Отключает пост-обработку (PostFX)")
-	  
-	  if imgui.Checkbox(u8"Исправить темный таймцикл", checkbox.fixdarktimecyc) then
-	     ini.settings.fixdarktimecyc = not ini.settings.fixdarktimecyc
-		 if not ini.settings.fixdarktimecyc then
-	        memory.write(6359759, 217, 1, false)
-            memory.write(6359760, 21, 1, false)
-            memory.write(6359761, 96, 1, false)
-            memory.write(6359762, 208, 1, false)
-            memory.write(6359763, 140, 1, false)
-            memory.write(6359764, 0, 1, false)
-            memory.write(6359778, 199, 1, false)
-            memory.write(6359779, 5, 1, false)
-            memory.write(6359780, 96, 1, false)
-            memory.write(6359781, 208, 1, false)
-            memory.write(6359782, 140, 1, false)
-            memory.write(6359783, 0, 1, false)
-            memory.write(6359784, 0, 1, false)
-            memory.write(6359785, 0, 1, false)
-            memory.write(6359786, 128, 1, false)
-            memory.write(6359787, 63, 1, false)
-            memory.write(5637016, 12043448, 4, false)
-            memory.write(5637032, 12043452, 4, false)
-            memory.write(5637048, 12043456, 4, false)
-            memory.write(5636920, 12043424, 4, false)
-            memory.write(5636936, 12043428, 4, false)
-            memory.write(5636952, 12043432, 4, false)
-			
-			memory.setfloat(9228384, 0.0, false) -- allambient
-		    memory.setfloat(12044024, 0.0, false) -- objambient
-		    memory.setfloat(12044048, 0.0, false) -- worldambientR
-            memory.setfloat(12044072, 0.0, false) -- worldambientG
-            memory.setfloat(12044096, 0.0, false) -- worldambientB
-		 end
-		 save()
-	  end
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Исправляет темные текстуры и освещение игры (аналог gammafix)")
 	  
 	  if imgui.Checkbox(u8("Фильтровать подключения/отключения игроков в чате"), checkbox.chatfilter) then
          ini.settings.chatfilter = not ini.settings.chatfilter
@@ -221,13 +159,15 @@ function imgui.OnDrawFrame()
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"При сворачивании окна игрок не будет уходить в афк")
 	  
-	  if imgui.Checkbox(u8("Скрывать пикапы оружия"), checkbox.noweaponpickups) then 
-         ini.settings.noweaponpickups = not ini.settings.noweaponpickups
-		 save()
-      end
+	  if not isAbsoluteRoleplay then 
+	     if imgui.Checkbox(u8("Скрывать пикапы оружия"), checkbox.noweaponpickups) then 
+            ini.settings.noweaponpickups = not ini.settings.noweaponpickups
+		    save()
+         end
        
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Удаляет пикапы оружия из зоны стрима (Повышает FPS)")
+         imgui.SameLine()
+         imgui.TextQuestion("( ? )", u8"Удаляет пикапы оружия из зоны стрима (Повышает FPS)")
+	  end
 	  
 	  if imgui.Checkbox(u8("Скрывать иконки свободных домов"), checkbox.hidehousesmapicons) then 
          ini.settings.hidehousesmapicons = not ini.settings.hidehousesmapicons
@@ -245,20 +185,21 @@ function imgui.OnDrawFrame()
       imgui.SameLine()
       imgui.TextQuestion("( ? )", u8"Скрывает аттачи(аксессуары) с игрока при прицеливании c кемпы, рпг или использовании фотоаппарата")
 	  
-	  if imgui.Checkbox(u8("Восстановить удаленные объекты"), checkbox.restoreremovedobjects) then 
-         if checkbox.restoreremovedobjects.v then
-            ini.settings.restoreremovedobjects = not ini.settings.restoreremovedobjects
-			if ini.settings.restoreremovedobjects then
-			   sampAddChatMessage("Для применения данной опции необходимо перезайти", -1)
-			end
+	  if not isAbsoluteRoleplay then 
+	     if imgui.Checkbox(u8("Восстановить удаленные объекты"), checkbox.restoreremovedobjects) then 
+            if checkbox.restoreremovedobjects.v then
+               ini.settings.restoreremovedobjects = not ini.settings.restoreremovedobjects
+			   if ini.settings.restoreremovedobjects then
+			      sampAddChatMessage("Для применения данной опции необходимо перезайти", -1)
+			   end
+            end
+		    save()
          end
-		 save()
-      end
-	  
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Восстанавливает удаленные объекты деревьев и столбов с улиц (требуется релог)")
+		 imgui.SameLine()
+         imgui.TextQuestion("( ? )", u8"Восстанавливает удаленные объекты деревьев и столбов с улиц (требуется релог)")
+	  end
         
-	  imgui.Text(" ")
+	  imgui.Spacing()
       imgui.End()
    end
 end
@@ -271,6 +212,8 @@ function main()
       if not ip:find(hostip) then
          thisScript():unload()
 	  else
+	     if port >= 7771 and port < 7777 then isAbsoluteRoleplay = true end
+	     if port == 7111 then isAbsoluteRoleplay = true end -- testhost
 	     sampAddChatMessage("{880000}Absolute Fix. {FFFFFF}Открыть настройки {CDCDCD}/absfix", 0xFFFFFF)
       end
 	  
@@ -299,14 +242,14 @@ function main()
          sampTextdrawDelete(420)
       end
 	  
-	  if(ini.settings.antiafk) then
+	  if ini.settings.antiafk then
          -- dirty hack nop F1 and F4 keys functions
          memory.setuint8(getModuleHandle('samp.dll') + 0x67450, 0xC3, true)
          memory.write(sampGetBase()+0x797E, 0, 1, true)
 	  end
       
 	  -- fastload (Hide default loading screen like fastload.asi)
-	  if(ini.settings.fastload) and not FastloadAsi then 
+	  if ini.settings.fastload and not FastloadAsi then 
          if memory.getuint8(0x748C2B) == 0xE8 then
 		    memory.fill(0x748C2B, 0x90, 5, true)
 	     elseif memory.getuint8(0x748C7B) == 0xE8 then
@@ -331,7 +274,7 @@ function main()
 	  end
 	  
 	  -- Deleting unnecessary sections in the menu in SA-MP
-	  if(ini.settings.menupatch) then
+	  if ini.settings.menupatch then
 	     memory.copy(0x8D0444, memory.strptr("\x36\x46\x45\x50\x5F\x52\x45\x53\x00\x0B\x00\x00\x40\x01\xAA\x00\x03\x00\x05\x46\x45\x48\x5F\x4D\x41\x50\x00\x0B\x05\x00\x40\x01\xC8\x00\x03\x00\x05\x46\x45\x50\x5F\x4F\x50\x54\x00\x0B\x21\x00\x40\x01\xE6\x00\x03\x00\x05\x46\x45\x50\x5F\x51\x55\x49\x00\x0B\x23\x00\x40\x01\x04\x01\x03\x00"), 72)
          memory.fill(0x8D048C, 0, 144)
          memory.write(0x8CE47B, 1, 1)
@@ -339,7 +282,7 @@ function main()
          memory.write(0x8CFEF7, 3, 1)
 	  end
 	  
-      if(ini.settings.gamefixes) then	 
+      if ini.settings.gamefixes then	 
 		 -- SADisplayResolutions(1920x1080// 16:9)
          memory.write(0x745BC9, 0x9090, 2, false) 
 		 -- CJFix
@@ -374,7 +317,9 @@ function main()
 		 
 		 -- patch anim duck
 		 writeMemory(0x692649+1, 1, 6, true)
-		 
+      end
+      
+      if ini.settings.anticrash then
 		 -- AntiCrash R1
 		 local base = sampGetBase() + 0x5CF2C
          writeMemory(base, 4, 0x90909090, true)
@@ -385,8 +330,8 @@ function main()
          base = base + 4
          writeMemory(base, 1, 0x90, true)
       end
-      
-      if(ini.settings.addonupgrades) then
+         
+      if ini.settings.addonupgrades then
          -- interior run
          memory.write(5630064, -1027591322, 4, false)
          memory.write(5630068, 4, 2, false)
@@ -395,7 +340,7 @@ function main()
          memory.setint8(0xB7CEE4, 1)
       end
 	  
-      if(ini.settings.noeffects) then
+      if ini.settings.noeffects then
          -- nodust
          memory.write(7205311, 1056964608, 4, false)
          memory.write(7205316, 1065353216, 4, false)
@@ -421,14 +366,8 @@ function main()
          memory.write(7391066, 32081167, 4, false)
          memory.write(7391070, -1869611008, 4, false)
       end
-      
-	  if (ini.settings.nopostfx) then
-	     --memory.fill(0x53EAD3, 0x90, 5, true)
-		 memory.write(7358318, 1448280247, 4, false)--postfx on
-         memory.write(7358314, -988281383, 4, false)--postfx on
-	  end
 	  
-	  if (ini.settings.noradio) then
+	  if ini.settings.noradio then
 	     memory.copy(0x4EB9A0, memory.strptr('\xC2\x04\x00'), 3, true)
 	  end
 	  
@@ -468,48 +407,7 @@ function main()
             setCharCanBeKnockedOffBike(PLAYER_PED, false)
          end
       end
-      
-	  -- fix dark timecyc (gammafix) thanks Black Jesus
-	  if ini.settings.fixdarktimecyc then
-	     memory.write(6359759, 144, 1, false)
-         memory.write(6359760, 144, 1, false)
-         memory.write(6359761, 144, 1, false)
-         memory.write(6359762, 144, 1, false)
-         memory.write(6359763, 144, 1, false)
-         memory.write(6359764, 144, 1, false)
-         memory.write(6359778, 144, 1, false)
-         memory.write(6359779, 144, 1, false)
-         memory.write(6359780, 144, 1, false)
-         memory.write(6359781, 144, 1, false)
-         memory.write(6359782, 144, 1, false)
-         memory.write(6359783, 144, 1, false)
-         memory.write(6359784, 144, 1, false)
-         memory.write(6359785, 144, 1, false)
-         memory.write(6359786, 144, 1, false)
-         memory.write(6359787, 144, 1, false)
-         memory.write(5637016, 12044024, 4, false)
-         memory.write(5637032, 12044024, 4, false)
-         memory.write(5637048, 12044024, 4, false)
-         memory.write(5636920, 12044048, 4, false)
-         memory.write(5636936, 12044072, 4, false)
-         memory.write(5636952, 12044096, 4, false)
-		 		 
-         if ini.settings.nopostfx then
-            memory.setfloat(9228384, 1.0, false) -- allambient
-		    memory.setfloat(12044024, ini.settings.fixtimecycvalue*2, false) -- objambient
-		    memory.setfloat(12044048, ini.settings.fixtimecycvalue*2, false) -- worldambientR
-            memory.setfloat(12044072, ini.settings.fixtimecycvalue*2, false) -- worldambientG
-            memory.setfloat(12044096, ini.settings.fixtimecycvalue*2, false) -- worldambientB
-		 else
-            memory.setfloat(9228384, 0.8, false) -- allambient
-		    memory.setfloat(12044024, ini.settings.fixtimecycvalue, false) -- objambient
-		    memory.setfloat(12044048, ini.settings.fixtimecycvalue, false) -- worldambientR
-            memory.setfloat(12044072, ini.settings.fixtimecycvalue, false) -- worldambientG
-            memory.setfloat(12044096, ini.settings.fixtimecycvalue, false) -- worldambientB
-		 end
-	  end
 	  
-      -- antiafk 
       if ini.settings.antiafk then
          writeMemory(7634870, 1, 1, 1)
          writeMemory(7635034, 1, 1, 1)
@@ -553,16 +451,18 @@ function main()
       end
       
       -- no dialogs restore (by rraggerr)
-	  if dialogIncoming ~= 0 and dialogs[dialogIncoming] then
-         local data = dialogs[dialogIncoming]
-         if data[1] and not dialogRestoreText then
-		    sampSetCurrentDialogListItem(data[1])
-		 end
-		 if data[2] then
-            sampSetCurrentDialogEditboxText(data[2])
-		 end
-		 dialogIncoming = 0
-	  end
+      if ini.settings.dialogfix then
+         if dialogIncoming ~= 0 and dialogs[dialogIncoming] then
+            local data = dialogs[dialogIncoming]
+            if data[1] and not dialogRestoreText then
+               sampSetCurrentDialogListItem(data[1])
+            end
+            if data[2] then
+               sampSetCurrentDialogEditboxText(data[2])
+            end
+            dialogIncoming = 0
+         end
+      end
 	  
 	  -- won't let you get stuck in another player's skin. 
 	  for i = 0, sampGetMaxPlayerId(false) do
@@ -639,8 +539,18 @@ function main()
 			end
          end	
 		 
-         if isKeyJustPressed(VK_K) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/vfibye2") end
-
+		 if isAbsoluteRoleplay then
+            if isKeyJustPressed(VK_K) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/gps") end
+		 else
+		    if isKeyJustPressed(VK_K) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/vfibye2") end
+		 end	
+         
+		 if isAbsoluteRoleplay then
+            if isKeyJustPressed(VK_P) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/phone") end
+		 
+            if isKeyJustPressed(VK_I) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/inv") end
+		 end
+		 
          if isKeyJustPressed(VK_M) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/vfibye") end
       
          if isKeyJustPressed(VK_U) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/anim") end
@@ -722,6 +632,29 @@ function sampev.onServerMessage(color, text)
       if text:find("Ни 1 клан не создан") then
          return false
       end
+      
+      if text:find("Громкость музыки зависит от громкости радио") then
+         return false
+      end
+      
+      if text:find("Рекорд игроков на сервере") then
+         return false
+      end
+
+      if text:find("Вконтакте") then
+         -- Клавиша Y - Настройки - Аккаунт - Вконтакте
+         -- Рекомендуется прикрепить страницу Вконтакте для защиты аккаунта
+         return false
+      end
+
+      if text:find("У тебя устаревшая версия клиента") then
+         return false
+      end
+      
+      if text:find("Рекомендуется скачать последнюю версию с нашего сайта") then
+         return false
+      end
+
    end
    
    if ini.settings.disablerecordnotifications then
@@ -756,8 +689,8 @@ function sampev.onScriptTerminate(script, quitGame)
         if not sampIsDialogActive() then
             showCursor(false)
         end
-        sampAddChatMessage("Скрипт AbsoluteFix аварийно завершил свою работу.", -1)
-        sampAddChatMessage("Для перезагрузки нажмите CTRL + R.", -1)
+        -- sampAddChatMessage("Скрипт AbsoluteFix аварийно завершил свою работу.", -1)
+        -- sampAddChatMessage("Для перезагрузки нажмите CTRL + R.", -1)
     end
 end
 
@@ -796,7 +729,7 @@ function sampev.onSendDialogResponse(dialogId, button, listboxId, input)
 end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
-   if ini.settings.gamefixes then
+   if ini.settings.dialogfix then
       dialogIncoming = dialogId
    end
    
@@ -806,18 +739,24 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 	  -- printStringNow("color "..randomcolor.." copied to clipboard",1000)
 	  -- setClipboardText(randomcolor)
    -- end
-   
-   -- debug
-   -- print(dialogId, style, title, button1, button2, text)
 
-   -- hide buy a house dialog (now not work)
-   -- if ini.settings.disablenotifications then
-      -- if dialogId == 118 then
-	     -- sampSendDialogResponse(118, 1, nil, nil)
-		 -- print(dialogId, button1, text)
-		 -- sampCloseCurrentDialogWithButton(0)
-      -- end
-   -- end
+   -- hide buy a house dialog 
+   if ini.settings.dialogfix then
+      if dialogId == 118 then
+	     sampSendDialogResponse(118, 0, 1)
+		 sampCloseCurrentDialogWithButton(0)
+         return false
+      end
+   end
+   
+   -- hide change nickname dialog after login with non-RP nickname
+   if isAbsoluteRoleplay and ini.settings.dialogfix then
+      if dialogId == 20153 then
+         sampSendDialogResponse(20153, 0, 1)
+         sampCloseCurrentDialogWithButton(0)
+         return false
+      end
+   end
 end
 
 function sampev.onSendClickPlayer(playerId, source)
@@ -830,51 +769,57 @@ function sampev.onRemoveBuilding(modelId, position, radius)
    end
 end
 
+-- function sampev.onSendPlayerSync(data)
+   -- bunnyhop fix
+   -- if data.keysData == 40 then data.keysData = 0 end
+-- end
+
 -- END hooks
 
--- Thanks Heroku for this function on !SAPatcher 
+-- Thanks Heroku for this function on !SAPatcher
 function onSendRpc(id, bs, priority, reliability, channel, shiftTimestamp)
-	-- Fix ClickMap height detection when setting a placemark on the game map
-    if id == 119 then
-       local posX, posY, posZ = raknetBitStreamReadFloat(bs), raknetBitStreamReadFloat(bs), raknetBitStreamReadFloat(bs)
-       requestCollision(posX, posY)
-       loadScene(posX, posY, posZ)
-       local res, x, y, z = getTargetBlipCoordinates()
-       if res then
-           local new_bs = raknetNewBitStream()
-           raknetBitStreamWriteFloat(new_bs, x)
-           raknetBitStreamWriteFloat(new_bs, y)
-           raknetBitStreamWriteFloat(new_bs, z + 0.5)
+   if ini.settings.anticrash then
+       -- Fix ClickMap height detection when setting a placemark on the game map
+      if id == 119 then
+         local posX, posY, posZ = raknetBitStreamReadFloat(bs), raknetBitStreamReadFloat(bs), raknetBitStreamReadFloat(bs)
+         requestCollision(posX, posY)
+         loadScene(posX, posY, posZ)
+         local res, x, y, z = getTargetBlipCoordinates()
+         if res then
+              local new_bs = raknetNewBitStream()
+              raknetBitStreamWriteFloat(new_bs, x)
+              raknetBitStreamWriteFloat(new_bs, y)
+              raknetBitStreamWriteFloat(new_bs, z + 0.5)
            raknetSendRpcEx(119, new_bs, priority, reliability, channel, shiftTimestamp)
            raknetDeleteBitStream(new_bs)
-       end
-       return false
-   end
-
-   if id == 153 and ini.settings.invalidmodelsfix then
-      local playerId = raknetBitStreamReadInt32(bs)
-      local modelId = raknetBitStreamReadInt32(bs)
-	  
-	  -- Fixes a SAMP crash related to the installation of an invalid player skin model.
-	  -- works only on the R1 version of the client, Kalcor has already built this fix into R3.
-	  if modelId < 0 or modelId == 65535 then
-         sampAddChatMessage("Warning: The server is trying to set invalid skin model (model: "
-		 .. modelId .. ")", -1)
+         end
          return false
       end
-	  
-      -- Fixes the crash of SA-MP (0x006E3D17) associated with the installation of the skin in the car.	  
-	  local result, myId = sampGetPlayerIdByCharHandle(PLAYER_PED)
-      if result then
-         if playerId == myId then
-		    if isCharInAnyCar(PLAYER_PED) then
-			   sampAddChatMessage("Warning: The server is trying to set the skin in the car.", -1)
-			   return false
-		    end
-		 end
-	  end
+
+      if id == 153 then
+         local playerId = raknetBitStreamReadInt32(bs)
+         local modelId = raknetBitStreamReadInt32(bs)
+         
+         -- Fixes a SAMP crash related to the installation of an invalid player skin model.
+         -- works only on the R1 version of the client, Kalcor has already built this fix into R3.
+         if modelId < 0 or modelId == 65535 then
+            sampAddChatMessage("Warning: The server is trying to set invalid skin model (model: "
+            .. modelId .. ")", -1)
+            return false
+         end
+         
+         -- Fixes the crash of SA-MP (0x006E3D17) associated with the installation of the skin in the car.	  
+         local result, myId = sampGetPlayerIdByCharHandle(PLAYER_PED)
+         if result then
+            if playerId == myId then
+               if isCharInAnyCar(PLAYER_PED) then
+                  sampAddChatMessage("Warning: The server is trying to set the skin in the car.", -1)
+                  return false
+               end
+            end
+         end
+      end
    end
-   
 end
 
 -- Imgui extended functions
@@ -1008,5 +953,4 @@ apply_custom_style()
 -- EvgeN 1137, hnnssy, FYP - Moonloader
 -- FYP - imgui, SAMP lua library
 -- Gorskin - useful code snippets and memory hacks
--- Black Jesus - timecyc fix functions
 -- Heroku - invalid models fix functions 
