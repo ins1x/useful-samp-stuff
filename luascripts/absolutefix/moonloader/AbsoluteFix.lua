@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("2.0.2")
+script_version("2.0.3")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -86,7 +86,8 @@ local checkbox = {
 local hostip = "193.84.90.23"
 local isAbsoluteRoleplay = false
 local dialogs = {}
-local removed_objects = {647, 1410, 1412, 1413, 1447} -- exclude objects here
+local removed_objects = {647, 1410, 1412, 1413} 
+local restored_objects = {3337, 3244, 3276, 1290} 
 local attached_objects = {}
 local isPlayerSpectating = false
 local dialogRestoreText = false
@@ -371,6 +372,13 @@ function main()
 	     memory.copy(0x4EB9A0, memory.strptr('\xC2\x04\x00'), 3, true)
 	  end
 	  
+      -- MapFix
+      -- restore statue on spawn LS
+      local tmpobjid = createObject(2744, 423.1, -1558.3, 26.3)
+      setObjectHeading(tmpobjid, 202.8)
+      -- replacing invisible roadsign by tree
+      createObject(700, 724.05, 1842.88, 4.9)
+      
       --- END init
       while true do
       wait(0)
@@ -560,10 +568,12 @@ function main()
 		 -- if Player in Vehicle
 	     if isCharInAnyCar(PLAYER_PED) then
 	        if isKeyJustPressed(VK_L) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/lock") end
-	  
-            if isKeyJustPressed(VK_H) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then  sampSendChat("/f") end
+	        
+            if not isAbsoluteRoleplay then
+               if isKeyJustPressed(VK_H) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then  sampSendChat("/f") end
 			
-			if isKeyJustPressed(VK_Z) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/xbybnm") end
+			   if isKeyJustPressed(VK_Z) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/xbybnm") end
+            end   
 		 end
 		 
 		 -- Switching textdraws with arrow buttons, mouse buttons, pgup-pgdown keys
@@ -685,13 +695,14 @@ function sampev.onTogglePlayerSpectating(state)
 end
 
 function sampev.onScriptTerminate(script, quitGame)
-    if script == thisScript() then
-        if not sampIsDialogActive() then
-            showCursor(false)
-        end
-        -- sampAddChatMessage("Скрипт AbsoluteFix аварийно завершил свою работу.", -1)
-        -- sampAddChatMessage("Для перезагрузки нажмите CTRL + R.", -1)
-    end
+   if script == thisScript() then
+      
+      if not sampIsDialogActive() then
+          showCursor(false)
+      end
+      -- sampAddChatMessage("Скрипт AbsoluteFix аварийно завершил свою работу.", -1)
+      -- sampAddChatMessage("Для перезагрузки нажмите CTRL + R.", -1)
+   end
 end
 
 function sampev.onDisplayGameText(style, time, text)
@@ -766,6 +777,12 @@ end
 function sampev.onRemoveBuilding(modelId, position, radius)
    if ini.settings.restoreremovedobjects then
 	  return false
+   else 
+      for key, value in ipairs(restored_objects) do
+         if modelId == value then 
+            return false
+         end
+      end   
    end
 end
 
@@ -948,9 +965,3 @@ function apply_custom_style()
    colors[clr.ModalWindowDarkening] = ImVec4(1.00, 0.98, 0.95, 0.73)
 end
 apply_custom_style()
-
--- Credits:
--- EvgeN 1137, hnnssy, FYP - Moonloader
--- FYP - imgui, SAMP lua library
--- Gorskin - useful code snippets and memory hacks
--- Heroku - invalid models fix functions 
