@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("2.0.3")
+script_version("2.0.4")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -320,6 +320,12 @@ function main()
 		 
 		 -- patch anim duck
 		 writeMemory(0x692649+1, 1, 6, true)
+         
+         -- windsound bugfix
+         local windsoundfix = allocateMemory(4)
+         writeMemory(windsoundfix, 4, 1, true)
+         writeMemory(0x506667+1, 4, windsoundfix, true)
+         writeMemory(0x505BEB+1, 4, windsoundfix, true)
       end
       
       if ini.settings.anticrash then
@@ -668,6 +674,10 @@ function sampev.onServerMessage(color, text)
       end
       
       if text:find("Рекомендуется скачать последнюю версию с нашего сайта") then
+         return false
+      end
+      
+      if text:find("Никто не смог решить вопрос терминала загадок") then
          return false
       end
 
