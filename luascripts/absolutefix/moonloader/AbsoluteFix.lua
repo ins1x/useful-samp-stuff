@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("2.0.4")
+script_version("2.0.5")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -788,6 +788,51 @@ end
 
 function sampev.onSendClickPlayer(playerId, source)
    clickedplayerid = playerId
+end
+
+function round(num, idp)
+   local mult = 10^(idp or 0)
+   return math.floor(num * mult + 0.5) / mult
+end
+
+function sampev.onCreateObject(objectId, data)
+   -- Fix Crash the game when creating a crane object 1382
+   if data.modelId == 1382 then return false end
+   
+   -- Fix double created objects (only for 0.3.7 clients)
+   if data.modelId == 16563 and round(data.position.x, 3) == -222.195 then 
+      return false
+   end
+   
+   if data.modelId == 6431 and round(data.position.x, 4) == -233.8828 then 
+      return false
+   end
+   
+   if data.modelId == 6421 and round(data.position.x, 4) == 137.3984 then
+      return false
+   end
+   
+   if data.modelId == 8849 and round(data.position.x, 4) == 2764.1797 then
+      return false
+   end
+   
+   if data.modelId == 1344 and round(data.position.x, 4) == 2764.9766 then
+      return false
+   end
+   
+   if data.modelId == 640 then
+      if round(data.position.x, 4) == 1335.8281 or
+         round(data.position.x, 4) == 1302.2266 then
+         return false
+      end
+   end
+   
+   if data.modelId == 1344 then
+      local px, py, pz = getCharCoordinates(PLAYER_PED)
+      local distance = string.format("%.0f", getDistanceBetweenCoords3d(data.position.x, data.position.y, data.position.z, px, py, pz))
+      print(distance, data.position.x, round(data.position.x, 4))
+   end
+   
 end
 
 function sampev.onRemoveBuilding(modelId, position, radius)
