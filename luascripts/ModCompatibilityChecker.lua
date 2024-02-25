@@ -46,18 +46,18 @@ function main()
 	  -- check old version shadows asi
 	  if doesFileExist(getGameDirectory() .. "\\shadows.asi") and
 	  getFileSize(getGameDirectory() .. "\\shadows.asi") == 52224 then
-		 sampAddChatMessage("У вас устаревшая версия shadows.asi которая может вызывать краши", 0xFF00000)
+		 sampAddChatMessage("РЈ РІР°СЃ СѓСЃС‚Р°СЂРµРІС€Р°СЏ РІРµСЂСЃРёСЏ shadows.asi РєРѕС‚РѕСЂР°СЏ РјРѕР¶РµС‚ РІС‹Р·С‹РІР°С‚СЊ РєСЂР°С€Рё", 0xFF00000)
 	  end
 	
 	  -- newopcodes
 	  if doesFileExist(getGameDirectory() .. "\\cleo\\newOpcodes.cleo") and
 	  getFileSize(getGameDirectory() .. "\\cleo\\newOpcodes.cleo") < 161280 then
-		 sampAddChatMessage("У вас устаревшая версия NewOpcodes которая может вызывать краши", 0xFF00000)
+		 sampAddChatMessage("РЈ РІР°СЃ СѓСЃС‚Р°СЂРµРІС€Р°СЏ РІРµСЂСЃРёСЏ NewOpcodes РєРѕС‚РѕСЂР°СЏ РјРѕР¶РµС‚ РІС‹Р·С‹РІР°С‚СЊ РєСЂР°С€Рё", 0xFF00000)
 	  end
 	
 	  if doesFileExist(getGameDirectory() .. "\\cleo\\NewOpcodes.cleo") and
 	  getFileSize(getGameDirectory() .. "\\cleo\\NewOpcodes.cleo") < 161280 then
-		 sampAddChatMessage("У вас устаревшая версия NewOpcodes которая может вызывать краши", 0xFF00000)
+		 sampAddChatMessage("РЈ РІР°СЃ СѓСЃС‚Р°СЂРµРІС€Р°СЏ РІРµСЂСЃРёСЏ NewOpcodes РєРѕС‚РѕСЂР°СЏ РјРѕР¶РµС‚ РІС‹Р·С‹РІР°С‚СЊ РєСЂР°С€Рё", 0xFF00000)
 	  end
 	
 	  -- streammemfix checker
@@ -72,79 +72,84 @@ function main()
 	 
 	  -- exdisp
 	  if doesFileExist(getGameDirectory() .. "\\exdisp.asi") then
-		 sampAddChatMessage("exdisp.asi может вызывать краши при снятом ограничителе фпс", 0xFF00000)
+		 sampAddChatMessage("exdisp.asi РјРѕР¶РµС‚ РІС‹Р·С‹РІР°С‚СЊ РєСЂР°С€Рё РїСЂРё СЃРЅСЏС‚РѕРј РѕРіСЂР°РЅРёС‡РёС‚РµР»Рµ С„РїСЃ", 0xFF00000)
 		 print("ModChecker warning: exdisp.asi can cause crashes when the fps limiter is removed")
 		 print("ModChecker warning: install widescreen fix asi instead of exdisp.asi")
 	  end
 	
 	  -- GFXHack
 	  if doesFileExist(getGameDirectory() .. "\\GFXHack.asi") then
-		 sampAddChatMessage("GFXHack устарел, используйте SilentPatch вместо него", 0xFF00000)
+		 sampAddChatMessage("GFXHack СѓСЃС‚Р°СЂРµР», РёСЃРїРѕР»СЊР·СѓР№С‚Рµ SilentPatch РІРјРµСЃС‚Рѕ РЅРµРіРѕ", 0xFF00000)
 		 print("ModChecker warning: GFXHack Outdated. (SILENT PATCH already contains this fix)")
 	  end
 	
 	  -- III.VC.SA.LimitAdjuster
 	  if doesFileExist(getGameDirectory() .. "\\III.VC.SA.LimitAdjuster.asi") then
-		 sampAddChatMessage("SA.LimitAdjuster плагин вызывает проблемы со стабильность и производительностью", 0xFF00000)
+		 sampAddChatMessage("SA.LimitAdjuster РїР»Р°РіРёРЅ РІС‹Р·С‹РІР°РµС‚ РїСЂРѕР±Р»РµРјС‹ СЃРѕ СЃС‚Р°Р±РёР»СЊРЅРѕСЃС‚СЊ Рё РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚СЊСЋ", 0xFF00000)
 		 print("ModChecker warning: SA.LimitAdjuster plugin causes stability and performance issues")
 	  end
 	 
 	  -- newCoronaLimit
 	  if doesFileExist(getGameDirectory() .. "\\newCoronaLimit.asi") then
-		 sampAddChatMessage("newCoronaLimit.asi приводит к сбою в отображении шейдера ENB на автомобилях.", 0xFF00000)
+		 sampAddChatMessage("newCoronaLimit.asi РїСЂРёРІРѕРґРёС‚ Рє СЃР±РѕСЋ РІ РѕС‚РѕР±СЂР°Р¶РµРЅРёРё С€РµР№РґРµСЂР° ENB РЅР° Р°РІС‚РѕРјРѕР±РёР»СЏС….", 0xFF00000)
 		 print("ModChecker warning: newCoronaLimit causes the ENB shader to fail to display on cars")
 	  end
 	 
 	  -- SA_Lightning
 	  if doesFileExist(getGameDirectory() .. "\\SA_Lightning.asi") then
-		 sampAddChatMessage("SA_Lightning.asi устарел, не работает на WIn7/10", 0xFF00000)
+		 sampAddChatMessage("SA_Lightning.asi СѓСЃС‚Р°СЂРµР», РЅРµ СЂР°Р±РѕС‚Р°РµС‚ РЅР° WIn7/10", 0xFF00000)
 		 print("ModChecker warning: SA_Lightning outdated, does not work on WIn7/10")
  	  end
 	 
 	  -- SCMDirectDrawing
 	  if doesFileExist(getGameDirectory() .. "\\SCMDirectDrawing.asi") then
-		 sampAddChatMessage("SCMDirectDrawing Конфликтует с другими плагинами, и приводит к тому, что шрифты и информационное поле не отображаются.", 0xFF00000)
-		 print("ModChecker warning: SCMDirectDrawing сonflicts with other plugins, and leads to the fact that fonts and the information field are not displayed.")
+		 sampAddChatMessage("SCMDirectDrawing РљРѕРЅС„Р»РёРєС‚СѓРµС‚ СЃ РґСЂСѓРіРёРјРё РїР»Р°РіРёРЅР°РјРё, Рё РїСЂРёРІРѕРґРёС‚ Рє С‚РѕРјСѓ, С‡С‚Рѕ С€СЂРёС„С‚С‹ Рё РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅРѕРµ РїРѕР»Рµ РЅРµ РѕС‚РѕР±СЂР°Р¶Р°СЋС‚СЃСЏ.", 0xFF00000)
+		 print("ModChecker warning: SCMDirectDrawing СЃonflicts with other plugins, and leads to the fact that fonts and the information field are not displayed.")
 	  end
 	 
 	  -- Searchlights
 	  if doesFileExist(getGameDirectory() .. "\\Searchlights.asi") then
-		 sampAddChatMessage("Searchlights крашит на новых версиях клиента.", 0xFF00000)
+		 sampAddChatMessage("Searchlights РєСЂР°С€РёС‚ РЅР° РЅРѕРІС‹С… РІРµСЂСЃРёСЏС… РєР»РёРµРЅС‚Р°.", 0xFF00000)
 		 print("ModChecker warning: Searchlights crashes on new versions of samp client.")
 	  end
 	 
 	  -- SuperVars
 	  if doesFileExist(getGameDirectory() .. "\\SuperVars.asi") then
-		 sampAddChatMessage("SuperVars устарел может вызывать краши на новых версиях клиентах.", 0xFF00000)
+		 sampAddChatMessage("SuperVars СѓСЃС‚Р°СЂРµР» РјРѕР¶РµС‚ РІС‹Р·С‹РІР°С‚СЊ РєСЂР°С€Рё РЅР° РЅРѕРІС‹С… РІРµСЂСЃРёСЏС… РєР»РёРµРЅС‚Р°С….", 0xFF00000)
 		 print("ModChecker warning: SuperVars outdated may cause crashes on new versions of clients.")
 	  end
 	 
 	  -- GTA.SA.WideScreen.Fix.asi
 	  if doesFileExist(getGameDirectory() .. "\\GTA.SA.WideScreen.Fix.asi") then
-		 sampAddChatMessage("GTA.SA.WideScreen.Fix Сбрасывает разрешение до разрешения рабочего стола, при нулевых параметрах ResX и ResY", 0xFF00000)
+		 sampAddChatMessage("GTA.SA.WideScreen.Fix РЎР±СЂР°СЃС‹РІР°РµС‚ СЂР°Р·СЂРµС€РµРЅРёРµ РґРѕ СЂР°Р·СЂРµС€РµРЅРёСЏ СЂР°Р±РѕС‡РµРіРѕ СЃС‚РѕР»Р°, РїСЂРё РЅСѓР»РµРІС‹С… РїР°СЂР°РјРµС‚СЂР°С… ResX Рё ResY", 0xFF00000)
 		 print("ModChecker warning: GTA.SA.WideScreen.Fix Resets the resolution to desktop resolution, with zero ResX and ResY parameters.")
 	  end
 	 
+     -- DwmComposition
+      if doesFileExist(getGameDirectory() .. "\\DwmComposition.asi") then
+		 sampAddChatMessage("DwmComposition Р’С‹Р·С‹РІР°РµС‚ РїСЂРѕР±Р»РµРјС‹ СЃ Р·Р°РїСѓСЃРєРѕРј Рё СЃРІРѕСЂР°С‡РёРІР°РЅРёРµРј РёРіСЂС‹ РЅР° Windows 10.", 0xFF00000)
+		 print("ModChecker warning: DwmComposition causes problems with starting and minimizing the game on Windows 10.")
+	  end
 	  -- crc32ffi
 	  if doesFileExist(getGameDirectory() .. "\\moonloader\\crc32ffi.lua") then
-		 sampAddChatMessage("crc32ffi.lua приводит к мгновенному закрытию игры без каких-либо ошибок или журнала", 0xFF00000)
+		 sampAddChatMessage("crc32ffi.lua РїСЂРёРІРѕРґРёС‚ Рє РјРіРЅРѕРІРµРЅРЅРѕРјСѓ Р·Р°РєСЂС‹С‚РёСЋ РёРіСЂС‹ Р±РµР· РєР°РєРёС…-Р»РёР±Рѕ РѕС€РёР±РѕРє РёР»Рё Р¶СѓСЂРЅР°Р»Р°", 0xFF00000)
 		 print("ModChecker warning: crc32ffi results in instant closure of the game without any errors or log")
 	  end
 	 
 	  -- maplimit260
 	  if doesFileExist(getGameDirectory() .. "\\moonloader\\maplimit260.lua") then
-		 sampAddChatMessage("maplimit260 Вызывает сбой после загрузки", 0xFF00000)
+		 sampAddChatMessage("maplimit260 Р’С‹Р·С‹РІР°РµС‚ СЃР±РѕР№ РїРѕСЃР»Рµ Р·Р°РіСЂСѓР·РєРё", 0xFF00000)
 		 print("ModChecker warning: maplimit260 Causes a crash after loading")
 	  end
 	 
 	  if doesFileExist(getGameDirectory() .. "\\moonloader\\chatNopFlood.lua") and 
 	  doesFileExist(getGameDirectory() .. "\\moonloader\\antiscrollingchat.lua") then
-		 sampAddChatMessage("chatNopFlood.lua и antiscrollingchat.lua несовместимы", 0xFF00000)
+		 sampAddChatMessage("chatNopFlood.lua Рё antiscrollingchat.lua РЅРµСЃРѕРІРјРµСЃС‚РёРјС‹", 0xFF00000)
 		 print("ModChecker warning: chatNopFlood.lua and antiscrollingchat.lua are incompatible")
 	  end
 	  -- skybox
 	  if doesFileExist(getGameDirectory() .. "\\cleo\\cleoskybox.cs") then
-		 sampAddChatMessage("cleoskybox.cs устарел и может вызывать краши и некорректное отображение текстур", 0xFF00000)
+		 sampAddChatMessage("cleoskybox.cs СѓСЃС‚Р°СЂРµР» Рё РјРѕР¶РµС‚ РІС‹Р·С‹РІР°С‚СЊ РєСЂР°С€Рё Рё РЅРµРєРѕСЂСЂРµРєС‚РЅРѕРµ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ С‚РµРєСЃС‚СѓСЂ", 0xFF00000)
 		 print("ModChecker warning: cleoskybox.cs is outdated and can cause crashes and incorrect show server textures")
 		 print("ModChecker warning: install RealSkybox.SA.asi instead of skybox.cleo")
 	  end
@@ -157,40 +162,40 @@ function main()
 	  -- RealSkybox.SA and skygrad
 	  if doesFileExist(getGameDirectory() .. "\\RealSkybox.SA.asi") and 
 	  doesFileExist(getGameDirectory() .. "\\skygrad.asi") then
-		 sampAddChatMessage("Одновременное использование модов skygrad.asi и RealSkybox.SA.asi вызывает глитчи", 0xFF00000)
+		 sampAddChatMessage("РћРґРЅРѕРІСЂРµРјРµРЅРЅРѕРµ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ РјРѕРґРѕРІ skygrad.asi Рё RealSkybox.SA.asi РІС‹Р·С‹РІР°РµС‚ РіР»РёС‚С‡Рё", 0xFF00000)
 		 print("ModChecker warning: using mods skygrad.asi and RealSkybox.SA.asi simultaneously causes glitches")
 	  end
 	
 	  -- timecycle24 and Real Linear Graphics
 	  if doesFileExist(getGameDirectory() .. "\\timecycle24.asi") and 
 	  doesFileExist(getGameDirectory() .. "\\data\\timecyc_24h.dat") then 
-		 sampAddChatMessage("Мод 24H Timecycle устанавливается без файла timecyc_24h.dat", 0xFF00000)
+		 sampAddChatMessage("РњРѕРґ 24H Timecycle СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ Р±РµР· С„Р°Р№Р»Р° timecyc_24h.dat", 0xFF00000)
 		 print("ModChecker warning: The 24H Timecycle mod shoud be installed without the timecyc_24h.dat file")
 	  end
 	
 	  -- SAMPFUNCS and skygfx
 	  if SAMPFUNCS and doesFileExist(getGameDirectory() .. "\\SkyGfx.asi") then
 		 sampAddChatMessage("SkyGFX is incompatible with SAMPFUNCS", 0xFF00000)
-		 print("ModChecker warning: SkyGfx несовместим с SAMPFUNCS")
+		 print("ModChecker warning: SkyGfx РЅРµСЃРѕРІРјРµСЃС‚РёРј СЃ SAMPFUNCS")
 	  end
 	 
 	  -- fixtimecyc.cs
 	  if doesFileExist(getGameDirectory() .. "\\cleo\\fixtimecyc.cs") 
 	  and doesFileExist(getGameDirectory() .. "\\LightMap.asi") then
-		 sampAddChatMessage("fixtimecyc.cs несовместим с LightMap.asi", 0xFF00000)
+		 sampAddChatMessage("fixtimecyc.cs РЅРµСЃРѕРІРјРµСЃС‚РёРј СЃ LightMap.asi", 0xFF00000)
 		 print("ModChecker warning: fixtimecyc.cs is incompatible with LightMap.asi")
 	  end
 	 
 	  -- FixDIST.cs
 	  if ModTimecyc and doesFileExist(getGameDirectory() .. "\\cleo\\FixDIST.cs") then
-		 sampAddChatMessage("FixDIST.cs может неккоректно работать на нестандартном таймцикле", 0xFF00000)
+		 sampAddChatMessage("FixDIST.cs РјРѕР¶РµС‚ РЅРµРєРєРѕСЂРµРєС‚РЅРѕ СЂР°Р±РѕС‚Р°С‚СЊ РЅР° РЅРµСЃС‚Р°РЅРґР°СЂС‚РЅРѕРј С‚Р°Р№РјС†РёРєР»Рµ", 0xFF00000)
 		 print("ModChecker warning: FixDIST.cs may not work correctly on a non-standard timecycle")
 	  end
 	 
 	  -- language files check
 	  if doesFileExist(getGameDirectory() .. "\\data\\fonts\\fp_font.dat") and 
 	  getFileSize(getGameDirectory() .. "\\data\\fonts\\fp_font.dat") ~= 979 then
-		sampAddChatMessage("Некорректный fp_font.dat может выдавать неверную ширину некоторых символов", 0xFF00000)
+		sampAddChatMessage("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ fp_font.dat РјРѕР¶РµС‚ РІС‹РґР°РІР°С‚СЊ РЅРµРІРµСЂРЅСѓСЋ С€РёСЂРёРЅСѓ РЅРµРєРѕС‚РѕСЂС‹С… СЃРёРјРІРѕР»РѕРІ", 0xFF00000)
 		print("ModChecker warning: incorrect fp_font.dat may output incorrect width of some characters")
 	  end
    -- END MAIN
