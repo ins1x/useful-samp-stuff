@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("2.0.5")
+script_version("2.0.6")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -48,7 +48,7 @@ local ini = inicfg.load({
       menupatch = true,
       pmsoundfix = true,
 	  restoreremovedobjects = false,
-	  recontime = 10000,
+	  recontime = 15000,
       vehvisualdmg = false
    },
 }, configIni)
@@ -93,6 +93,7 @@ local isPlayerSpectating = false
 local dialogRestoreText = false
 local dialogIncoming = 0
 local clickedplayerid = nil
+local randomcolor = nil
 -- mods finder
 local ENBSeries = false
 local FastloadAsi = false
@@ -285,7 +286,7 @@ function main()
          memory.write(0x8CFEF7, 3, 1)
 	  end
 	  
-      if ini.settings.gamefixes then	 
+      if ini.settings.gamefixes then 
 		 -- SADisplayResolutions(1920x1080// 16:9)
          memory.write(0x745BC9, 0x9090, 2, false) 
 		 -- CJFix
@@ -293,16 +294,31 @@ function main()
 		 -- the helicopter doesn't explode many times
          memory.setuint32(0x736F88, 0, false) 
 		 -- fix blackroads
-         memory.write(8931716, 0, 4, false) 
+         memory.write(8931716, 0, 4, false)
+         -- enable this-blip
+         memory.setuint8(0x588550, 0xEB, true)
+         -- disable Replays
+         writeMemory(0x460500, 1, 0xC3, true)
+         --flickr
+         writeMemory(0x5B8E55, 4, 0x15F90, true)
+         writeMemory(0x5B8EB0, 4, 0x15F90, true)
+         -- binthesky by DK
+         -- memory.fill(0x5557CF, 0x90, 7, true)
+      
+         memory.fill(0x748E6B, 0x90, 5, true) -- CGame::Shutdown
+	     memory.fill(0x748E82, 0x90, 5, true) -- RsEventHandler rsRWTERMINATE
+	     memory.fill(0x748E75, 0x90, 5, true) -- CAudioEngine::Shutdown
+         
          -- Afk shift fix by FYP
 		 memory.fill(0x00531155, 0x90, 5, true)
-		 -- nop gamma 
+		 
+         -- nop gamma 
 		 --memory.hex2bin('E9D200000090', 0x0074721C, 5)
-		 -- disable wind effects
-		 -- memory.fill(0x535030, 0x90, 5, true) 
+         
          -- fps fix
          memory.write(0x53E94C, 0, 1, false) --del fps delay 14 ms
          memory.setuint32(12761548, 1051965045, false) -- car speed fps fix
+         writeMemory(7547174, 4, 8753112, true) -- limit lod veh
          
          -- birds on
          memory.write(5497200, 232, 1, false)
@@ -320,6 +336,9 @@ function main()
 		 
 		 -- patch anim duck
 		 writeMemory(0x692649+1, 1, 6, true)
+         
+         -- disable talking
+         writeMemory(0x5EFFE7, 1, 0xEB, true)
          
          -- windsound bugfix
          local windsoundfix = allocateMemory(4)
@@ -374,6 +393,12 @@ function main()
          memory.write(7388591, 0, 2, false)
          memory.write(7391066, 32081167, 4, false)
          memory.write(7391070, -1869611008, 4, false)
+         
+         -- disable Blue Fog
+         -- memory.fill(0x575B0E, 0x90, 5, true)
+         
+         -- disable Haze Effect
+         -- memory.write(0x72C1B7, 0xEB, 1, true)
       end
 	  
 	  if ini.settings.noradio then
@@ -396,7 +421,8 @@ function main()
 	  if ini.settings.autoreconnect then
 	     local chatstring = sampGetChatString(99)
          if chatstring == "Server closed the connection." 
-		 or chatstring == "You are banned from this server." then
+		 or chatstring == "You are banned from this server."
+		 or chatstring == "CONNECTION REJECTED: Unacceptable NickName" then
 	        sampDisconnectWithReason(false)
             sampAddChatMessage("Wait reconnecting...", -1)
             wait(ini.settings.recontime)
@@ -468,13 +494,24 @@ function main()
       
       -- no dialogs restore (by rraggerr)
       if ini.settings.dialogfix then
-         if dialogIncoming ~= 0 and dialogs[dialogIncoming] then
+         if dialogIncoming ~= 0
+         and dialogs[dialogIncoming] then
             local data = dialogs[dialogIncoming]
             if data[1] and not dialogRestoreText then
-               sampSetCurrentDialogListItem(data[1])
+               -- ignore delete option restore on edit dialog
+               if dialogIncoming == 1403 and data[1] == 1 then
+                  sampSetCurrentDialogListItem(0)
+               else
+                  sampSetCurrentDialogListItem(data[1])
+               end
             end
             if data[2] then
-               sampSetCurrentDialogEditboxText(data[2])
+               -- dialog random color autocomplete
+               if dialogIncoming == 1496 and randomcolor ~= nil then
+                  sampSetCurrentDialogEditboxText(randomcolor)
+               else
+                  sampSetCurrentDialogEditboxText(data[2])
+               end
             end
             dialogIncoming = 0
          end
@@ -646,6 +683,10 @@ function sampev.onServerMessage(color, text)
       if text:find("выхода из читмира") then
          return false
       end
+      
+      if text:find("выпустить могут только админы") then
+         return false
+      end
    
       if text:find("Ни 1 клан не создан") then
          return false
@@ -738,14 +779,17 @@ end
 
 function sampev.onSetMapIcon(iconId, position, type, color, style)
    if ini.settings.hidehousesmapicons then
-    -- local hideonradius = false
-	-- local pX, pY, pZ = getCharCoordinates(PLAYER_PED)
-	-- local icondrawdist = 0.5
 	-- hide free houses mapicons
 	  if(style == 0 and type == 31) then 
-	   -- if(pX-position.x > icondrawdist and pY-position.y > icondrawdist) then 
 	     return false
 	  end
+   end
+   
+   if ini.settings.anticrash then
+      local MAX_SAMP_MARKERS = 63
+      if type > MAX_SAMP_MARKERS then
+         return false
+      end
    end
 end
 
@@ -760,12 +804,12 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
       dialogIncoming = dialogId
    end
    
-   -- if dialogId == 1499 or dialogId == 1496 then
-      -- local randomcolor = string.sub(text, string.len(text)-6, #text-1)
-	  -- --sampAddChatMessage("Случайный цвет скопирован в буфер обмена",-1)
-	  -- printStringNow("color "..randomcolor.." copied to clipboard",1000)
-	  -- setClipboardText(randomcolor)
-   -- end
+   if dialogId == 1496 then
+      randomcolor = string.sub(text, string.len(text)-6, #text-1)
+	  --printStringNow("color "..randomcolor.." copied to clipboard",1000)
+	  setClipboardText(randomcolor)
+	  --sampSetCurrentDialogEditboxText(randomcolor)
+   end
 
    -- hide buy a house dialog 
    if ini.settings.dialogfix then
@@ -820,6 +864,10 @@ function sampev.onCreateObject(objectId, data)
       return false
    end
    
+   if data.modelId == 6399 and round(data.position.x, 4) == 552.4297 then
+      return false
+   end
+  
    if data.modelId == 640 then
       if round(data.position.x, 4) == 1335.8281 or
          round(data.position.x, 4) == 1302.2266 then
@@ -827,11 +875,12 @@ function sampev.onCreateObject(objectId, data)
       end
    end
    
-   if data.modelId == 1344 then
-      local px, py, pz = getCharCoordinates(PLAYER_PED)
-      local distance = string.format("%.0f", getDistanceBetweenCoords3d(data.position.x, data.position.y, data.position.z, px, py, pz))
-      print(distance, data.position.x, round(data.position.x, 4))
-   end
+   -- Debug
+   -- if data.modelId == 6399 then
+      -- local px, py, pz = getCharCoordinates(PLAYER_PED)
+      -- local distance = string.format("%.0f", getDistanceBetweenCoords3d(data.position.x, data.position.y, data.position.z, px, py, pz))
+      -- print(distance, data.position.x, round(data.position.x, 4))
+   -- end
    
 end
 
@@ -847,8 +896,24 @@ function sampev.onRemoveBuilding(modelId, position, radius)
    end
 end
 
+function sampev.onSetVehicleVelocity(turn, velocity)
+   if ini.setting.anticrash then
+      if velocity.x ~= velocity.x or velocity.y ~= velocity.y or velocity.z ~= velocity.z then
+         sampAddChatMessage("Warning: ignoring invalid SetVehicleVelocity", -1)
+         return false
+      end
+   end
+end
+
+--function sampev.onCreateGangZone(zoneId, squareStart, squareEnd, color)
+   --print(zoneId, squareStart, squareEnd, color)
+   --zoneId 481- 580 PUBG zones ids
+   --if zoneId >= 481 and zoneId <= 580 then
+   --end
+--end
+
 -- function sampev.onSendPlayerSync(data)
-   -- bunnyhop fix
+   -- RP bunnyhop fix
    -- if data.keysData == 40 then data.keysData = 0 end
 -- end
 
