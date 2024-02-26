@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("2.0.6")
+script_version("3.0")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -15,13 +15,12 @@ script_version("2.0.6")
 require 'lib.moonloader'
 local keys = require 'vkeys'
 local sampev = require 'lib.samp.events'
-local imgui = require 'imgui'
 local memory = require 'memory'
 local encoding = require 'encoding'
 encoding.default = 'CP1251'
 u8 = encoding.UTF8
 
-------------------------[ cfg ] -------------------
+----------------- [ cfg ] -------------------
 local inicfg = require 'inicfg'
 local configIni = "AbsoluteFix.ini"
 local ini = inicfg.load({
@@ -45,6 +44,7 @@ local ini = inicfg.load({
 	  noradio = false,
       nogametext = false,
 	  noweaponpickups = true,
+      mapfixes = true,
       menupatch = true,
       pmsoundfix = true,
 	  restoreremovedobjects = false,
@@ -54,159 +54,25 @@ local ini = inicfg.load({
 }, configIni)
 inicfg.save(ini, configIni)
 
-function save()
-    inicfg.save(ini, configIni)
-	--sampAddChatMessage("Настройки сохранены",-1)
-end
----------------------------------------------------------
-
-local sizeX, sizeY = getScreenResolution()
-local v = nil
-
-local dialog = {
-   settings = imgui.ImBool(false)
-}
-
-local checkbox = {
-   antiafk = imgui.ImBool(ini.settings.antiafk),
-   chatfilter = imgui.ImBool(ini.settings.chatfilter),
-   disablenotifications = imgui.ImBool(ini.settings.disablenotifications),
-   keybinds = imgui.ImBool(ini.settings.keybinds),
-   gamefixes = imgui.ImBool(ini.settings.gamefixes),
-   noeffects = imgui.ImBool(ini.settings.noeffects),
-   nologo = imgui.ImBool(ini.settings.nologo),
-   noweaponpickups = imgui.ImBool(ini.settings.noweaponpickups),
-   hideattachesonaim = imgui.ImBool(ini.settings.hideattachesonaim),
-   hidehousesmapicons = imgui.ImBool(ini.settings.hidehousesmapicons),
-   restoreremovedobjects = imgui.ImBool(ini.settings.restoreremovedobjects),
-   addonupgrades = imgui.ImBool(ini.settings.addonupgrades)
-}
+-- function save()
+   -- inicfg.save(ini, configIni)
+-- end
+-------------------------------------------
 
 -- If the server changes IP, change it here
 local hostip = "193.84.90.23"
+-------------------------------------------
 local isAbsoluteRoleplay = false
-local dialogs = {}
 local removed_objects = {647, 1410, 1412, 1413} 
 local restored_objects = {3337, 3244, 3276, 1290, 1540} 
 local attached_objects = {}
 local isPlayerSpectating = false
+local dialogs = {}
 local dialogRestoreText = false
 local dialogIncoming = 0
 local clickedplayerid = nil
 local randomcolor = nil
--- mods finder
-local ENBSeries = false
-local FastloadAsi = false
-local SAMPFUNCS = false
-
-function imgui.OnDrawFrame()    
-    
-   if dialog.settings.v then      
-      imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 7, sizeY / 4),
-      imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-     
-      imgui.Begin(u8"AbsoluteFix", dialog.settings)
-       
-      imgui.Text(u8"Набор исправлений и дополнений для серверов")
-      imgui.SameLine()
-      imgui.TextColored(imgui.ImVec4(0, 0.49, 1, 1.0), u8"Absolute Play")
-	  if imgui.IsItemClicked() then
-         setClipboardText("gta-samp.ru")
-         printStringNow("Url copied to clipboard", 1000)
-      end
-	  
-	  imgui.Text(u8" ")
-
-      if imgui.Checkbox(u8("Фикс горячих клавиш аддона"), checkbox.keybinds) then 
-         ini.settings.keybinds = not ini.settings.keybinds
-		 save()
-      end
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Восстанавливает стандартные горячие клавиши доступные с samp addon")
-
-      if imgui.Checkbox(u8("Включить фиксы игры"), checkbox.gamefixes) then 
-         ini.settings.gamefixes = not ini.settings.gamefixes
-		 save()
-      end
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Включает некоторые фиксы багов игры (Нужен релог для применения)")
-      
-      if imgui.Checkbox(u8("Включить работу апгрейдов"), checkbox.addonupgrades) then 
-         ini.settings.addonupgrades = not ini.settings.addonupgrades
-		 save()
-      end
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Включает улучшения - бесконечный бег, бег в интерьере, анти падение с байка")
-	  
-	  if imgui.Checkbox(u8("Фильтровать подключения/отключения игроков в чате"), checkbox.chatfilter) then
-         ini.settings.chatfilter = not ini.settings.chatfilter
-		 save()
-      end
-	  
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Убирает сообщения о подключениях-отключениях игроков в общем чате")
-      
-	  if imgui.Checkbox(u8("Фильтровать уведомления в чате"), checkbox.disablenotifications) then
-         ini.settings.disablenotifications = not ini.settings.disablenotifications
-         ini.settings.disablerecordnotifications = not ini.settings.disablerecordnotifications
-		 save()
-      end
-	  
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Убирает лишние сообщения в чат (дрифт рекорды, безумные трюки, прочий флуд)")
-	  
-      if imgui.Checkbox(u8("Анти-афк"), checkbox.antiafk) then 
-         ini.settings.antiafk = not ini.settings.antiafk
-		 save()
-      end
-       
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"При сворачивании окна игрок не будет уходить в афк")
-	  
-	  if not isAbsoluteRoleplay then 
-	     if imgui.Checkbox(u8("Скрывать пикапы оружия"), checkbox.noweaponpickups) then 
-            ini.settings.noweaponpickups = not ini.settings.noweaponpickups
-		    save()
-         end
-       
-         imgui.SameLine()
-         imgui.TextQuestion("( ? )", u8"Удаляет пикапы оружия из зоны стрима (Повышает FPS)")
-	  end
-	  
-	  if imgui.Checkbox(u8("Скрывать иконки свободных домов"), checkbox.hidehousesmapicons) then 
-         ini.settings.hidehousesmapicons = not ini.settings.hidehousesmapicons
-		 save()
-      end
-       
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Удаляет иконки свободных домов (Повышает FPS)")
-	  
-	  if imgui.Checkbox(u8("Скрывать аттачи при прицеливании"), checkbox.hideattachesonaim) then 
-         ini.settings.hideattachesonaim = not ini.settings.hideattachesonaim
-		 save()
-      end
-	  
-      imgui.SameLine()
-      imgui.TextQuestion("( ? )", u8"Скрывает аттачи(аксессуары) с игрока при прицеливании c кемпы, рпг или использовании фотоаппарата")
-	  
-	  if not isAbsoluteRoleplay then 
-	     if imgui.Checkbox(u8("Восстановить удаленные объекты"), checkbox.restoreremovedobjects) then 
-            if checkbox.restoreremovedobjects.v then
-               ini.settings.restoreremovedobjects = not ini.settings.restoreremovedobjects
-			   if ini.settings.restoreremovedobjects then
-			      sampAddChatMessage("Для применения данной опции необходимо перезайти", -1)
-			   end
-            end
-		    save()
-         end
-		 imgui.SameLine()
-         imgui.TextQuestion("( ? )", u8"Восстанавливает удаленные объекты деревьев и столбов с улиц (требуется релог)")
-	  end
-        
-	  imgui.Spacing()
-      imgui.End()
-   end
-end
+------------------------------------------
 
 function main()
    if not isSampLoaded() or not isSampfuncsLoaded() then return end
@@ -221,20 +87,11 @@ function main()
 	     sampAddChatMessage("{880000}Absolute Fix. {FFFFFF}Открыть настройки {CDCDCD}/absfix", 0xFFFFFF)
       end
 	  
-	  -- ENB check
-	  if doesFileExist(getGameDirectory() .. "\\enbseries.asi") or 
-	  doesFileExist(getGameDirectory() .. "\\d3d9.dll") then
-	     ENBSeries = true
+      -- flickr
+      if not doesFileExist(getGameDirectory() .. "\\flickr.asi") then
+         writeMemory(0x5B8E55, 4, 0x15F90, true)
+         writeMemory(0x5B8EB0, 4, 0x15F90, true)
 	  end
-	  
-	  if doesFileExist(getGameDirectory() .. "\\FastLoad.asi") then
-	     FastloadAsi = true
-	  end
-	  
-      -- commands section
-      sampRegisterChatCommand("absfix", function ()
-	     if not ENBSeries then dialog.settings.v = not dialog.settings.v end
-      end)
 			
 	  -- remove "open Y menu" textdraw
       sampTextdrawDelete(423)
@@ -253,7 +110,7 @@ function main()
 	  end
       
 	  -- fastload (Hide default loading screen like fastload.asi)
-	  if ini.settings.fastload and not FastloadAsi then 
+	  if ini.settings.fastload and not doesFileExist(getGameDirectory() .. "\\FastLoad.asi") then 
          if memory.getuint8(0x748C2B) == 0xE8 then
 		    memory.fill(0x748C2B, 0x90, 5, true)
 	     elseif memory.getuint8(0x748C7B) == 0xE8 then
@@ -299,9 +156,7 @@ function main()
          memory.setuint8(0x588550, 0xEB, true)
          -- disable Replays
          writeMemory(0x460500, 1, 0xC3, true)
-         --flickr
-         writeMemory(0x5B8E55, 4, 0x15F90, true)
-         writeMemory(0x5B8EB0, 4, 0x15F90, true)
+
          -- binthesky by DK
          -- memory.fill(0x5557CF, 0x90, 7, true)
       
@@ -406,11 +261,14 @@ function main()
 	  end
 	  
       -- MapFix
-      -- restore statue on spawn LS
-      local tmpobjid = createObject(2744, 423.1, -1558.3, 26.3)
-      setObjectHeading(tmpobjid, 202.8)
-      -- replacing invisible roadsign by tree
-      createObject(700, 724.05, 1842.88, 4.9)
+      if ini.settings.mapfixes then
+         -- restore statue on spawn LS
+         local tmpobjid = createObject(2744, 423.1, -1558.3, 26.3)
+         setObjectHeading(tmpobjid, 202.8)
+         
+         -- replacing invisible roadsign by tree
+         createObject(700, 724.05, 1842.88, 4.9)
+      end
       
       --- END init
       while true do
@@ -429,9 +287,6 @@ function main()
             sampSetGamestate(1)-- GAMESTATE_WAIT_CONNECT
          end
 	  end
-	  
-      -- Run imgui menu if no ENB
-      if not ENBSeries then imgui.Process = dialog.settings.v end
       
       -- chatfix
       if isKeyJustPressed(0x54) and not sampIsDialogActive() and not sampIsScoreboardOpen() and not isSampfuncsConsoleActive() then
@@ -843,45 +698,46 @@ function sampev.onCreateObject(objectId, data)
    -- Fix Crash the game when creating a crane object 1382
    if data.modelId == 1382 then return false end
    
-   -- Fix double created objects (only for 0.3.7 clients)
-   if data.modelId == 16563 and round(data.position.x, 3) == -222.195 then 
-      return false
-   end
-   
-   if data.modelId == 6431 and round(data.position.x, 4) == -233.8828 then 
-      return false
-   end
-   
-   if data.modelId == 6421 and round(data.position.x, 4) == 137.3984 then
-      return false
-   end
-   
-   if data.modelId == 8849 and round(data.position.x, 4) == 2764.1797 then
-      return false
-   end
-   
-   if data.modelId == 1344 and round(data.position.x, 4) == 2764.9766 then
-      return false
-   end
-   
-   if data.modelId == 6399 and round(data.position.x, 4) == 552.4297 then
-      return false
-   end
-  
-   if data.modelId == 640 then
-      if round(data.position.x, 4) == 1335.8281 or
-         round(data.position.x, 4) == 1302.2266 then
+   if ini.settings.mapfixes then 
+      -- Fix double created objects (only for 0.3.7 clients)
+      if data.modelId == 16563 and round(data.position.x, 3) == -222.195 then 
          return false
       end
+      
+      if data.modelId == 6431 and round(data.position.x, 4) == -233.8828 then 
+         return false
+      end
+       
+      if data.modelId == 6421 and round(data.position.x, 4) == 137.3984 then
+         return false
+      end
+      
+      if data.modelId == 8849 and round(data.position.x, 4) == 2764.1797 then
+         return false
+      end
+      
+      if data.modelId == 1344 and round(data.position.x, 4) == 2764.9766 then
+         return false
+      end
+      
+      if data.modelId == 6399 and round(data.position.x, 4) == 552.4297 then
+         return false
+      end
+      
+      if data.modelId == 640 then
+         if round(data.position.x, 4) == 1335.8281 or
+            round(data.position.x, 4) == 1302.2266 then
+            return false
+         end
+      end
+       
+      -- Debug
+      -- if data.modelId == 6399 then
+          -- local px, py, pz = getCharCoordinates(PLAYER_PED)
+         -- local distance = string.format("%.0f", getDistanceBetweenCoords3d(data.position.x, data.position.y, data.position.z, px, py, pz))
+         -- print(distance, data.position.x, round(data.position.x, 4))
+      -- end
    end
-   
-   -- Debug
-   -- if data.modelId == 6399 then
-      -- local px, py, pz = getCharCoordinates(PLAYER_PED)
-      -- local distance = string.format("%.0f", getDistanceBetweenCoords3d(data.position.x, data.position.y, data.position.z, px, py, pz))
-      -- print(distance, data.position.x, round(data.position.x, 4))
-   -- end
-   
 end
 
 function sampev.onRemoveBuilding(modelId, position, radius)
@@ -964,78 +820,3 @@ function onSendRpc(id, bs, priority, reliability, channel, shiftTimestamp)
       end
    end
 end
-
--- Imgui extended functions
-function imgui.TextQuestion(label, description)
-    imgui.TextDisabled(label)
-
-    if imgui.IsItemHovered() then
-        imgui.BeginTooltip()
-            imgui.PushTextWrapPos(600)
-                imgui.TextUnformatted(description)
-            imgui.PopTextWrapPos()
-        imgui.EndTooltip()
-    end
-end
-
-function apply_custom_style()
-   imgui.SwitchContext()
-   local style = imgui.GetStyle()
-   local colors = style.Colors
-   local clr = imgui.Col
-   local ImVec4 = imgui.ImVec4
-
-   style.WindowPadding = imgui.ImVec2(15, 15)
-   style.WindowRounding = 1.5
-   style.FramePadding = imgui.ImVec2(5, 5)
-   style.FrameRounding = 4.0
-   style.ItemSpacing = imgui.ImVec2(12, 8)
-   style.ItemInnerSpacing = imgui.ImVec2(8, 6)
-   style.IndentSpacing = 25.0
-   style.ScrollbarSize = 15.0
-   style.ScrollbarRounding = 9.0
-   style.GrabMinSize = 5.0
-   style.GrabRounding = 3.0
-
-   colors[clr.Text] = ImVec4(0.80, 0.80, 0.83, 1.00)
-   colors[clr.TextDisabled] = ImVec4(0.24, 0.23, 0.29, 1.00)
-   colors[clr.WindowBg] = ImVec4(0.06, 0.05, 0.07, 1.00)
-   colors[clr.ChildWindowBg] = ImVec4(0.07, 0.07, 0.09, 1.00)
-   colors[clr.PopupBg] = ImVec4(0.07, 0.07, 0.09, 1.00)
-   colors[clr.Border] = ImVec4(0.80, 0.80, 0.83, 0.88)
-   colors[clr.BorderShadow] = ImVec4(0.92, 0.91, 0.88, 0.00)
-   colors[clr.FrameBg] = ImVec4(0.10, 0.09, 0.12, 1.00)
-   colors[clr.FrameBgHovered] = ImVec4(0.24, 0.23, 0.29, 1.00)
-   colors[clr.FrameBgActive] = ImVec4(0.56, 0.56, 0.58, 1.00)
-   colors[clr.TitleBg] = ImVec4(0.10, 0.09, 0.12, 1.00)
-   colors[clr.TitleBgCollapsed] = ImVec4(1.00, 0.98, 0.95, 0.75)
-   colors[clr.TitleBgActive] = ImVec4(0.07, 0.07, 0.09, 1.00)
-   colors[clr.MenuBarBg] = ImVec4(0.10, 0.09, 0.12, 1.00)
-   colors[clr.ScrollbarBg] = ImVec4(0.10, 0.09, 0.12, 1.00)
-   colors[clr.ScrollbarGrab] = ImVec4(0.80, 0.80, 0.83, 0.31)
-   colors[clr.ScrollbarGrabHovered] = ImVec4(0.56, 0.56, 0.58, 1.00)
-   colors[clr.ScrollbarGrabActive] = ImVec4(0.06, 0.05, 0.07, 1.00)
-   colors[clr.ComboBg] = ImVec4(0.19, 0.18, 0.21, 1.00)
-   colors[clr.CheckMark] = ImVec4(0.80, 0.80, 0.83, 0.31)
-   colors[clr.SliderGrab] = ImVec4(0.80, 0.80, 0.83, 0.31)
-   colors[clr.SliderGrabActive] = ImVec4(0.06, 0.05, 0.07, 1.00)
-   colors[clr.Button] = ImVec4(0.10, 0.09, 0.12, 1.00)
-   colors[clr.ButtonHovered] = ImVec4(0.24, 0.23, 0.29, 1.00)
-   colors[clr.ButtonActive] = ImVec4(0.56, 0.56, 0.58, 1.00)
-   colors[clr.Header] = ImVec4(0.10, 0.09, 0.12, 1.00)
-   colors[clr.HeaderHovered] = ImVec4(0.56, 0.56, 0.58, 1.00)
-   colors[clr.HeaderActive] = ImVec4(0.06, 0.05, 0.07, 1.00)
-   colors[clr.ResizeGrip] = ImVec4(0.00, 0.00, 0.00, 0.00)
-   colors[clr.ResizeGripHovered] = ImVec4(0.56, 0.56, 0.58, 1.00)
-   colors[clr.ResizeGripActive] = ImVec4(0.06, 0.05, 0.07, 1.00)
-   colors[clr.CloseButton] = ImVec4(0.40, 0.39, 0.38, 0.16)
-   colors[clr.CloseButtonHovered] = ImVec4(0.40, 0.39, 0.38, 0.39)
-   colors[clr.CloseButtonActive] = ImVec4(0.40, 0.39, 0.38, 1.00)
-   colors[clr.PlotLines] = ImVec4(0.40, 0.39, 0.38, 0.63)
-   colors[clr.PlotLinesHovered] = ImVec4(0.25, 1.00, 0.00, 1.00)
-   colors[clr.PlotHistogram] = ImVec4(0.40, 0.39, 0.38, 0.63)
-   colors[clr.PlotHistogramHovered] = ImVec4(0.25, 1.00, 0.00, 1.00)
-   colors[clr.TextSelectedBg] = ImVec4(0.25, 1.00, 0.00, 0.43)
-   colors[clr.ModalWindowDarkening] = ImVec4(1.00, 0.98, 0.95, 0.73)
-end
-apply_custom_style()
