@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("3.0")
+script_version("3.0.1")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -84,7 +84,7 @@ function main()
 	  else
 	     if port >= 7771 and port < 7777 then isAbsoluteRoleplay = true end
 	     if port == 7111 then isAbsoluteRoleplay = true end -- testhost
-	     sampAddChatMessage("{880000}Absolute Fix. {FFFFFF}Открыть настройки {CDCDCD}/absfix", 0xFFFFFF)
+	     sampAddChatMessage("{880000}Absolute Fix. {FFFFFF}Загружен", 0xFFFFFF)
       end
 	  
       -- flickr
@@ -280,7 +280,7 @@ function main()
 	     local chatstring = sampGetChatString(99)
          if chatstring == "Server closed the connection." 
 		 or chatstring == "You are banned from this server."
-		 or chatstring == "CONNECTION REJECTED: Unacceptable NickName" then
+		 or chatstring == "Use /quit to exit or press ESC and select Quit Game" then
 	        sampDisconnectWithReason(false)
             sampAddChatMessage("Wait reconnecting...", -1)
             wait(ini.settings.recontime)
@@ -606,18 +606,11 @@ function sampev.onTogglePlayerSpectating(state)
    isPlayerSpectating = state
 end
 
-function sampev.onScriptTerminate(script, quitGame)
-   if script == thisScript() then
-      
-      if not sampIsDialogActive() then
-          showCursor(false)
-      end
-      -- sampAddChatMessage("Скрипт AbsoluteFix аварийно завершил свою работу.", -1)
-      -- sampAddChatMessage("Для перезагрузки нажмите CTRL + R.", -1)
-   end
-end
-
 function sampev.onDisplayGameText(style, time, text)
+   -- hide /dv message (Транспорт восстановлен 1000$)
+   if style == 3 and text:find("1000$") then
+      return false
+   end
    if ini.settings.nogametext then 
       return false
    end
@@ -661,16 +654,21 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
    
    if dialogId == 1496 then
       randomcolor = string.sub(text, string.len(text)-6, #text-1)
-	  --printStringNow("color "..randomcolor.." copied to clipboard",1000)
 	  setClipboardText(randomcolor)
-	  --sampSetCurrentDialogEditboxText(randomcolor)
    end
 
-   -- hide buy a house dialog 
    if ini.settings.dialogfix then
+      -- hide buy a house dialog 
       if dialogId == 118 then
 	     sampSendDialogResponse(118, 0, 1)
 		 sampCloseCurrentDialogWithButton(0)
+         return false
+      end
+      
+      -- hide aftercrash dialog
+      if dialogId == 931 then
+         sampSendDialogResponse(931, 0, 1)
+         sampCloseCurrentDialogWithButton(0)
          return false
       end
    end
@@ -767,11 +765,6 @@ end
    --if zoneId >= 481 and zoneId <= 580 then
    --end
 --end
-
--- function sampev.onSendPlayerSync(data)
-   -- RP bunnyhop fix
-   -- if data.keysData == 40 then data.keysData = 0 end
--- end
 
 -- END hooks
 
