@@ -722,6 +722,10 @@ function sampev.onCreateObject(objectId, data)
          return false
       end
       
+      if data.modelId == 7510 and round(data.position.x, 4) == 1370.3594 then
+         return false
+      end
+      
       if data.modelId == 640 then
          if round(data.position.x, 4) == 1335.8281 or
             round(data.position.x, 4) == 1302.2266 then
@@ -730,8 +734,8 @@ function sampev.onCreateObject(objectId, data)
       end
        
       -- Debug
-      -- if data.modelId == 6399 then
-          -- local px, py, pz = getCharCoordinates(PLAYER_PED)
+      -- if data.modelId == 7510 then
+         -- local px, py, pz = getCharCoordinates(PLAYER_PED)
          -- local distance = string.format("%.0f", getDistanceBetweenCoords3d(data.position.x, data.position.y, data.position.z, px, py, pz))
          -- print(distance, data.position.x, round(data.position.x, 4))
       -- end
