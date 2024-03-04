@@ -11,7 +11,7 @@
 ### Восстановленные функции аддона
 * Активация дополнительных горячих клавиш на серверах Absolute Play без аддона
 * Отключение паузы в Esc и при сворачивании в SA-MP (анти-афк)
-* Возможность включить улучшения как в samp addon (бег по всем поверхностям, улучшенное вождение)
+* Возможность включить улучшения бег по всем поверхностям, улучшенное вождение, улучшенный джетпак и прочие
 * Отключение загрузочных экранов
 * Исправление включения чата на T
 * Удаление ненужных разделов в меню в SA-MP
@@ -106,38 +106,38 @@
 ## Config
 Все настройки хранятся в файле moonloader\config\AbsoluteFix.ini  
 ```INI
-      addonupgrades = true,
-      antiafk = true,
-      anticrash = true,
-	  autoreconnect = true,
-      chatfilter = true,
-      dialogfix = true,
-      disablenotifications = true,
-	  disablerecordnotifications = true,
-      fastload = true,
-      hideattachesonaim = true,
-	  hidehousesmapicons = true,
-      gamefixes = true,
-      keybinds = true,
-      noeffects = false,
-      nologo = false,
-	  noradio = false,
-      nogametext = false,
-	  noweaponpickups = true,
-      mapfixes = true,
-      menupatch = true,
-      pmsoundfix = true,
-	  restoreremovedobjects = false,
-	  recontime = 15000,
-      vehvisualdmg = false
+    antiafk = true,
+    anticrash = true,
+    autoreconnect = true,
+    chatfilter = true,
+    dialogfix = true,
+    disablenotifications = true,
+    disablerecordnotifications = true,
+    fastload = true,
+    hideattachesonaim = true,
+    hidehousesmapicons = true,
+    gamefixes = true,
+    infinityrun = true,
+    improvedrun = true,
+    improvedbike = true,
+    improvedjetpack = true,
+    keybinds = true,
+    noeffects = false,
+    nologo = false,
+    noradio = false,
+    nogametext = false,
+    noweaponpickups = true,
+    mapfixes = true,
+    menupatch = true,
+    pmsoundfix = true,
+    restoreremovedobjects = false,
+    recontime = 15000,
+    vehvisualdmg = false
 ```
 
-> Попробуйте более функциональный скрипт с множеством фиксов [GameFixer by Gorskin](https://vk.com/@gorskinscripts-gamefixer-obnovlenie-30)
-
-## Credits 
-* [EvgeN 1137](https://www.blast.hk/members/1), [hnnssy](https://www.blast.hk/members/66797), [FYP](https://github.com/THE-FYP) - Moonloader  
-* [FYP](https://github.com/THE-FYP) - imgui, SAMP lua библиотеки
-* [Gorskin](https://vk.com/gorskinscripts) - полезные сниппеты и мемхаки
+> Попробуйте более функциональные скрипты с множеством фиксов
+[GameFixer by Gorskin](https://vk.com/@gorskinscripts-gamefixer-obnovlenie-30)
+и [MixSets](https://www.mixmods.com.br/2022/03/sa-mixsets/)
 
 ## KnownBugs
 * При восстановлении серверных объектов удаленных через RemoveBuildings, теряется исходное положение некоторых объектов. Например автобусные остановки повернуты не в ту сторону
