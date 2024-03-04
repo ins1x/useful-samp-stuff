@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("3.0.1")
+script_version("3.0.2")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -26,7 +26,6 @@ local configIni = "AbsoluteFix.ini"
 local ini = inicfg.load({
    settings =
    {
-      addonupgrades = true,
       antiafk = true,
       anticrash = true,
 	  autoreconnect = true,
@@ -38,6 +37,10 @@ local ini = inicfg.load({
       hideattachesonaim = true,
 	  hidehousesmapicons = true,
       gamefixes = true,
+      infinityrun = true,
+      improvedrun = true,
+      improvedbike = true,
+      improvedjetpack = true,
       keybinds = true,
       noeffects = false,
       nologo = false,
@@ -200,6 +203,7 @@ function main()
          writeMemory(windsoundfix, 4, 1, true)
          writeMemory(0x506667+1, 4, windsoundfix, true)
          writeMemory(0x505BEB+1, 4, windsoundfix, true)
+         
       end
       
       if ini.settings.anticrash then
@@ -214,15 +218,25 @@ function main()
          writeMemory(base, 1, 0x90, true)
       end
          
-      if ini.settings.addonupgrades then
-         -- interior run
-         memory.write(5630064, -1027591322, 4, false)
-         memory.write(5630068, 4, 2, false)
-         
+      if ini.settings.infinityrun then
          -- infinity run
          memory.setint8(0xB7CEE4, 1)
       end
+      
+      if ini.settings.improvedrun then
+         -- interior run
+         memory.write(5630064, -1027591322, 4, false)
+         memory.write(5630068, 4, 2, false)
+      end
+          
+      if ini.settings.improvedjetpack then 
+         -- Jetpack MaxHeight fix
+         memory.write(0x67F268, 121, 1, false)
+      end
 	  
+      -- TODO          
+      -- Max helicopter height 0x6D261D
+      
       if ini.settings.noeffects then
          -- nodust
          memory.write(7205311, 1056964608, 4, false)
@@ -254,6 +268,9 @@ function main()
          
          -- disable Haze Effect
          -- memory.write(0x72C1B7, 0xEB, 1, true)
+         
+         -- NoStencilShadows
+         memory.write(0x70BDAC, 0x84, false);
       end
 	  
 	  if ini.settings.noradio then
@@ -273,7 +290,7 @@ function main()
       --- END init
       while true do
       wait(0)
-	  
+      
 	  -- Autoreconnect
 	  -- Required use reset_remove.asi fix
 	  if ini.settings.autoreconnect then
@@ -294,7 +311,7 @@ function main()
       end
       
       -- nobike
-      if ini.settings.addonupgrades then
+      if ini.settings.improvedbike then
          if isCharInAnyCar(PLAYER_PED) then
             setCharCanBeKnockedOffBike(PLAYER_PED, true)
          else
@@ -363,6 +380,8 @@ function main()
             if data[2] then
                -- dialog random color autocomplete
                if dialogIncoming == 1496 and randomcolor ~= nil then
+                  sampSetCurrentDialogEditboxText(randomcolor)
+               elseif dialogIncoming == 43 and randomcolor ~= nil then
                   sampSetCurrentDialogEditboxText(randomcolor)
                else
                   sampSetCurrentDialogEditboxText(data[2])
@@ -471,7 +490,7 @@ function main()
 	        
             if not isAbsoluteRoleplay then
                if isKeyJustPressed(VK_H) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then  sampSendChat("/f") end
-			
+               
 			   if isKeyJustPressed(VK_Z) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/xbybnm") end
             end   
 		 end
@@ -560,8 +579,6 @@ function sampev.onServerMessage(color, text)
       end
       
       if text:find("Вконтакте") then
-         -- Клавиша Y - Настройки - Аккаунт - Вконтакте
-         -- Рекомендуется прикрепить страницу Вконтакте для защиты аккаунта
          return false
       end
 
@@ -576,7 +593,13 @@ function sampev.onServerMessage(color, text)
       if text:find("Никто не смог решить вопрос терминала загадок") then
          return false
       end
-
+      
+      if text:find("Клавиша Y") then
+         if text:find("Основное меню") then
+            return false
+         end
+      end
+      
    end
    
    if ini.settings.disablerecordnotifications then
@@ -645,6 +668,11 @@ function sampev.onSendDialogResponse(dialogId, button, listboxId, input)
    if ini.settings.gamefixes then
       dialogs[dialogId] = {listboxId, input}
    end
+   
+   if dialogId == 100 and listboxId == 2 and button == 1 then
+      sampAddChatMessage("Примечание: Стоимость 500$ за любой", -1)
+   end
+   
 end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
@@ -657,6 +685,11 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 	  setClipboardText(randomcolor)
    end
 
+   if dialogId == 43 then
+      randomcolor = string.sub(text, string.len(text)-36, #text-30)
+	  setClipboardText(randomcolor)
+   end
+   
    if ini.settings.dialogfix then
       -- hide buy a house dialog 
       if dialogId == 118 then
@@ -681,6 +714,37 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
          return false
       end
    end
+   
+   if dialogId == 14 then
+      local newtext = 
+      "Оружие при появлении\t\n"..
+      "Цвет\t\n"..
+      "Регенерация здоровья\t\n"..
+      "Ремонт авто 'На ходу'\t\n"..
+      "Слежка за игроком\t\n"..
+      "Заказ транспорта\t\n"..
+      "Регенерация брони\t\n"..
+      "Прикрепление транспорта\t\n"..
+      "Улучшение Дома - Бизнеса\t\n"..
+      "Бесконечный бег\t"..(ini.settings.infinityrun and '{00FF00}(Включено)' or '{555555}Отключено').."{00FF00}\n"..
+      "Стрельба с JetPack\t{555555}(SA-MP Addon не установлен){00FF00}\n"..
+      "Уровень бизнеса\t\n"..
+      "Улучшенный бег\t"..(ini.settings.improvedrun and '{00FF00}(Включено)' or '{555555}Отключено').."{00FF00}\n"..
+      "Вождение 2-х колёсного транспорта\t"..(ini.settings.improvedbike and '{00FF00}(Включено)' or '{555555}Отключено').."{00FF00}\n"..
+      "Вождение воздушного транспорта \t{555555}(SA-MP Addon не установлен){00FF00}\n"..
+      "Улучшенный JetPack\t"..(ini.settings.improvedjetpack and '{00FF00}(Включено)' or '{555555}Отключено').."{00FF00}\n"
+      return {dialogId, 4, title, button1, button2, newtext}
+   end
+   
+   if dialogId == 24 then 
+      return {dialogId, style, title, button1, button2, text.."\nДля того чтобы быстро отцепить транспорт войди в наблюдение (/набл 0)"}
+   end
+   
+   if dialogId == 1700 then
+      local newtext = "Интерфейс\nЦвет интерфейса\nЗвук\nГрафика\nInternet радио\nЧат\nАккаунт\nДругое"
+      return {dialogId, style, title, button1, button2, newtext}
+   end
+   
 end
 
 function sampev.onSendClickPlayer(playerId, source)
