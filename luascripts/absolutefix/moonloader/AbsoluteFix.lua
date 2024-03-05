@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("3.0.2")
+script_version("3.0.3")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -41,6 +41,7 @@ local ini = inicfg.load({
       improvedrun = true,
       improvedbike = true,
       improvedjetpack = true,
+      improvedairvehheight= true,
       keybinds = true,
       noeffects = false,
       nologo = false,
@@ -51,7 +52,7 @@ local ini = inicfg.load({
       menupatch = true,
       pmsoundfix = true,
 	  restoreremovedobjects = false,
-	  recontime = 15000,
+	  recontime = 20000,
       vehvisualdmg = false
    },
 }, configIni)
@@ -204,6 +205,13 @@ function main()
          writeMemory(0x506667+1, 4, windsoundfix, true)
          writeMemory(0x505BEB+1, 4, windsoundfix, true)
          
+         -- fixloadmap
+         memory.fill(0x584C6D, 0x90, 0x19, true)
+         
+         -- long armfix
+         memory.write(7045634, 33807, 2, true)
+         memory.write(7046489, 33807, 2, true)
+         
       end
       
       if ini.settings.anticrash then
@@ -234,8 +242,10 @@ function main()
          memory.write(0x67F268, 121, 1, false)
       end
 	  
-      -- TODO          
-      -- Max helicopter height 0x6D261D
+      if ini.settings.improvedairvehheight then 
+         -- Max helicopter height
+         memory.write(0x6D261D, 235, 1, false)
+      end      
       
       if ini.settings.noeffects then
          -- nodust
@@ -304,7 +314,7 @@ function main()
             sampSetGamestate(1)-- GAMESTATE_WAIT_CONNECT
          end
 	  end
-      
+
       -- chatfix
       if isKeyJustPressed(0x54) and not sampIsDialogActive() and not sampIsScoreboardOpen() and not isSampfuncsConsoleActive() then
          sampSetChatInputEnabled(true)
@@ -594,6 +604,10 @@ function sampev.onServerMessage(color, text)
          return false
       end
       
+      -- if text:find("Ты не можешь уйти в АФК на улице") then
+         -- return {color, text.." (Тут кругом маньяки)"}
+      -- end
+      
       if text:find("Клавиша Y") then
          if text:find("Основное меню") then
             return false
@@ -731,7 +745,7 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
       "Уровень бизнеса\t\n"..
       "Улучшенный бег\t"..(ini.settings.improvedrun and '{00FF00}(Включено)' or '{555555}Отключено').."{00FF00}\n"..
       "Вождение 2-х колёсного транспорта\t"..(ini.settings.improvedbike and '{00FF00}(Включено)' or '{555555}Отключено').."{00FF00}\n"..
-      "Вождение воздушного транспорта \t{555555}(SA-MP Addon не установлен){00FF00}\n"..
+      "Вождение воздушного транспорта\t"..(ini.settings.improvedairvehheight and '{00FF00}(Включено)' or '{555555}Отключено').."{00FF00}\n"..
       "Улучшенный JetPack\t"..(ini.settings.improvedjetpack and '{00FF00}(Включено)' or '{555555}Отключено').."{00FF00}\n"
       return {dialogId, 4, title, button1, button2, newtext}
    end
