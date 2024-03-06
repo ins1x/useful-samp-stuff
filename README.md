@@ -36,15 +36,16 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | --- | --- |
 | [AbsoluteFix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix) | A set of fixes and additions for Absolute Play servers |
 | [AutoForward](https://github.com/ins1x/useful-samp-stuff/blob/main/luascripts/AutoForward.lua) | Script for automatic movement by car (cruise control), and autoforward on foot |
-| [ModCompatibilityChecker](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/ModCompatibilityChecker.lua) | Checks the mods that can cause crashes |
 | [AbsEventHelper](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
+| [Bunnyhopfix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/bunnyhopfix.lua) | Assistant for mappers and event organizers on Absolute Play servers |
 | [Clickwarp](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/clickwarp/) | Fork of original clickwarp by FYP updated for Absolute Play |
 | [DriftСameraLock](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/DriftСameraLock.lua) | Lock camera behind player on vehicle (DriftCam) |
-| [ImguiSnippets](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/snippets) | Templates for creating lua scripts for SAMP |
-| [GangWarNotifer](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/GangWarNotifier.lua) | Notifies if gangwar has started for the territory |
 | [FriendsList](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/FriendsList.lua) | It notifies you when a friend comes online or quits |
-| [Renderobjects](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/renderobjects) | A convenient tool for mappers, allows you to quickly find the desired object  |
+| [GangWarNotifer](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/GangWarNotifier.lua) | Notifies if gangwar has started for the territory |
+| [ImguiSnippets](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/snippets) | Templates for creating lua scripts for SAMP |
+| [Renderobjects](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/renderobjects) | A convenient tool for mappers, allows you to quickly find the desired object |
+| [TrainingRulesFix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/TrainingRulesFix.lua) | Skip rules dialog on connect to TRAINING server |
+| [ModCompatibilityChecker](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/ModCompatibilityChecker.lua) | Checks the mods that can cause crashes |
 | [Nogametext](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/nogametext.lua) | Hides annoying gametext in the middle of the screen on the UIF server |
-
 
 > Disclaimer: All rights to modified scripts belong to their respective owners (specified in the description).
