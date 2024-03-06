@@ -30,14 +30,15 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 | [Vae](https://github.com/ins1x/useful-samp-stuff/tree/main/filterscripts/vae) | Vehicle Attachment Editor |
 
 ### Lua scripts (Moonloader)
-[Moonloader](https://www.blast.hk/threads/13305/) is a mod for the GTA San Andreas game, aiming to become a complete modern replacement for [CLEO](https://cleo.li/ru/index.html).  It introduces the ability to load Lua scripts into the game, has all the functionality of the game's opcodes, the [CLEO 4 library](https://cleo.li/ru/index.html), the [SAMPFUNCS 5+ plugin](https://www.blast.hk/threads/17/), [SAMP.Lua](https://github.com/THE-FYP/SAMP.Lua) and adds its own set of new features for development.  
+[Moonloader](https://www.blast.hk/threads/13305/) is a mod for the GTA San Andreas game, aiming to become a complete modern replacement for [CLEO](https://cleo.li/ru/index.html).  
+It introduces the ability to load Lua scripts into the game, has all the functionality of the game's opcodes, the [CLEO 4 library](https://cleo.li/ru/index.html), the [SAMPFUNCS 5+ plugin](https://www.blast.hk/threads/17/), [SAMP.Lua](https://github.com/THE-FYP/SAMP.Lua) and adds its own set of new features for development.  
 
 | Name | Description |
 | --- | --- |
 | [AbsoluteFix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix) | A set of fixes and additions for Absolute Play servers |
 | [AutoForward](https://github.com/ins1x/useful-samp-stuff/blob/main/luascripts/AutoForward.lua) | Script for automatic movement by car (cruise control), and autoforward on foot |
 | [AbsEventHelper](https://github.com/ins1x/AbsEventHelper) | Assistant for mappers and event organizers on Absolute Play servers |
-| [Bunnyhopfix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/bunnyhopfix.lua) | Assistant for mappers and event organizers on Absolute Play servers |
+| [Bunnyhopfix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/bunnyhopfix.lua) | Allow bunnyhop for roleplay servers |
 | [Clickwarp](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/clickwarp/) | Fork of original clickwarp by FYP updated for Absolute Play |
 | [DriftСameraLock](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/DriftСameraLock.lua) | Lock camera behind player on vehicle (DriftCam) |
 | [FriendsList](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/FriendsList.lua) | It notifies you when a friend comes online or quits |
