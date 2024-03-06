@@ -12,6 +12,7 @@ local font_flag = require('moonloader').font_flag
 -- fixed traffic when the auto cruise is turned off and the chat is open
 -- fixed a bug with maintaining the speed limit when the cruise is disabled
 -- fixed script crash when player teleporting, or leaving the vehicle for spectating
+-- fixed broken limit on case script reloading or terminating
 -- Use on foot:
 -- Numpad / - enable automatic walking.
 -- Numpad + - switch the walking mode to a faster one (Three modes in total).
@@ -98,6 +99,15 @@ function main()
 			end
 		end
 	end
+end
+
+function onExitScript()
+   if isCharInAnyCar(playerPed) then 
+      maxspeed = mem.getfloat(GetVehicleHeader() * 0xE0 + 0xC2B9DC + 0x84, false) * 100
+   else
+      maxspeed = 60
+   end
+   mem.setfloat(GetVehicleHeader() * 0xE0 + 0xC2B9DC + 0x84, maxspeed / 100, false)
 end
 
 function GetVehicleHeader()
