@@ -38,7 +38,7 @@ function autoRobPlayer(id)
         sampSendChat('/rob')
      end
      -- Change default delay here
-     wait(300000) -- 300000 ms. == 5 min.
+     wait(375000) -- 375000 ms. == 6,25 min.
      return true
    end
 end
