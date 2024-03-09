@@ -104,10 +104,10 @@ end
 function onExitScript()
    if isCharInAnyCar(playerPed) then 
       maxspeed = mem.getfloat(GetVehicleHeader() * 0xE0 + 0xC2B9DC + 0x84, false) * 100
+      mem.setfloat(GetVehicleHeader() * 0xE0 + 0xC2B9DC + 0x84, maxspeed / 100, false)
    else
       maxspeed = 60
    end
-   mem.setfloat(GetVehicleHeader() * 0xE0 + 0xC2B9DC + 0x84, maxspeed / 100, false)
 end
 
 function GetVehicleHeader()
