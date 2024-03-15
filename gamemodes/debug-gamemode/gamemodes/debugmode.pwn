@@ -33,6 +33,10 @@
 
 // ----------------------------------------------------------------------------
 
+// Allow connect 0.3.7 clients to DL server
+// https://github.com/AGraber/samp-compat
+#include <compat>
+
 #if defined JIT_INC
     #warning Don't include JIT with CrashDetect or Profiler plugin
 #endif

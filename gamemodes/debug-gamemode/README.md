@@ -1,7 +1,7 @@
 ## Debugmode  
-Description: Simple [SA:MP](https://www.sa-mp.com/) gamemode created for debugging purposes.  
+Description: Simple [SA:MP](https://www.sa-mp.mp/) gamemode created for debugging purposes.  
 Perfect if you need to quickly deploy a samp server and test any system.  
-> Based on [SA:MP 0.3.7 R2 server](https://www.sa-mp.com/download.php)  
+> Based on [SA:MP 0.3.DL server](https://sampforum.blast.hk/showthread.php?tid=648633)  
 
 ### Configure
 - Check before run [server.cfg](https://open.mp/docs/server/server.cfg) configfile. 
@@ -11,6 +11,7 @@ plugins crashdetect
 rcon_password debug
 ```
 - Change [rcon_password](https://www.open.mp/docs/server/ControllingServer)!
+- Download [Pawn Community Compiler](https://github.com/pawn-lang/compiler)
 - Compile your script with [debug info](https://github.com/Zeex/samp-plugin-crashdetect/wiki/Compiling-scripts-with-debug-info).
 > Crashdetect [does not work in conjunction with Profiler and JIT plugins](https://github.com/Zeex/samp-plugin-crashdetect), only one of them can be used!
 
@@ -18,6 +19,7 @@ rcon_password debug
 * [Crashdetect 4.19 plugin](https://github.com/Zeex/samp-plugin-crashdetect/releases)
 * [Sscanf 2.8 plugin](https://github.com/Y-Less/sscanf/releases)
 * [Profiler 2.15 plugin](https://github.com/Zeex/samp-plugin-profiler)
+* [Compat 1.0.2 plugin](https://github.com/AGraber/samp-compat)
 
 ### Filterscripts
 Contains only the necessary filterscripts:

@@ -1,0 +1,2 @@
+AddCharModel(305, 20001, "lvpdpc2.dff", "lvpdpc2.txd");
+AddSimpleModel(-1,19379, -2000, "wallzzz.dff", "wallzzz.txd");
