@@ -1,0 +1,1 @@
+All temporary files and configs of the mtools script are located here. If you need to restore the default config, copy the mtools.db database from the /default folder
