@@ -34,6 +34,8 @@ The filterscripts are written in the Pawn language. To build from sources, you w
 [Moonloader](https://www.blast.hk/threads/13305/) is a mod for the GTA San Andreas game, aiming to become a complete modern replacement for [CLEO](https://cleo.li/ru/index.html).  
 It introduces the ability to load Lua scripts into the game, has all the functionality of the game's opcodes, the [CLEO 4 library](https://cleo.li/ru/index.html), the [SAMPFUNCS 5+ plugin](https://www.blast.hk/threads/17/), [SAMP.Lua](https://github.com/THE-FYP/SAMP.Lua) and adds its own set of new features for development.  
 
+> You can download all the necessary libraries at once from [sa-essentials](https://github.com/ins1x/sa-essentials) repository
+
 | Name | Description |
 | --- | --- |
 | [AbsoluteFix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix) | A set of fixes and additions for Absolute Play servers |
@@ -46,7 +48,7 @@ It introduces the ability to load Lua scripts into the game, has all the functio
 | [GangWarNotifer](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/GangWarNotifier.lua) | Notifies if gangwar has started for the territory |
 | [ImguiSnippets](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/snippets) | Templates for creating lua scripts for SAMP |
 | [Renderobjects](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/renderobjects) | A convenient tool for mappers, allows you to quickly find the desired object |
-| [TrainingRulesFix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/TrainingRulesFix.lua) | Skip rules dialog on connect to TRAINING server |
+| [TrainingFix](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/training-fixes) | Various fixes for the TRAINING server |
 | [ModCompatibilityChecker](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/ModCompatibilityChecker.lua) | Checks the mods that can cause crashes |
 | [Nogametext](https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/nogametext.lua) | Hides annoying gametext in the middle of the screen on the UIF server |
 
