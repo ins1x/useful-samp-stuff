@@ -3,7 +3,7 @@ script_name("AbsoluteFix")
 script_description("Set of fixes for Absolute Play servers")
 script_properties("work-in-pause")
 script_url("https://github.com/ins1x/useful-samp-stuff/tree/main/luascripts/absolutefix")
-script_version("3.0.3")
+script_version("3.0.4")
 
 -- script_moonloader(16) moonloader v.0.26
 -- forked from https://github.com/ins1x/AbsEventHelper v1.5
@@ -13,6 +13,7 @@ script_version("3.0.3")
 -- https://vk.com/@gorskinscripts-gamefixer-obnovlenie-30
 
 require 'lib.moonloader'
+local ffi = require"ffi"
 local keys = require 'vkeys'
 local sampev = require 'lib.samp.events'
 local memory = require 'memory'
@@ -41,7 +42,7 @@ local ini = inicfg.load({
       improvedrun = true,
       improvedbike = true,
       improvedjetpack = true,
-      improvedairvehheight= true,
+      improvedairvehheight = true,
       keybinds = true,
       noeffects = false,
       nologo = false,
@@ -58,14 +59,9 @@ local ini = inicfg.load({
 }, configIni)
 inicfg.save(ini, configIni)
 
--- function save()
-   -- inicfg.save(ini, configIni)
--- end
--------------------------------------------
-
 -- If the server changes IP, change it here
 local hostip = "193.84.90.23"
--------------------------------------------
+
 local isAbsoluteRoleplay = false
 local removed_objects = {647, 1410, 1412, 1413} 
 local restored_objects = {3337, 3244, 3276, 1290, 1540} 
@@ -76,7 +72,7 @@ local dialogRestoreText = false
 local dialogIncoming = 0
 local clickedplayerid = nil
 local randomcolor = nil
-------------------------------------------
+local lastObjectId = nil
 
 function main()
    if not isSampLoaded() or not isSampfuncsLoaded() then return end
@@ -309,7 +305,7 @@ function main()
 		 or chatstring == "You are banned from this server."
 		 or chatstring == "Use /quit to exit or press ESC and select Quit Game" then
 	        sampDisconnectWithReason(false)
-            sampAddChatMessage("Wait reconnecting...", -1)
+            sampAddChatMessage("Wait reconnecting...", 0xa9c4e4ff)
             wait(ini.settings.recontime)
             sampSetGamestate(1)-- GAMESTATE_WAIT_CONNECT
          end
@@ -488,6 +484,14 @@ function main()
             if isKeyJustPressed(VK_I) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/inv") end
 		 end
 		 
+         if isPlayerSpectating then
+            if isKeyJustPressed(VK_N) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then 
+               if lastObjectId ~= nil then
+                  editObjectBySampId(lastObjectId, false)
+               end
+            end
+         end
+         
          if isKeyJustPressed(VK_M) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/vfibye") end
       
          if isKeyJustPressed(VK_U) and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() and not isSampfuncsConsoleActive() then sampSendChat("/anim") end
@@ -539,6 +543,12 @@ function getClosestPlayerId()
         end
     end
     return closestId
+end
+
+function editObjectBySampId(id, playerobj) 
+   if isSampAvailable() then
+      ffi.cast("void (__thiscall*)(unsigned long, short int, unsigned long)", sampGetBase() + 0x6DE40)(readMemory(sampGetBase() + 0x21A0C4, 4), id, playerobj and 1 or 0)
+   end
 end
 
 -- Hooks
@@ -775,7 +785,7 @@ function sampev.onCreateObject(objectId, data)
    if data.modelId == 1382 then return false end
    
    if ini.settings.mapfixes then 
-      -- Fix double created objects (only for 0.3.7 clients)
+      -- Fix double created objects 
       if data.modelId == 16563 and round(data.position.x, 3) == -222.195 then 
          return false
       end
@@ -820,6 +830,10 @@ function sampev.onCreateObject(objectId, data)
    end
 end
 
+function sampev.onSendEditObject(playerObject, objectId, response, position, rotation)
+   lastObjectId = objectId
+end
+ 
 function sampev.onRemoveBuilding(modelId, position, radius)
    if ini.settings.restoreremovedobjects then
 	  return false
@@ -840,13 +854,6 @@ function sampev.onSetVehicleVelocity(turn, velocity)
       end
    end
 end
-
---function sampev.onCreateGangZone(zoneId, squareStart, squareEnd, color)
-   --print(zoneId, squareStart, squareEnd, color)
-   --zoneId 481- 580 PUBG zones ids
-   --if zoneId >= 481 and zoneId <= 580 then
-   --end
---end
 
 -- END hooks
 
