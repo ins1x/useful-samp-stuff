@@ -1,5 +1,7 @@
 ![logo](https://raw.githubusercontent.com/ins1x/useful-samp-stuff/main/docs/img/logo.jpg)
 
+Learn more https://ins1x.github.io/insanemapping/  
+
 ### Mapping resources
 * [Map editors](https://github.com/ins1x/useful-samp-stuff/tree/main/docs/mapping/MapEditors.md)  
 * [Mapping materials (articles,tutorials,guides)](https://github.com/ins1x/useful-samp-stuff/tree/main/docs/mapping/MappingMaterials.md)
