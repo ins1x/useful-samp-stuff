@@ -1,0 +1,1 @@
+Unpack this libs to server root folder if you run this gamemode on modern OS
